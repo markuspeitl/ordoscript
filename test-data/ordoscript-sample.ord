@@ -1,0 +1,9 @@
+
+const test = 1 + 4;
+
+
+function print_hello(hello_text: string): void {
+    console.log(hello_text);
+};
+
+print_hello('hello world from ordo');
