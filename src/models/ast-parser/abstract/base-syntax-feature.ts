@@ -3,5 +3,5 @@ import { BaseAstParser } from "./base-ast-parser";
 
 export abstract class BaseSyntaxFeature {
     public abstract isFeatureDetected(code: string): boolean;
-    public abstract parseFeatureContents(code: string, astParser: BaseAstParser): BaseAstNode;
+    public abstract parseFeature(code: string, astParser: BaseAstParser): BaseAstNode;
 }

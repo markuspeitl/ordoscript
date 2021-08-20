@@ -7,7 +7,7 @@ export class FunctionSyntax extends BaseSyntaxFeature {
         const trimmed: string = code.trim();
         return trimmed.startsWith('function ');
     }
-    public parseFeatureContents(code: string, astParser: BaseAstParser): BaseAstNode | null {
+    public parseFeature(code: string, astParser: BaseAstParser): BaseAstNode | null {
         if (!this.isFeatureDetected(code)) {
             return null;
         }

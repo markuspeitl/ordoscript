@@ -1,13 +1,9 @@
-import { AstNode } from './abstract/base-ast-node';
+import { BaseAstNode } from './abstract/base-ast-node';
+import { Block } from './block';
 
-export class ForNode extends AstNode {
-
-    public toString(): string {
-        return "for";
-    }
-
-    public parse(code: string): void {
-        throw new Error('Method not implemented.');
-    }
-
+export class ForNode extends BaseAstNode {
+    public initializer: BaseAstNode;
+    public endCondition: BaseAstNode;
+    public incrementor: BaseAstNode;
+    public body: Block;
 }

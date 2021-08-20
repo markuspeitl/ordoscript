@@ -11,12 +11,10 @@ export class OrdoAstParser extends BaseAstParser {
 
     public parseAstNode(code: string): BaseAstNode {
 
-        if(code.includes(OrdoAstParser.nodeEnclosureOpenToken))
-
         if (!code.includes(OrdoAstParser.nodeEnclosureOpenToken) && !code.includes(OrdoAstParser.nodeEnclosureOpenToken)) {
             return this.parseAstLeaf(code);
         } else if (code.includes(OrdoAstParser.nodeEnclosureOpenToken) && code.includes(OrdoAstParser.nodeEnclosureOpenToken)) {
-            const statements: string[] = code.split(delimiterToken);
+            const statements: string[] = code.split(OrdoAstParser.delimiterToken);
             let startIndex: number = 0;
             let endIndex: number = 0;
 

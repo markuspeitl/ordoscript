@@ -83,7 +83,7 @@
 		"eqeqeq": ["error", "always"],
 		"guard-for-in": ["warn"],
 		"semi": ["error", "always"],
-		"id-denylist": ["error", "data", "err", "any", "cb", "callback", "i1", "test", "collection", "list", "value"],
+		"id-denylist": ["error", "data", "err", "any", "cb", "callback", "i1", "test", "collection", "list"],
 		"no-multiple-empty-lines": ["error"],
 		"no-new-wrappers": ["error"],
 		"prefer-const": ["error"],
