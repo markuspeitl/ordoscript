@@ -1,3 +1,12 @@
+import { PropertyAccessSyntax } from './features/property-access-syntax';
+import { ValueListingSyntax } from './features/value-listing-syntax';
+import { ValueListingNode } from './../../../ast-node/value-listing-node';
+import { AssignmentSyntax } from './features/assignment-syntax';
+import { AssignmentNode } from './../../../ast-node/assignment-node';
+import { VariableDeclarationSyntax } from './features/variable-declaration-syntax';
+import { VariableDeclarationNode } from './../../../ast-node/variable-declaration-node';
+import { OrdoSyntaxCurator } from './features/util/ordo-syntax-curator';
+import { ISyntaxCurator } from './../../abstract/i-syntax-curator';
 import { ElseSyntax } from './features/else-syntax';
 import { IfSyntax } from './features/if-syntax';
 import { ElseNode } from './../../../ast-node/else-node';
@@ -12,6 +21,7 @@ import { BaseAstNode } from '../../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from '../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../abstract/base-syntax-feature';
 import { BlockScope } from '../../../ast-node/block-scope';
+import { PropertyAccessNode } from '../../../ast-node/property-access-node';
 
 export class OrdoAstParser extends BaseAstParser {
 	public static delimiterToken: string = ';';
@@ -24,11 +34,16 @@ export class OrdoAstParser extends BaseAstParser {
 
 	public initializeFeatureSet(): void {
 		//Optimization todo -> order by usage probability
-		this.addFeature(FunctionDefinition, FunctionSyntax);
-		this.addFeature(BlockScope, BlockScopeSyntax);
-		this.addFeature(BlockContent, BlockContentSyntax);
-		this.addFeature(IfNode, IfSyntax);
-		this.addFeature(ElseNode, ElseSyntax);
+		const syntaxCurator: ISyntaxCurator = new OrdoSyntaxCurator();
+		this.addFeature(FunctionDefinition, FunctionSyntax, syntaxCurator);
+		this.addFeature(BlockScope, BlockScopeSyntax, syntaxCurator);
+		this.addFeature(BlockContent, BlockContentSyntax, syntaxCurator);
+		this.addFeature(IfNode, IfSyntax, syntaxCurator);
+		this.addFeature(ElseNode, ElseSyntax, syntaxCurator);
+		this.addFeature(VariableDeclarationNode, VariableDeclarationSyntax, syntaxCurator);
+		this.addFeature(AssignmentNode, AssignmentSyntax, syntaxCurator);
+		this.addFeature(ValueListingNode, ValueListingSyntax, syntaxCurator);
+		this.addFeature(PropertyAccessNode, PropertyAccessSyntax, syntaxCurator);
 	}
 
 	public parseAstNodeDetect(code: string): BaseAstNode {
@@ -38,7 +53,7 @@ export class OrdoAstParser extends BaseAstParser {
 				return parsedNode;
 			}
 		}
-		throw new Error('Failed to parse AST node, syntax feature not detected');
+		throw new Error('Failed to parse AST node, syntax feature not detected: ' + String(code));
 	}
 
 	private tryParseFeature(code: string, targetAstNode: string): BaseAstNode | null {
@@ -51,11 +66,14 @@ export class OrdoAstParser extends BaseAstParser {
 	}
 
 	public parseAstNode<AstNodeType extends BaseAstNode>(code: string, astNodeType: string): AstNodeType {
+		console.log('Before Parse: ' + astNodeType);
+		console.log(code);
 		const selectedFeature: ISyntaxFeature = this.featureSetDict[astNodeType];
+		console.log('Selected parser: ');
+		console.log(selectedFeature);
+		if (!selectedFeature) {
+			throw new Error('Can not parse code for which no Syntax Parser was found: ' + astNodeType);
+		}
 		return selectedFeature.parseFeature(code, this) as AstNodeType;
-	}
-
-	public parseFileContent(code: string): BlockContent {
-		return this.parseAstNode<BlockContent>(code, BlockContent.name);
 	}
 }

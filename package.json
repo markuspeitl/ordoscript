@@ -4,8 +4,8 @@
   "description": "",
   "main": "dist/script.js",
   "scripts": {
-    "start-sample": "tsc && node dist/script.js test-data/input-file.txt test-data/output-file.txt",
-    "start-sample-ts": "node_modules/.bin/ts-node src/script.ts test-data/input-file.txt test-data/output-file.txt",
+    "start-sample": "tsc && node dist/script.js test-data/ordoscript-sample.ord test-data/ordoscript-out.ord",
+    "start-sample-ts": "node_modules/.bin/ts-node src/script.ts test-data/ordoscript-sample.ord test-data/ordoscript-out.ord",
     "test": "tsc && mocha dist/test/**/*.js",
     "test-watch": "mocha-typescript-watch",
     "prod:install": "npm install --production",

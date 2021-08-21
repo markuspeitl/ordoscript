@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+/*import { expect } from 'chai';
 import { SampleClass } from '../models/sample-class';
 
 describe('Testing SampleClass getName Method', () => {
@@ -7,4 +7,4 @@ describe('Testing SampleClass getName Method', () => {
 		const myNameResult: string = sampleClass.getName();
 		expect(myNameResult).to.equal('I am a sampleClass');
 	});
-});
+});*/

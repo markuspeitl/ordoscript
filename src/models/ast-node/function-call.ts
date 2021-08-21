@@ -1,8 +1,8 @@
 import { Identifier } from './identifier';
-import { Block } from './block';
-import { BaseAstNode } from "./abstract/base-ast-node";
+import { BaseAstNode } from './abstract/base-ast-node';
+import { ValueListingNode } from './value-listing-node';
 
 export class FunctionCall extends BaseAstNode {
-    public identifier: Identifier;
-    public parameters: BaseAstNode[];
+	public identifier: Identifier;
+	public parameters: ValueListingNode;
 }

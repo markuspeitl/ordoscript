@@ -2,14 +2,20 @@ import { BlockContent } from './../../../../ast-node/block-content';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { ISyntaxFeature } from '../../../abstract/i-syntax-feature';
-import { SyntaxUtil } from '../../../abstract/sytax-util';
+import { ISyntaxCurator } from '../../../abstract/i-syntax-curator';
+import { ConsoleUtil } from '../../../abstract/console-util';
+import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 
-export class BlockContentSyntax implements ISyntaxFeature {
+export class BlockContentSyntax extends BaseSyntaxFeature {
 	public getTargetNodeType(): string {
 		return 'BlockContent';
 	}
 
-	public parseFeature(code: string, astParser: BaseAstParser): BaseAstNode | null {
+	public isFeatureDetected(code: string): boolean {
+		return false;
+	}
+
+	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
 		if (!code) {
 			return null;
 		}
@@ -17,10 +23,13 @@ export class BlockContentSyntax implements ISyntaxFeature {
 		if (!this.isValid) {
 			throw new Error('Can not create a valid AST as the number of block opening and closing tokens does not match');
 		}
+
+		ConsoleUtil.printNamedBody('Parsing Syntax feature ' + String(this.constructor.name), code);
+
 		//trimmedCode = trimmedCode.trim();
 
 		const node: BlockContent = new BlockContent();
-		const curatedLines: string[] | null = SyntaxUtil.getStrippedLines(code);
+		const curatedLines: string[] | null = this.syntaxCurator.getCuratedLines(code);
 
 		if (!curatedLines) {
 			return node;
@@ -41,7 +50,7 @@ export class BlockContentSyntax implements ISyntaxFeature {
 					blockCode = curatedLines[previousLineIndex] + line;
 				}
 			} else if (blockCode !== null) {
-				blockCode = blockCode + line;
+				blockCode = blockCode + '\n' + line;
 				if (line.includes('}')) {
 					statements.push(blockCode);
 					blockCode = null;
@@ -51,6 +60,8 @@ export class BlockContentSyntax implements ISyntaxFeature {
 			}
 		}
 
+		ConsoleUtil.printNamedBody('Block Statements: ', JSON.stringify(statements, null, 2));
+
 		if (statements.length > 0) {
 			node.children = [];
 			for (const statement of statements) {
@@ -59,6 +70,7 @@ export class BlockContentSyntax implements ISyntaxFeature {
 			}
 		}
 
+		ConsoleUtil.printNamedBody('Block AST: ', JSON.stringify(node, null, 2));
 		return node;
 	}
 

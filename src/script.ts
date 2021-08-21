@@ -21,7 +21,7 @@ const args: any = parser.parse_args();
 function readDocument(targetFilePath: string): string | null {
 	console.log('Reading document from: ' + targetFilePath);
 	if (!fs.existsSync(targetFilePath)) {
-		console.log("File does not exist");
+		console.log('File does not exist');
 		return null;
 	}
 
@@ -36,7 +36,8 @@ const documentContents: string | null = readDocument(args.source);
 
 if (documentContents) {
 	const ordoAstParser: BaseAstParser = new OrdoAstParser();
-	const astTree: BaseAstNode = ordoAstParser.parseAstNode(documentContents);
+	//console.log('Parsing: ' + String(documentContents));
+	const astTree: BaseAstNode = ordoAstParser.parseFileContent(String(documentContents));
 	const astUnparser: BaseAstUnparser = new TypeScriptAstUnparser();
 	const code: string = astUnparser.unParseAstNode(astTree);
 	writeDocument(code, args.target);

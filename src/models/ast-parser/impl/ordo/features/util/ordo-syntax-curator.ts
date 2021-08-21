@@ -1,12 +1,13 @@
-export class SyntaxUtil {
-	public static getStrippedCode(code: string): string | null {
-		const curatedLines: string[] | null = SyntaxUtil.getStrippedLines(code);
+import { ISyntaxCurator } from './../../../../abstract/i-syntax-curator';
+export class OrdoSyntaxCurator implements ISyntaxCurator {
+	public getCuratedCode(code: string): string | null {
+		const curatedLines: string[] | null = this.getCuratedLines(code);
 		if (curatedLines) {
 			return curatedLines.join('\n');
 		}
 		return null;
 	}
-	public static getStrippedLines(code: string): string[] | null {
+	public getCuratedLines(code: string): string[] | null {
 		const lines: string[] = code.split('\n');
 		const nonEmptyLines: string[] = lines.filter((line: string) => line.replace(';', '').trim().length > 0);
 		const curatedLines: string[] = nonEmptyLines.map((line: string) => line.replace(';', '').trim());

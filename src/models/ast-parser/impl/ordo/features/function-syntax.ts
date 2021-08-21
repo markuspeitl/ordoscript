@@ -6,7 +6,6 @@ import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 import { OrdoAstParser } from '../ordo-ast-parser';
 import { BlockScope } from '../../../../ast-node/block-scope';
-import { SyntaxUtil } from '../../../abstract/sytax-util';
 
 export class FunctionSyntax extends BaseSyntaxFeature {
 	public getTargetNodeType(): string {
@@ -17,35 +16,29 @@ export class FunctionSyntax extends BaseSyntaxFeature {
 		const trimmedCode: string = code.trim();
 		return this.regExp.test(trimmedCode);
 	}
-	public parseFeature(code: string, astParser: BaseAstParser): BaseAstNode | null {
+	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
 		if (!code) {
 			return null;
 		}
 
-		const curatedLines: string[] | null = SyntaxUtil.getStrippedLines(code);
-		if (!curatedLines) {
-			return null;
-		}
-		const curatedCode: string = curatedLines.join('\n');
-
 		const node: FunctionDefinition = new FunctionDefinition();
 
-		const whitespaceIndex: number = curatedLines[0].indexOf(' ');
-		const parenthesisOpenIndex: number = curatedCode.indexOf(OrdoAstParser.functionParamOpenToken);
-		const parenthesisCloseIndex: number = curatedCode.indexOf(OrdoAstParser.functionParamCloseToken);
-		const blockOpenIndex: number = curatedCode.indexOf(OrdoAstParser.nodeEnclosureOpenToken);
-		const blockCloseIndex: number = curatedCode.lastIndexOf(OrdoAstParser.nodeEnclosureCloseToken);
-		const returnTypeStartIndex: number = curatedCode.indexOf(OrdoAstParser.typeDefStartToken);
+		const whitespaceIndex: number = code.indexOf(' ');
+		const parenthesisOpenIndex: number = code.indexOf(OrdoAstParser.functionParamOpenToken);
+		const parenthesisCloseIndex: number = code.indexOf(OrdoAstParser.functionParamCloseToken);
+		const blockOpenIndex: number = code.indexOf(OrdoAstParser.nodeEnclosureOpenToken);
+		const blockCloseIndex: number = code.lastIndexOf(OrdoAstParser.nodeEnclosureCloseToken);
+		const returnTypeStartIndex: number = code.indexOf(OrdoAstParser.typeDefStartToken);
 
-		node.label = curatedCode.substring(whitespaceIndex + 1, parenthesisOpenIndex - 1);
-		node.parameters = astParser.parseAstNode<ValueListingNode>(curatedCode.substring(parenthesisOpenIndex + 1, parenthesisCloseIndex - 1), ValueListingNode.name);
+		node.label = code.substring(whitespaceIndex + 1, parenthesisOpenIndex);
+		node.parameters = astParser.parseAstNode<ValueListingNode>(code.substring(parenthesisOpenIndex + 1, parenthesisCloseIndex), ValueListingNode.name);
 
 		if (returnTypeStartIndex > -1 && returnTypeStartIndex < parenthesisOpenIndex) {
-			const returnType: string = curatedCode.substring(returnTypeStartIndex + 1, parenthesisOpenIndex - 1).trim();
+			const returnType: string = code.substring(returnTypeStartIndex + 1, parenthesisOpenIndex - 1).trim();
 			node.returnType = astParser.parseAstNode<Identifier>(returnType, Identifier.name);
 		}
 
-		node.body = astParser.parseAstNode<BlockScope>(curatedCode.substring(blockOpenIndex, blockCloseIndex), BlockScope.name);
+		node.body = astParser.parseAstNode<BlockScope>(code.substring(blockOpenIndex, blockCloseIndex + 1), BlockScope.name);
 
 		return node;
 	}
