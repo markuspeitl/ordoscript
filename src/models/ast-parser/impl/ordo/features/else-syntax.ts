@@ -1,18 +1,17 @@
-import { Identifier } from './../../../../ast-node/identifier';
-import { ValueListingNode } from './../../../../ast-node/value-listing-node';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
-import { FunctionDefinition } from '../../../../ast-node/function-definition';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 import { OrdoAstParser } from '../ordo-ast-parser';
 import { BlockScope } from '../../../../ast-node/block-scope';
 import { SyntaxUtil } from '../../../abstract/sytax-util';
+import { CompositionNode } from '../../../../ast-node/composition-node';
+import { ElseNode } from '../../../../ast-node/else-node';
 
-export class FunctionSyntax extends BaseSyntaxFeature {
+export class ElseSyntax extends BaseSyntaxFeature {
 	public getTargetNodeType(): string {
-		return 'FunctionDefinition';
+		return 'ElseNode';
 	}
-	private regExp: RegExp = new RegExp(/^function [a-zA-Z0-9]+()/);
+	private regExp: RegExp = new RegExp(/}[ \n]*else[ ]/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmedCode: string = code.trim();
 		return this.regExp.test(trimmedCode);
@@ -28,24 +27,16 @@ export class FunctionSyntax extends BaseSyntaxFeature {
 		}
 		const curatedCode: string = curatedLines.join('\n');
 
-		const node: FunctionDefinition = new FunctionDefinition();
+		const node: ElseNode = new ElseNode();
 
-		const whitespaceIndex: number = curatedLines[0].indexOf(' ');
 		const parenthesisOpenIndex: number = curatedCode.indexOf(OrdoAstParser.functionParamOpenToken);
 		const parenthesisCloseIndex: number = curatedCode.indexOf(OrdoAstParser.functionParamCloseToken);
+
 		const blockOpenIndex: number = curatedCode.indexOf(OrdoAstParser.nodeEnclosureOpenToken);
 		const blockCloseIndex: number = curatedCode.lastIndexOf(OrdoAstParser.nodeEnclosureCloseToken);
-		const returnTypeStartIndex: number = curatedCode.indexOf(OrdoAstParser.typeDefStartToken);
 
-		node.label = curatedCode.substring(whitespaceIndex + 1, parenthesisOpenIndex - 1);
-		node.parameters = astParser.parseAstNode<ValueListingNode>(curatedCode.substring(parenthesisOpenIndex + 1, parenthesisCloseIndex - 1), ValueListingNode.name);
-
-		if (returnTypeStartIndex > -1 && returnTypeStartIndex < parenthesisOpenIndex) {
-			const returnType: string = curatedCode.substring(returnTypeStartIndex + 1, parenthesisOpenIndex - 1).trim();
-			node.returnType = astParser.parseAstNode<Identifier>(returnType, Identifier.name);
-		}
-
-		node.body = astParser.parseAstNode<BlockScope>(curatedCode.substring(blockOpenIndex, blockCloseIndex), BlockScope.name);
+		node.condition = astParser.parseAstNode<CompositionNode>(curatedCode.substring(parenthesisOpenIndex + 1, parenthesisCloseIndex - 1), CompositionNode.name);
+		node.thenBlock = astParser.parseAstNode<BlockScope>(curatedCode.substring(blockOpenIndex, blockCloseIndex), BlockScope.name);
 
 		return node;
 	}

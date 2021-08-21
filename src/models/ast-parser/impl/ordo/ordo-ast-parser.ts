@@ -1,60 +1,61 @@
-import { BaseAstNode } from "../../../ast-node/abstract/base-ast-node";
-import { AstTree } from "../../../ast-node/ast-tree";
-import { BaseAstParser } from "../../abstract/base-ast-parser";
+import { ElseSyntax } from './features/else-syntax';
+import { IfSyntax } from './features/if-syntax';
+import { ElseNode } from './../../../ast-node/else-node';
+import { IfNode } from './../../../ast-node/if-node';
+import { BlockContentSyntax } from './features/block-content-syntax';
+import { BlockScopeSyntax } from './features/block-scope-syntax';
+import { ISyntaxFeature } from './../../abstract/i-syntax-feature';
+import { BlockContent } from './../../../ast-node/block-content';
+import { FunctionDefinition } from './../../../ast-node/function-definition';
+import { FunctionSyntax } from './features/function-syntax';
+import { BaseAstNode } from '../../../ast-node/abstract/base-ast-node';
+import { BaseAstParser } from '../../abstract/base-ast-parser';
+import { BaseSyntaxFeature } from '../../abstract/base-syntax-feature';
+import { BlockScope } from '../../../ast-node/block-scope';
 
 export class OrdoAstParser extends BaseAstParser {
+	public static delimiterToken: string = ';';
+	public static delimiterTokenLength: number = OrdoAstParser.delimiterToken.length;
+	public static nodeEnclosureOpenToken: string = '{';
+	public static nodeEnclosureCloseToken: string = '}';
+	public static functionParamOpenToken: string = '(';
+	public static functionParamCloseToken: string = ')';
+	public static typeDefStartToken: string = ':';
 
-    public static delimiterToken: string = ';';
-    public static delimiterTokenLength: number = OrdoAstParser.delimiterToken.length;
-    public static nodeEnclosureOpenToken: string = '{';
-    public static nodeEnclosureCloseToken: string = '}';
+	public initializeFeatureSet(): void {
+		//Optimization todo -> order by usage probability
+		this.addFeature(FunctionDefinition, FunctionSyntax);
+		this.addFeature(BlockScope, BlockScopeSyntax);
+		this.addFeature(BlockContent, BlockContentSyntax);
+		this.addFeature(IfNode, IfSyntax);
+		this.addFeature(ElseNode, ElseSyntax);
+	}
 
-    public parseAstNode(code: string): BaseAstNode {
+	public parseAstNodeDetect(code: string): BaseAstNode {
+		for (const astNodeKey of Object.keys(this.featureSetDict)) {
+			const parsedNode: BaseAstNode | null = this.tryParseFeature(code, astNodeKey);
+			if (parsedNode) {
+				return parsedNode;
+			}
+		}
+		throw new Error('Failed to parse AST node, syntax feature not detected');
+	}
 
-        if (!code.includes(OrdoAstParser.nodeEnclosureOpenToken) && !code.includes(OrdoAstParser.nodeEnclosureOpenToken)) {
-            return this.parseAstLeaf(code);
-        } else if (code.includes(OrdoAstParser.nodeEnclosureOpenToken) && code.includes(OrdoAstParser.nodeEnclosureOpenToken)) {
-            const statements: string[] = code.split(OrdoAstParser.delimiterToken);
-            let startIndex: number = 0;
-            let endIndex: number = 0;
+	private tryParseFeature(code: string, targetAstNode: string): BaseAstNode | null {
+		const selectedFeature: ISyntaxFeature = this.featureSetDict[targetAstNode];
+		if (selectedFeature instanceof BaseSyntaxFeature) {
+			const parsedNode: BaseAstNode | null = selectedFeature.tryParseFeature(code, this);
+			return parsedNode;
+		}
+		return null;
+	}
 
-            const rootAstNode: BaseAstNode = new AstTree();
-            rootAstNode.children = [];
+	public parseAstNode<AstNodeType extends BaseAstNode>(code: string, astNodeType: string): AstNodeType {
+		const selectedFeature: ISyntaxFeature = this.featureSetDict[astNodeType];
+		return selectedFeature.parseFeature(code, this) as AstNodeType;
+	}
 
-            for (const statement of statements) {
-                const statementNode: BaseAstNode = this.parseAstNode(statement);
-
-                statementNode.startCharIndex = startIndex;
-                endIndex = statementNode.startCharIndex + statement.length + delimiterTokenLength;
-                statementNode.endCharIndex = endIndex;
-                startIndex = endIndex;
-
-                rootAstNode.children.push(statementNode);
-            }
-
-            return rootAstNode;
-        }
-
-        throw new Error("Invalid number of Enclosure tokens");
-    }
-
-    public parseAstLeaf(code: string): BaseAstNode {
-        const trimmedCode: string = code.trim();
-
-        if (trimmedCode.startsWith('function ')) {
-            console.log("Function detected");
-        }
-    }
-
-    public getNextEnclosure(code: string): string {
-        const enclosureStart: number = code.indexOf(OrdoAstParser.nodeEnclosureOpenToken);
-        const enclosureEnd: number = code.lastIndexOf(OrdoAstParser.nodeEnclosureCloseToken);
-        return code.substring(enclosureStart + 1, enclosureEnd - 1);
-    }
-
-    public parseNextEnclosure()
-
-    public detectStatementAndCreate(snippet: string): BaseAstNode {
-        return null;
-    }
+	public parseFileContent(code: string): BlockContent {
+		return this.parseAstNode<BlockContent>(code, BlockContent.name);
+	}
 }

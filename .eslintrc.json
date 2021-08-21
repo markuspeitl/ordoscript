@@ -92,7 +92,7 @@
 		"block-spacing":["error","always"],
 		"brace-style": ["error", "1tbs", { "allowSingleLine": true }],
 		"comma-spacing": ["error", { "before": false, "after": true }],
-		"semi-spacing": ["error", {"before": false, "after": false}],
+		"semi-spacing": ["error", {"before": false, "after": true}],
 		"space-in-parens": ["error", "never"],
 		"space-before-blocks": ["error", "always"],
 		"no-return-assign": "error",

@@ -7,12 +7,14 @@ import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 import { OrdoAstParser } from '../ordo-ast-parser';
 import { BlockScope } from '../../../../ast-node/block-scope';
 import { SyntaxUtil } from '../../../abstract/sytax-util';
+import { IfNode } from '../../../../ast-node/if-node';
+import { CompositionNode } from '../../../../ast-node/composition-node';
 
-export class FunctionSyntax extends BaseSyntaxFeature {
+export class IfSyntax extends BaseSyntaxFeature {
 	public getTargetNodeType(): string {
-		return 'FunctionDefinition';
+		return 'IfNode';
 	}
-	private regExp: RegExp = new RegExp(/^function [a-zA-Z0-9]+()/);
+	private regExp: RegExp = new RegExp(/^if[ ]*\(/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmedCode: string = code.trim();
 		return this.regExp.test(trimmedCode);
@@ -28,24 +30,16 @@ export class FunctionSyntax extends BaseSyntaxFeature {
 		}
 		const curatedCode: string = curatedLines.join('\n');
 
-		const node: FunctionDefinition = new FunctionDefinition();
+		const node: IfNode = new IfNode();
 
-		const whitespaceIndex: number = curatedLines[0].indexOf(' ');
 		const parenthesisOpenIndex: number = curatedCode.indexOf(OrdoAstParser.functionParamOpenToken);
 		const parenthesisCloseIndex: number = curatedCode.indexOf(OrdoAstParser.functionParamCloseToken);
+
 		const blockOpenIndex: number = curatedCode.indexOf(OrdoAstParser.nodeEnclosureOpenToken);
 		const blockCloseIndex: number = curatedCode.lastIndexOf(OrdoAstParser.nodeEnclosureCloseToken);
-		const returnTypeStartIndex: number = curatedCode.indexOf(OrdoAstParser.typeDefStartToken);
 
-		node.label = curatedCode.substring(whitespaceIndex + 1, parenthesisOpenIndex - 1);
-		node.parameters = astParser.parseAstNode<ValueListingNode>(curatedCode.substring(parenthesisOpenIndex + 1, parenthesisCloseIndex - 1), ValueListingNode.name);
-
-		if (returnTypeStartIndex > -1 && returnTypeStartIndex < parenthesisOpenIndex) {
-			const returnType: string = curatedCode.substring(returnTypeStartIndex + 1, parenthesisOpenIndex - 1).trim();
-			node.returnType = astParser.parseAstNode<Identifier>(returnType, Identifier.name);
-		}
-
-		node.body = astParser.parseAstNode<BlockScope>(curatedCode.substring(blockOpenIndex, blockCloseIndex), BlockScope.name);
+		node.condition = astParser.parseAstNode<CompositionNode>(curatedCode.substring(parenthesisOpenIndex + 1, parenthesisCloseIndex - 1), CompositionNode.name);
+		node.thenBlock = astParser.parseAstNode<BlockScope>(curatedCode.substring(blockOpenIndex, blockCloseIndex), BlockScope.name);
 
 		return node;
 	}

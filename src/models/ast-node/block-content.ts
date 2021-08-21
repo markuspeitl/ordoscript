@@ -1,5 +1,5 @@
 import { BaseAstNode } from "./abstract/base-ast-node";
 
-export class Block extends BaseAstNode {
+export class BlockContent extends BaseAstNode {
     public children: BaseAstNode[] | null = null;
 }
