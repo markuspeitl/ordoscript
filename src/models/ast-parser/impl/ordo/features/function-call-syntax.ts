@@ -25,7 +25,10 @@ export class FunctionCallSyntax extends BaseSyntaxFeature {
 
 		const node: FunctionCall = new FunctionCall();
 
-		const parenthesisEnclosing: Enclosing = SyntaxTool.getEnclosingOfTokens(code, tokenSet.functionParamTokenPair);
+		const parenthesisEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, tokenSet.functionParamTokenPair);
+		if (!parenthesisEnclosing) {
+			throw new Error('Could not find parameter definition of function call');
+		}
 		const functionName: string = code.substr(0, parenthesisEnclosing.open).trim();
 		const enclosedParam: string = SyntaxTool.getEnclosedContents(code, parenthesisEnclosing);
 

@@ -1,3 +1,12 @@
+import { ParameterDeclarationSyntax } from './features/parameter-declaration-syntax';
+import { ParameterDeclaration } from './../../../ast-node/parameter-declaration';
+import { IdentifierSyntax } from './features/identifier-syntax';
+import { Identifier } from './../../../ast-node/identifier';
+import { StringLiteralSyntax } from './features/string-literal-syntax';
+import { ImportSyntax } from './features/import-syntax';
+import { LinkNode } from './../../../ast-node/link-node';
+import { PropertyCallSyntax } from './features/property-call-syntax';
+import { PropertyCallNode } from './../../../ast-node/property-call-node';
 import { NumberLiteralSyntax } from './features/number-literal-syntax';
 import { NumberLiteral } from './../../../ast-node/number-literal';
 import { CompositionSyntax } from './features/composition-syntax';
@@ -28,6 +37,9 @@ import { BlockScope } from '../../../ast-node/block-scope';
 import { PropertyAccessNode } from '../../../ast-node/property-access-node';
 import { ISyntaxCurator } from '../../interfaces/i-syntax-curator';
 import { FunctionCallSyntax } from './features/function-call-syntax';
+import { StringLiteral } from '../../../ast-node/string-literal';
+import { DictLiteral } from '../../../ast-node/dict-literal';
+import { DictLiteralSyntax } from './features/dict-literal-syntax';
 
 export class OrdoAstParser extends BaseAstParser {
 	public static delimiterToken: string = ';';
@@ -41,6 +53,7 @@ export class OrdoAstParser extends BaseAstParser {
 	public initializeFeatureSet(): void {
 		//Optimization todo -> order by usage probability
 		const syntaxCurator: ISyntaxCurator = new OrdoSyntaxCurator();
+		this.addFeature(LinkNode, ImportSyntax, syntaxCurator);
 		this.addFeature(FunctionDefinition, FunctionSyntax, syntaxCurator);
 		this.addFeature(BlockScope, BlockScopeSyntax, syntaxCurator);
 		this.addFeature(BlockContent, BlockContentSyntax, syntaxCurator);
@@ -49,10 +62,15 @@ export class OrdoAstParser extends BaseAstParser {
 		this.addFeature(AssignmentNode, AssignmentSyntax, syntaxCurator);
 		this.addFeature(VariableDeclarationNode, VariableDeclarationSyntax, syntaxCurator);
 		this.addFeature(ValueListingNode, ValueListingSyntax, syntaxCurator);
+		this.addFeature(PropertyCallNode, PropertyCallSyntax, syntaxCurator);
 		this.addFeature(PropertyAccessNode, PropertyAccessSyntax, syntaxCurator);
 		this.addFeature(FunctionCall, FunctionCallSyntax, syntaxCurator);
 		this.addFeature(CompositionNode, CompositionSyntax, syntaxCurator);
 		this.addFeature(NumberLiteral, NumberLiteralSyntax, syntaxCurator);
+		this.addFeature(StringLiteral, StringLiteralSyntax, syntaxCurator);
+		this.addFeature(DictLiteral, DictLiteralSyntax, syntaxCurator);
+		this.addFeature(ParameterDeclaration, ParameterDeclarationSyntax, syntaxCurator);
+		this.addFeature(Identifier, IdentifierSyntax, syntaxCurator);
 
 		//Todo add detection tree hierarchy
 	}

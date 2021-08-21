@@ -27,8 +27,16 @@ export class FunctionSyntax extends BaseSyntaxFeature {
 		const node: FunctionDefinition = new FunctionDefinition();
 
 		const whitespaceIndex: number = code.indexOf(' ');
-		const parenthesisEnclosing: Enclosing = SyntaxTool.getEnclosingOfTokens(code, tokenSet.functionParamTokenPair);
-		const blockEnclosing: Enclosing = SyntaxTool.getEnclosingOfTokens(code, tokenSet.blockScopeTokenPair);
+		const parenthesisEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, tokenSet.functionParamTokenPair);
+		if (!parenthesisEnclosing) {
+			throw new Error('Could not find parameter definition of function');
+		}
+
+		const blockEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, tokenSet.blockScopeTokenPair);
+		if (!blockEnclosing) {
+			throw new Error('Could not find body block of function.');
+		}
+
 		const returnTypeStartIndex: number = code.indexOf(tokenSet.typeDefinitionStartToken);
 		const typeEnclosing: Enclosing = new Enclosing(returnTypeStartIndex, blockEnclosing.open);
 
@@ -42,6 +50,7 @@ export class FunctionSyntax extends BaseSyntaxFeature {
 			node.returnType = astParser.parseAstNode<Identifier>(enclosedType.trim(), Identifier.name);
 		}
 
+		SyntaxTool.widenEnclosing(blockEnclosing, 1);
 		const enclosedBlock: string = SyntaxTool.getEnclosedContents(code, blockEnclosing);
 		node.body = astParser.parseAstNode<BlockScope>(enclosedBlock, BlockScope.name);
 

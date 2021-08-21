@@ -2,6 +2,7 @@ export class TokenSet {
 	public delimiterTokens: string[] = [';', '\n'];
 	public typeDefinitionStartToken: string = ':';
 	public blockScopeTokenPair: TokenPair = new TokenPair('{', '}');
+	public foreignScopeTokenPair: TokenPair = new TokenPair('{', '}');
 	public functionParamTokenPair: TokenPair = new TokenPair('(', ')');
 	public groupingTokenPair: TokenPair = new TokenPair('(', ')');
 	public functionKeywordToken: string = 'function';

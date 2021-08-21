@@ -10,7 +10,7 @@ export abstract class BaseSyntaxFeature implements ISyntaxFeature {
 		this.syntaxCurator = syntaxCurator;
 	}
 
-	public abstract getTargetNodeType(): string;
+	//public abstract getTargetNodeType(): string;
 	public abstract isFeatureDetected(code: string): boolean;
 	public parseFeature(code: string, astParser: BaseAstParser): BaseAstNode | null {
 		if (!code) {

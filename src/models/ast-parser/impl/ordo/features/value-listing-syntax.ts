@@ -22,9 +22,10 @@ export class ValueListingSyntax extends BaseSyntaxFeature {
 
 		if (!code.includes(',') && code.length > 0) {
 			node.values = [];
-			const id: Identifier = new Identifier();
-			id.label = code.trim();
-			node.values.push(id);
+			//const id: Identifier = new Identifier();
+			//id.label = code.trim();
+			const value: BaseAstNode = astParser.parseAstNodeDetect(code);
+			node.values.push(value);
 			return node;
 		}
 
@@ -35,9 +36,10 @@ export class ValueListingSyntax extends BaseSyntaxFeature {
 
 		node.values = [];
 		for (const part of parts) {
-			const id: Identifier = new Identifier();
-			id.label = part.trim();
-			node.values.push(id);
+			//const id: Identifier = new Identifier();
+			//id.label = part.trim();
+			const value: BaseAstNode = astParser.parseAstNodeDetect(part.trim());
+			node.values.push(value);
 		}
 
 		return node;
