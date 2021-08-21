@@ -1,11 +1,14 @@
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
-import { PropertyAccessNode } from '../../../../ast-node/property-access-node';
 import { Identifier } from '../../../../ast-node/identifier';
 import { FunctionCall } from '../../../../ast-node/function-call';
+import { tokenSet } from './token-set';
+import { SyntaxTool } from '../../../common/util/syntax-tool';
+import { Enclosing } from '../../../common/models/enclosing';
+import { ValueListingNode } from '../../../../ast-node/value-listing-node';
 
-export class PropertyAccessSyntax extends BaseSyntaxFeature {
+export class FunctionCallSyntax extends BaseSyntaxFeature {
 	public getTargetNodeType(): string {
 		return 'FunctionCall';
 	}
@@ -22,13 +25,13 @@ export class PropertyAccessSyntax extends BaseSyntaxFeature {
 
 		const node: FunctionCall = new FunctionCall();
 
-		const parts: string[] = code.split('.');
-		if (parts.length !== 2) {
-			throw Error('Invalid amount of participants for property access: ' + String(parts.length));
-		}
-		node.id = new Identifier();
-		node.id.label = parts[0];
-		node.property = parts[1];
+		const parenthesisEnclosing: Enclosing = SyntaxTool.getEnclosingOfTokens(code, tokenSet.functionParamTokenPair);
+		const functionName: string = code.substr(0, parenthesisEnclosing.open - 1).trim();
+		const enclosedParam: string = SyntaxTool.getEnclosedContents(code, parenthesisEnclosing);
+
+		node.identifier = new Identifier();
+		node.identifier.label = functionName;
+		node.parameters = astParser.parseAstNode<ValueListingNode>(enclosedParam, ValueListingNode.name);
 
 		return node;
 	}

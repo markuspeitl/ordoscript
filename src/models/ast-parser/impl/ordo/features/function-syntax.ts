@@ -1,3 +1,5 @@
+import { SyntaxTool } from './../../../common/util/syntax-tool';
+import { Enclosing } from './../../../common/models/enclosing';
 import { Identifier } from './../../../../ast-node/identifier';
 import { ValueListingNode } from './../../../../ast-node/value-listing-node';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
@@ -6,6 +8,7 @@ import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 import { OrdoAstParser } from '../ordo-ast-parser';
 import { BlockScope } from '../../../../ast-node/block-scope';
+import { tokenSet } from './token-set';
 
 export class FunctionSyntax extends BaseSyntaxFeature {
 	public getTargetNodeType(): string {
@@ -24,21 +27,23 @@ export class FunctionSyntax extends BaseSyntaxFeature {
 		const node: FunctionDefinition = new FunctionDefinition();
 
 		const whitespaceIndex: number = code.indexOf(' ');
-		const parenthesisOpenIndex: number = code.indexOf(OrdoAstParser.functionParamOpenToken);
-		const parenthesisCloseIndex: number = code.indexOf(OrdoAstParser.functionParamCloseToken);
-		const blockOpenIndex: number = code.indexOf(OrdoAstParser.nodeEnclosureOpenToken);
-		const blockCloseIndex: number = code.lastIndexOf(OrdoAstParser.nodeEnclosureCloseToken);
-		const returnTypeStartIndex: number = code.indexOf(OrdoAstParser.typeDefStartToken);
+		const parenthesisEnclosing: Enclosing = SyntaxTool.getEnclosingOfTokens(code, tokenSet.functionParamTokenPair);
+		const blockEnclosing: Enclosing = SyntaxTool.getEnclosingOfTokens(code, tokenSet.blockScopeTokenPair);
+		const returnTypeStartIndex: number = code.indexOf(tokenSet.typeDefinitionStartToken);
+		const typeEnclosing: Enclosing = new Enclosing(returnTypeStartIndex, blockEnclosing.open);
 
-		node.label = code.substring(whitespaceIndex + 1, parenthesisOpenIndex);
-		node.parameters = astParser.parseAstNode<ValueListingNode>(code.substring(parenthesisOpenIndex + 1, parenthesisCloseIndex), ValueListingNode.name);
+		const enclosedParam: string = SyntaxTool.getEnclosedContents(code, parenthesisEnclosing);
 
-		if (returnTypeStartIndex > -1 && returnTypeStartIndex < parenthesisOpenIndex) {
-			const returnType: string = code.substring(returnTypeStartIndex + 1, parenthesisOpenIndex - 1).trim();
-			node.returnType = astParser.parseAstNode<Identifier>(returnType, Identifier.name);
+		node.label = code.substring(whitespaceIndex + 1, parenthesisEnclosing.open);
+		node.parameters = astParser.parseAstNode<ValueListingNode>(enclosedParam, ValueListingNode.name);
+
+		if (returnTypeStartIndex > -1 && returnTypeStartIndex < parenthesisEnclosing.open) {
+			const enclosedType: string = SyntaxTool.getEnclosedContents(code, typeEnclosing);
+			node.returnType = astParser.parseAstNode<Identifier>(enclosedType.trim(), Identifier.name);
 		}
 
-		node.body = astParser.parseAstNode<BlockScope>(code.substring(blockOpenIndex, blockCloseIndex + 1), BlockScope.name);
+		const enclosedBlock: string = SyntaxTool.getEnclosedContents(code, blockEnclosing);
+		node.body = astParser.parseAstNode<BlockScope>(enclosedBlock, BlockScope.name);
 
 		return node;
 	}

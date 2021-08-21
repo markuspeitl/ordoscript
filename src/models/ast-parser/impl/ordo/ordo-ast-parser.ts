@@ -1,3 +1,4 @@
+import { FunctionCall } from './../../../ast-node/function-call';
 import { PropertyAccessSyntax } from './features/property-access-syntax';
 import { ValueListingSyntax } from './features/value-listing-syntax';
 import { ValueListingNode } from './../../../ast-node/value-listing-node';
@@ -6,14 +7,13 @@ import { AssignmentNode } from './../../../ast-node/assignment-node';
 import { VariableDeclarationSyntax } from './features/variable-declaration-syntax';
 import { VariableDeclarationNode } from './../../../ast-node/variable-declaration-node';
 import { OrdoSyntaxCurator } from './features/util/ordo-syntax-curator';
-import { ISyntaxCurator } from './../../abstract/i-syntax-curator';
 import { ElseSyntax } from './features/else-syntax';
 import { IfSyntax } from './features/if-syntax';
 import { ElseNode } from './../../../ast-node/else-node';
 import { IfNode } from './../../../ast-node/if-node';
 import { BlockContentSyntax } from './features/block-content-syntax';
 import { BlockScopeSyntax } from './features/block-scope-syntax';
-import { ISyntaxFeature } from './../../abstract/i-syntax-feature';
+import { ISyntaxFeature } from '../../interfaces/i-syntax-feature';
 import { BlockContent } from './../../../ast-node/block-content';
 import { FunctionDefinition } from './../../../ast-node/function-definition';
 import { FunctionSyntax } from './features/function-syntax';
@@ -22,6 +22,8 @@ import { BaseAstParser } from '../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../abstract/base-syntax-feature';
 import { BlockScope } from '../../../ast-node/block-scope';
 import { PropertyAccessNode } from '../../../ast-node/property-access-node';
+import { ISyntaxCurator } from '../../interfaces/i-syntax-curator';
+import { FunctionCallSyntax } from './features/function-call-syntax';
 
 export class OrdoAstParser extends BaseAstParser {
 	public static delimiterToken: string = ';';
@@ -44,6 +46,9 @@ export class OrdoAstParser extends BaseAstParser {
 		this.addFeature(AssignmentNode, AssignmentSyntax, syntaxCurator);
 		this.addFeature(ValueListingNode, ValueListingSyntax, syntaxCurator);
 		this.addFeature(PropertyAccessNode, PropertyAccessSyntax, syntaxCurator);
+		this.addFeature(FunctionCall, FunctionCallSyntax, syntaxCurator);
+
+		//Todo add detection tree hierarchy
 	}
 
 	public parseAstNodeDetect(code: string): BaseAstNode {

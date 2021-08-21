@@ -1,4 +1,5 @@
-import { ISyntaxCurator } from './../../../../abstract/i-syntax-curator';
+import { ISyntaxCurator } from '../../../../interfaces/i-syntax-curator';
+
 export class OrdoSyntaxCurator implements ISyntaxCurator {
 	public getCuratedCode(code: string): string | null {
 		const curatedLines: string[] | null = this.getCuratedLines(code);

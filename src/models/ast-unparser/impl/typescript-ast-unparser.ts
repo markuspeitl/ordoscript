@@ -5,6 +5,7 @@ export class TypeScriptAstUnparser extends BaseAstUnparser {
 	public unParseAstNode(astNode: BaseAstNode): string {
 		console.log('Unparse AST Node');
 		console.log(astNode);
-		return 'Test';
+		console.log(JSON.stringify(astNode, null, 2));
+		return JSON.stringify(astNode, null, 2);
 	}
 }

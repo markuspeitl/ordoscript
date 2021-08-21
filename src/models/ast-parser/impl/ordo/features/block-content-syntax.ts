@@ -1,9 +1,7 @@
 import { BlockContent } from './../../../../ast-node/block-content';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
-import { ISyntaxFeature } from '../../../abstract/i-syntax-feature';
-import { ISyntaxCurator } from '../../../abstract/i-syntax-curator';
-import { ConsoleUtil } from '../../../abstract/console-util';
+import { ConsoleUtil } from '../../../common/util/console-util';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 
 export class BlockContentSyntax extends BaseSyntaxFeature {

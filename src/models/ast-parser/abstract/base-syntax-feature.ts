@@ -1,8 +1,8 @@
-import { ISyntaxCurator } from './i-syntax-curator';
 import { BaseAstNode } from '../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from './base-ast-parser';
-import { ISyntaxFeature } from './i-syntax-feature';
-import { ConsoleUtil } from './console-util';
+import { ISyntaxFeature } from '../interfaces/i-syntax-feature';
+import { ConsoleUtil } from '../common/util/console-util';
+import { ISyntaxCurator } from '../interfaces/i-syntax-curator';
 
 export abstract class BaseSyntaxFeature implements ISyntaxFeature {
 	protected syntaxCurator: ISyntaxCurator;
