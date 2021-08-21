@@ -26,7 +26,7 @@ export class FunctionCallSyntax extends BaseSyntaxFeature {
 		const node: FunctionCall = new FunctionCall();
 
 		const parenthesisEnclosing: Enclosing = SyntaxTool.getEnclosingOfTokens(code, tokenSet.functionParamTokenPair);
-		const functionName: string = code.substr(0, parenthesisEnclosing.open - 1).trim();
+		const functionName: string = code.substr(0, parenthesisEnclosing.open).trim();
 		const enclosedParam: string = SyntaxTool.getEnclosedContents(code, parenthesisEnclosing);
 
 		node.identifier = new Identifier();

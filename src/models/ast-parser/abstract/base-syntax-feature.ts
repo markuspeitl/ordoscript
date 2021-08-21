@@ -24,7 +24,10 @@ export abstract class BaseSyntaxFeature implements ISyntaxFeature {
 
 		ConsoleUtil.printNamedBody('Parsing Syntax feature ' + String(this.constructor.name), code);
 		const node: BaseAstNode | null = this.parseFeatureInternal(curatedCode, astParser);
-		ConsoleUtil.printNamedBody(String(this.constructor.name) + ' AST: ', JSON.stringify(node, null, 2));
+		if (node) {
+			ConsoleUtil.printNamedBody(String(this.constructor.name) + ' AST: ', JSON.stringify(node, null, 2));
+			node.type = String(node.constructor.name);
+		}
 		return node;
 	}
 	protected abstract parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null;

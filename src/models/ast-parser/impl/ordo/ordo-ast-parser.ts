@@ -1,3 +1,7 @@
+import { NumberLiteralSyntax } from './features/number-literal-syntax';
+import { NumberLiteral } from './../../../ast-node/number-literal';
+import { CompositionSyntax } from './features/composition-syntax';
+import { CompositionNode } from './../../../ast-node/composition-node';
 import { FunctionCall } from './../../../ast-node/function-call';
 import { PropertyAccessSyntax } from './features/property-access-syntax';
 import { ValueListingSyntax } from './features/value-listing-syntax';
@@ -42,11 +46,13 @@ export class OrdoAstParser extends BaseAstParser {
 		this.addFeature(BlockContent, BlockContentSyntax, syntaxCurator);
 		this.addFeature(IfNode, IfSyntax, syntaxCurator);
 		this.addFeature(ElseNode, ElseSyntax, syntaxCurator);
-		this.addFeature(VariableDeclarationNode, VariableDeclarationSyntax, syntaxCurator);
 		this.addFeature(AssignmentNode, AssignmentSyntax, syntaxCurator);
+		this.addFeature(VariableDeclarationNode, VariableDeclarationSyntax, syntaxCurator);
 		this.addFeature(ValueListingNode, ValueListingSyntax, syntaxCurator);
 		this.addFeature(PropertyAccessNode, PropertyAccessSyntax, syntaxCurator);
 		this.addFeature(FunctionCall, FunctionCallSyntax, syntaxCurator);
+		this.addFeature(CompositionNode, CompositionSyntax, syntaxCurator);
+		this.addFeature(NumberLiteral, NumberLiteralSyntax, syntaxCurator);
 
 		//Todo add detection tree hierarchy
 	}

@@ -25,7 +25,7 @@ export class VariableDeclarationSyntax extends BaseSyntaxFeature {
 			throw new Error('Variable declaration must have both const|var|let and identifier!');
 		}
 
-		node.type = spacedParts[0];
+		node.declaretype = spacedParts[0];
 		const typedParts: string[] = code.split(':');
 		if (typedParts && typedParts.length > 1) {
 			node.valuetype = typedParts[1].trim();

@@ -15,6 +15,7 @@ export class TokenSet {
 	public protectedAccessToken: string = 'protected';
 	public linkExtToken: string = 'import';
 	public linkExtLocationToken: string = 'from';
+	public binaryExpressionTokens: string[] = ['+', '-', '++', '--', '+=', '-=', '*', '/', '^', '&', '|', '&&', '||', '<', '>', '<<', '>>', '<=', '>=', '==', '==='];
 }
 
 export class DetectorSet {

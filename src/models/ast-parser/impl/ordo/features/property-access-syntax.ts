@@ -1,4 +1,3 @@
-import { AssignmentNode } from './../../../../ast-node/assignment-node';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
@@ -10,7 +9,7 @@ export class PropertyAccessSyntax extends BaseSyntaxFeature {
 		return 'PropertyAccessNode';
 	}
 
-	private regExp: RegExp = new RegExp(/^[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+()/);
+	private regExp: RegExp = new RegExp(/^[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmedCode: string = code.trim();
 		return this.regExp.test(trimmedCode);
