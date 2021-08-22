@@ -27,7 +27,7 @@ function readDocument(targetFilePath: string): string | null {
 	return fs.readFileSync(targetFilePath) as unknown as string;
 }
 function writeDocument(contents: string, targetFilePath: string): void {
-	console.log('Writing: \n' + contents + '\nto: ' + targetFilePath + '\n');
+	//console.log('Writing: \n' + contents + '\nto: ' + targetFilePath + '\n');
 	fs.writeFileSync(targetFilePath, contents);
 }
 
@@ -37,11 +37,11 @@ if (documentContents) {
 	const ordoAstParser: BaseAstParser = new OrdoAstParser();
 	//console.log('Parsing: ' + String(documentContents));
 	const astNode: BaseAstNode = ordoAstParser.parseFileContent(String(documentContents));
-	const astUnparser: BaseAstUnparser = new TypeScriptAstUnparser();
-	const code: string | null = astUnparser.unParseAstNode(astNode);
 	if (astNode) {
 		writeDocument(JSON.stringify(astNode, null, 2), String(args.target) + '-tree.json');
 	}
+	const astUnparser: BaseAstUnparser = new TypeScriptAstUnparser();
+	const code: string | null = astUnparser.unParseAstNode(astNode);
 	if (code) {
 		writeDocument(code, args.target);
 	}

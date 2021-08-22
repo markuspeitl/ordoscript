@@ -6,6 +6,8 @@
   "scripts": {
     "start-sample": "tsc && node dist/script.js test-data/ordoscript-sample.ord test-data/ordoscript-out.ord",
     "start-sample-ts": "node_modules/.bin/ts-node src/script.ts test-data/ordoscript-sample.ord test-data/ordoscript-out.ord",
+    "start-sample2": "tsc && node dist/script.js test-data/ordoscript-sample2.ord test-data/ordoscript-out2.ord",
+    "start-sample2-ts": "node_modules/.bin/ts-node src/script.ts test-data/ordoscript-sample2.ord test-data/ordoscript-out2.ord",
     "test": "tsc && mocha dist/test/**/*.js",
     "test-watch": "mocha-typescript-watch",
     "prod:install": "npm install --production",

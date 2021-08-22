@@ -5,6 +5,7 @@ import { ConsoleUtil } from '../common/util/console-util';
 import { ISyntaxCurator } from '../interfaces/i-syntax-curator';
 
 export abstract class BaseSyntaxFeature implements ISyntaxFeature {
+	private printOutPut: boolean = false;
 	protected syntaxCurator: ISyntaxCurator;
 	public constructor(syntaxCurator: ISyntaxCurator) {
 		this.syntaxCurator = syntaxCurator;
@@ -22,11 +23,12 @@ export abstract class BaseSyntaxFeature implements ISyntaxFeature {
 			return null;
 		}
 
-		ConsoleUtil.printNamedBody('Parsing Syntax feature ' + String(this.constructor.name), code);
+		ConsoleUtil.printNamedBody('Parsing Syntax feature ' + String(this.constructor.name), code, this.printOutPut);
 		const node: BaseAstNode | null = this.parseFeatureInternal(curatedCode, astParser);
 		if (node) {
-			ConsoleUtil.printNamedBody(String(this.constructor.name) + ' AST: ', JSON.stringify(node, null, 2));
+			ConsoleUtil.printNamedBody(String(this.constructor.name) + ' AST: ', JSON.stringify(node, null, 2), this.printOutPut);
 			node.type = String(node.constructor.name);
+			node.original = code;
 		}
 		return node;
 	}

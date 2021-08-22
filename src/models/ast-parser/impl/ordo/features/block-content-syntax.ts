@@ -1,14 +1,9 @@
 import { BlockContent } from './../../../../ast-node/block-content';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
-import { ConsoleUtil } from '../../../common/util/console-util';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 
 export class BlockContentSyntax extends BaseSyntaxFeature {
-	public getTargetNodeType(): string {
-		return 'BlockContent';
-	}
-
 	public isFeatureDetected(code: string): boolean {
 		return false;
 	}
@@ -21,10 +16,6 @@ export class BlockContentSyntax extends BaseSyntaxFeature {
 		if (!this.isValid) {
 			throw new Error('Can not create a valid AST as the number of block opening and closing tokens does not match');
 		}
-
-		ConsoleUtil.printNamedBody('Parsing Syntax feature ' + String(this.constructor.name), code);
-
-		//trimmedCode = trimmedCode.trim();
 
 		const node: BlockContent = new BlockContent();
 		const curatedLines: string[] | null = this.syntaxCurator.getCuratedLines(code);
@@ -58,8 +49,6 @@ export class BlockContentSyntax extends BaseSyntaxFeature {
 			}
 		}
 
-		ConsoleUtil.printNamedBody('Block Statements: ', JSON.stringify(statements, null, 2));
-
 		if (statements.length > 0) {
 			node.children = [];
 			for (const statement of statements) {
@@ -67,8 +56,6 @@ export class BlockContentSyntax extends BaseSyntaxFeature {
 				node.children.push(childStatement);
 			}
 		}
-
-		ConsoleUtil.printNamedBody('Block AST: ', JSON.stringify(node, null, 2));
 		return node;
 	}
 

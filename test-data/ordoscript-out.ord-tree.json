@@ -1,0 +1,82 @@
+{
+  "children": [
+    {
+      "left": {
+        "declaretype": "const",
+        "label": "test",
+        "type": "VariableDeclarationNode"
+      },
+      "right": {
+        "compositorToken": "+",
+        "left": {
+          "value": 1,
+          "type": "NumberLiteral"
+        },
+        "right": {
+          "value": 4,
+          "type": "NumberLiteral"
+        },
+        "type": "CompositionNode"
+      },
+      "type": "AssignmentNode"
+    },
+    {
+      "label": "print_hello",
+      "parameters": {
+        "values": [
+          {
+            "label": "hello_text: string",
+            "type": "Identifier"
+          }
+        ],
+        "type": "ValueListingNode"
+      },
+      "body": {
+        "content": {
+          "children": [
+            {
+              "id": {
+                "label": "console"
+              },
+              "method": {
+                "identifier": {
+                  "label": "log"
+                },
+                "parameters": {
+                  "values": [
+                    {
+                      "label": "hello_text",
+                      "type": "Identifier"
+                    }
+                  ],
+                  "type": "ValueListingNode"
+                },
+                "type": "FunctionCall"
+              },
+              "type": "PropertyCallNode"
+            }
+          ],
+          "type": "BlockContent"
+        },
+        "type": "BlockScope"
+      },
+      "type": "FunctionDefinition"
+    },
+    {
+      "identifier": {
+        "label": "print_hello"
+      },
+      "parameters": {
+        "values": [
+          {
+            "text": "hello world from ordo",
+            "type": "StringLiteral"
+          }
+        ],
+        "type": "ValueListingNode"
+      },
+      "type": "FunctionCall"
+    }
+  ],
+  "type": "BlockContent"
+}

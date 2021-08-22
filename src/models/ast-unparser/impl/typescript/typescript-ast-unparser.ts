@@ -57,7 +57,7 @@ export class TypeScriptAstUnparser extends BaseAstUnparser {
 		throw new Error('Method not implemented.');
 	}
 	public unParseAstNode(astNode: BaseAstNode): string | null {
-		console.log('Unparse AST Node');
+		//console.log('Unparse AST Node');
 		//console.log(astNode);
 		//console.log(JSON.stringify(astNode, null, 2));
 		//return JSON.stringify(astNode, null, 2);

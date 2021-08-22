@@ -16,6 +16,10 @@ export abstract class BaseAstUnparser {
 	}
 
 	protected getFeatureFor(unParseSubject: BaseAstNode): BaseFeatureSyntax {
+		if (!this.featureSetDict[unParseSubject.constructor.name]) {
+			throw new Error('Can not get missing unparsing feature for node: ' + unParseSubject.constructor.name);
+		}
+
 		return this.featureSetDict[unParseSubject.constructor.name];
 	}
 

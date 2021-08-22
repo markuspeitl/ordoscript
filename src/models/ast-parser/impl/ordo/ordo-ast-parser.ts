@@ -1,3 +1,9 @@
+import { ReturnSyntax } from './features/return-syntax';
+import { ReturnNode } from './../../../ast-node/return-node';
+import { ForSyntax } from './features/for-syntax';
+import { ForNode } from './../../../ast-node/for-node';
+import { ArrayLiteralSyntax } from './features/array-literal-syntax';
+import { ArrayLiteral } from './../../../ast-node/array-literal';
 import {
 	LinkNode,
 	FunctionDefinition,
@@ -44,11 +50,15 @@ import { BaseAstParser } from '../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../abstract/base-syntax-feature';
 import { ISyntaxCurator } from '../../interfaces/i-syntax-curator';
 import { ISyntaxFeature } from '../../interfaces/i-syntax-feature';
+import { UnaryCompositionNode } from '../../../ast-node/unary-composition-node';
+import { UnaryCompositionSyntax } from './features/unary-composition-syntax';
 
 export class OrdoAstParser extends BaseAstParser {
 	public initializeFeatureSet(): void {
 		//Optimization todo -> order by usage probability
 		const syntaxCurator: ISyntaxCurator = new OrdoSyntaxCurator();
+		this.addFeature(ReturnNode, ReturnSyntax, syntaxCurator);
+		this.addFeature(ForNode, ForSyntax, syntaxCurator);
 		this.addFeature(LinkNode, ImportSyntax, syntaxCurator);
 		this.addFeature(FunctionDefinition, FunctionSyntax, syntaxCurator);
 		this.addFeature(BlockScope, BlockScopeSyntax, syntaxCurator);
@@ -61,11 +71,13 @@ export class OrdoAstParser extends BaseAstParser {
 		this.addFeature(PropertyCallNode, PropertyCallSyntax, syntaxCurator);
 		this.addFeature(PropertyAccessNode, PropertyAccessSyntax, syntaxCurator);
 		this.addFeature(FunctionCall, FunctionCallSyntax, syntaxCurator);
+		this.addFeature(UnaryCompositionNode, UnaryCompositionSyntax, syntaxCurator);
 		this.addFeature(CompositionNode, CompositionSyntax, syntaxCurator);
 		this.addFeature(NumberLiteral, NumberLiteralSyntax, syntaxCurator);
 		this.addFeature(StringLiteral, StringLiteralSyntax, syntaxCurator);
 		this.addFeature(DictLiteral, DictLiteralSyntax, syntaxCurator);
 		this.addFeature(ParameterDeclaration, ParameterDeclarationSyntax, syntaxCurator);
+		this.addFeature(ArrayLiteral, ArrayLiteralSyntax, syntaxCurator);
 		this.addFeature(Identifier, IdentifierSyntax, syntaxCurator);
 
 		//Todo add detection tree hierarchy
@@ -91,11 +103,11 @@ export class OrdoAstParser extends BaseAstParser {
 	}
 
 	public parseAstNode<AstNodeType extends BaseAstNode>(code: string, astNodeType: string): AstNodeType {
-		console.log('Before Parse: ' + astNodeType);
-		console.log(code);
+		//console.log('Before Parse: ' + astNodeType);
+		//console.log(code);
 		const selectedFeature: ISyntaxFeature = this.featureSetDict[astNodeType];
-		console.log('Selected parser: ');
-		console.log(selectedFeature);
+		//console.log('Selected parser: ');
+		//console.log(selectedFeature);
 		if (!selectedFeature) {
 			throw new Error('Can not parse code for which no Syntax Parser was found: ' + astNodeType);
 		}

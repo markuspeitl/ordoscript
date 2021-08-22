@@ -7,11 +7,13 @@ export class ConsoleUtil {
 		console.log(value);
 		ConsoleUtil.printSep();
 	}
-	public static printNamedBody(name: string, body: string): void {
-		console.log('\n\n----' + name);
-		ConsoleUtil.printSep();
-		console.log(body);
-		ConsoleUtil.printSep();
-		console.log('\n');
+	public static printNamedBody(name: string, body: string, printOutPut: boolean = true): void {
+		if (printOutPut) {
+			console.log('\n\n----' + name);
+			ConsoleUtil.printSep();
+			console.log(body);
+			ConsoleUtil.printSep();
+			console.log('\n');
+		}
 	}
 }

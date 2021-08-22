@@ -12,8 +12,7 @@ export class FunctionCallSyntax extends BaseSyntaxFeature {
 	public getTargetNodeType(): string {
 		return 'FunctionCall';
 	}
-
-	private regExp: RegExp = new RegExp(/^[a-zA-Z0-9_]+\(/);
+	private regExp: RegExp = new RegExp(/^[a-zA-Z0-9_]+\([a-zA-Z0-9_,\'\"]*\)/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmedCode: string = code.trim();
 		return this.regExp.test(trimmedCode);

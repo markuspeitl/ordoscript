@@ -5,4 +5,7 @@ export abstract class BaseAstNode {
 	//public children: BaseAstNode[] | null = null;
 	//public startCharIndex: number = -1;
 	//public endCharIndex: number = -1;
+
+	//Only for debugging
+	public original: string;
 }

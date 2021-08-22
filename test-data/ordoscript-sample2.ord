@@ -1,0 +1,27 @@
+import { SampleType } from "test";
+
+const test = 1 + 4 * 3
+
+function print_hello(hello_text): TestClass {
+    console.log(hello_text);
+  	return "sdfqrwe"
+}
+
+print_hello('hello world from ordo');
+
+const newall: any = {}
+
+const newallss: any = [1, 2, newall]
+
+if(newall < 40){
+  print_hello('hello');
+}
+else {
+  print_hello('sss');
+}
+
+const test = newall.prop();
+
+for(var i: number = 0; i < 10; i++){
+  console.log(hello_text);
+};

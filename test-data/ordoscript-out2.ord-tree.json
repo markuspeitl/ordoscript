@@ -1,0 +1,228 @@
+{
+  "children": [
+    {
+      "label": "print_hello",
+      "parameters": {
+        "values": [
+          {
+            "label": "hello_text",
+            "type": "Identifier",
+            "original": "hello_text"
+          }
+        ],
+        "type": "ValueListingNode",
+        "original": "hello_text"
+      },
+      "body": {
+        "content": {
+          "children": [
+            {
+              "id": {
+                "label": "console"
+              },
+              "method": {
+                "identifier": {
+                  "label": "log"
+                },
+                "parameters": {
+                  "values": [
+                    {
+                      "label": "hello_text",
+                      "type": "Identifier",
+                      "original": "hello_text"
+                    }
+                  ],
+                  "type": "ValueListingNode",
+                  "original": "hello_text"
+                },
+                "type": "FunctionCall",
+                "original": "log(hello_text);"
+              },
+              "type": "PropertyCallNode",
+              "original": "console.log(hello_text);"
+            },
+            {
+              "returnValue": {
+                "text": "sdfqrwe",
+                "type": "StringLiteral",
+                "original": "\"sdfqrwe\""
+              },
+              "type": "ReturnNode",
+              "original": "return \"sdfqrwe\""
+            }
+          ],
+          "type": "BlockContent",
+          "original": "\nconsole.log(hello_text);\nreturn \"sdfqrwe\"\n"
+        },
+        "type": "BlockScope",
+        "original": "{\nconsole.log(hello_text);\nreturn \"sdfqrwe\"\n}"
+      },
+      "type": "FunctionDefinition",
+      "original": "function print_hello(hello_text): TestClass {\nconsole.log(hello_text);\nreturn \"sdfqrwe\"\n}"
+    },
+    {
+      "label": "print_hello('hello world from ordo');",
+      "type": "Identifier",
+      "original": "print_hello('hello world from ordo');"
+    },
+    {
+      "condition": {
+        "compositorToken": "<",
+        "left": {
+          "label": "newall",
+          "type": "Identifier",
+          "original": "newall "
+        },
+        "right": {
+          "value": 4,
+          "type": "NumberLiteral",
+          "original": " 4"
+        },
+        "type": "CompositionNode",
+        "original": "newall < 4"
+      },
+      "thenBlock": {
+        "content": {
+          "children": [
+            {
+              "identifier": {
+                "label": "print_hello"
+              },
+              "parameters": {
+                "values": [
+                  {
+                    "text": "hello",
+                    "type": "StringLiteral",
+                    "original": "'hello'"
+                  }
+                ],
+                "type": "ValueListingNode",
+                "original": "'hello'"
+              },
+              "type": "FunctionCall",
+              "original": "print_hello('hello')"
+            }
+          ],
+          "type": "BlockContent",
+          "original": "\nprint_hello('hello')"
+        },
+        "type": "BlockScope",
+        "original": "{\nprint_hello('hello');\n"
+      },
+      "type": "IfNode",
+      "original": "if(newall < 40){\nprint_hello('hello');\n}"
+    },
+    {
+      "label": "else {\nprint_hello('sss');\n}",
+      "type": "Identifier",
+      "original": "else {\nprint_hello('sss');\n}"
+    },
+    {
+      "left": {
+        "declaretype": "const",
+        "label": "test",
+        "type": "VariableDeclarationNode",
+        "original": "const test "
+      },
+      "right": {
+        "id": {
+          "label": "newall"
+        },
+        "method": {
+          "identifier": {
+            "label": "prop"
+          },
+          "parameters": null,
+          "type": "FunctionCall",
+          "original": "prop();"
+        },
+        "type": "PropertyCallNode",
+        "original": " newall.prop();"
+      },
+      "type": "AssignmentNode",
+      "original": "const test = newall.prop();"
+    },
+    {
+      "initializer": {
+        "left": {
+          "declaretype": "var",
+          "valuetype": "number",
+          "label": "i",
+          "type": "VariableDeclarationNode",
+          "original": "var i: number "
+        },
+        "right": {
+          "value": 0,
+          "type": "NumberLiteral",
+          "original": " 0"
+        },
+        "type": "AssignmentNode",
+        "original": "var i: number = 0"
+      },
+      "endCondition": {
+        "compositorToken": "<",
+        "left": {
+          "label": "i",
+          "type": "Identifier",
+          "original": "i "
+        },
+        "right": {
+          "value": 10,
+          "type": "NumberLiteral",
+          "original": " 10"
+        },
+        "type": "CompositionNode",
+        "original": "i < 10"
+      },
+      "incrementor": {
+        "operationToken": "++",
+        "target": {
+          "label": "i",
+          "type": "Identifier",
+          "original": "i"
+        },
+        "type": "UnaryCompositionNode",
+        "original": "i++"
+      },
+      "body": {
+        "content": {
+          "children": [
+            {
+              "id": {
+                "label": "console"
+              },
+              "method": {
+                "identifier": {
+                  "label": "log"
+                },
+                "parameters": {
+                  "values": [
+                    {
+                      "label": "hello_text",
+                      "type": "Identifier",
+                      "original": "hello_text"
+                    }
+                  ],
+                  "type": "ValueListingNode",
+                  "original": "hello_text"
+                },
+                "type": "FunctionCall",
+                "original": "log(hello_text);"
+              },
+              "type": "PropertyCallNode",
+              "original": "console.log(hello_text);"
+            }
+          ],
+          "type": "BlockContent",
+          "original": "\nconsole.log(hello_text);\n"
+        },
+        "type": "BlockScope",
+        "original": "{\nconsole.log(hello_text);\n}"
+      },
+      "type": "ForNode",
+      "original": "for(var i: number = 0; i < 10; i++){\nconsole.log(hello_text);\n};"
+    }
+  ],
+  "type": "BlockContent",
+  "original": "import { SampleType } from \"test\";\n\nconst test = 1 + 4 * 3\n\nfunction print_hello(hello_text): TestClass {\n    console.log(hello_text);\n  \treturn \"sdfqrwe\"\n}\n\nprint_hello('hello world from ordo');\n\nconst newall: any = {}\n\nconst newallss: any = [1, 2, newall]\n\nif(newall < 40){\n  print_hello('hello');\n}\nelse {\n  print_hello('sss');\n}\n\nconst test = newall.prop();\n\nfor(var i: number = 0; i < 10; i++){\n  console.log(hello_text);\n};"
+}
