@@ -4,6 +4,8 @@ import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 
 export class BlockContentSyntax extends BaseSyntaxFeature {
+	public priority: number = 0.5;
+
 	public isFeatureDetected(code: string): boolean {
 		return false;
 	}
@@ -52,7 +54,12 @@ export class BlockContentSyntax extends BaseSyntaxFeature {
 		if (statements.length > 0) {
 			node.children = [];
 			for (const statement of statements) {
-				const childStatement: BaseAstNode = astParser.parseAstNodeDetect(statement);
+				const childStatement: BaseAstNode | null = astParser.parseAstNodeDetect(statement);
+
+				if (!childStatement) {
+					throw new Error('Block child statement with non empty code must result in an Ast node');
+				}
+
 				node.children.push(childStatement);
 			}
 		}

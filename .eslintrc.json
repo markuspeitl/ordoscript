@@ -45,7 +45,7 @@
 			"off"
 		],
 		"@typescript-eslint/array-type": [
-			"error",
+			"warn",
 			{
 				"default": "array"
 			}

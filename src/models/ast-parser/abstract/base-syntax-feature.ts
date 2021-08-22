@@ -8,6 +8,7 @@ import { ISyntaxCurator } from '../interfaces/i-syntax-curator';
 export abstract class BaseSyntaxFeature implements ISyntaxFeature {
 	private printOutPut: boolean = true;
 	protected syntaxCurator: ISyntaxCurator;
+	public abstract priority: number = 10;
 	public constructor(syntaxCurator: ISyntaxCurator) {
 		this.syntaxCurator = syntaxCurator;
 	}

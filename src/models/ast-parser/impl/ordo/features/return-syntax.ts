@@ -1,9 +1,11 @@
+import { SyntaxTool } from './../../../common/util/syntax-tool';
 import { ReturnNode } from './../../../../ast-node/return-node';
-import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
+import { BaseAstNode } from '../../../../ast-node';
 
 export class ReturnSyntax extends BaseSyntaxFeature {
+	public priority: number = 2;
 	//private regExp: RegExp = new RegExp(/^return /);
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();
@@ -16,7 +18,7 @@ export class ReturnSyntax extends BaseSyntaxFeature {
 
 		const node: ReturnNode = new ReturnNode();
 		const afterReturn: string = code.replace(this.matchSet.returnDetector, '').replace(';', '').trim();
-		node.returnValue = astParser.parseAstNodeDetect(afterReturn);
+		node.returnValue = SyntaxTool.getNodeDetect(afterReturn, astParser);
 
 		return node;
 	}

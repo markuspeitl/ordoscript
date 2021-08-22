@@ -4,6 +4,8 @@ import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 import { ValueListingNode } from '../../../../ast-node/value-listing-node';
 
 export class ValueListingSyntax extends BaseSyntaxFeature {
+	public priority: number = 100;
+
 	public isFeatureDetected(code: string): boolean {
 		return false;
 	}
@@ -18,7 +20,7 @@ export class ValueListingSyntax extends BaseSyntaxFeature {
 			node.values = [];
 			//const id: Identifier = new Identifier();
 			//id.label = code.trim();
-			const value: BaseAstNode = astParser.parseAstNodeDetect(code);
+			const value: BaseAstNode | null = astParser.parseAstNodeDetect(code);
 			node.values.push(value);
 			return node;
 		}
@@ -32,7 +34,7 @@ export class ValueListingSyntax extends BaseSyntaxFeature {
 		for (const part of parts) {
 			//const id: Identifier = new Identifier();
 			//id.label = part.trim();
-			const value: BaseAstNode = astParser.parseAstNodeDetect(part.trim());
+			const value: BaseAstNode | null = astParser.parseAstNodeDetect(part.trim());
 			node.values.push(value);
 		}
 

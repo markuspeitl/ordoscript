@@ -8,6 +8,7 @@ import { SyntaxTool } from '../../../common/util/syntax-tool';
 import { Enclosing } from '../../../common/models/enclosing';
 
 export class IfSyntax extends BaseSyntaxFeature {
+	public priority: number = 4;
 	//private regExp: RegExp = new RegExp(/^if[ ]*\(/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();
@@ -26,14 +27,15 @@ export class IfSyntax extends BaseSyntaxFeature {
 			throw new Error('Could not find parameter definition of function');
 		}
 
-		const blockEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, this.tokenSet.blockScopeTokenPair);
-		if (!blockEnclosing) {
-			throw new Error('Could not find body block of function.');
+		const condition: CompositionNode | null = astParser.parseAstNode<CompositionNode>(
+			SyntaxTool.getEnclosedContents(code, parenthesisEnclosing),
+			CompositionNode.name
+		);
+		if (!condition) {
+			throw new Error('If must have a non empty condition');
 		}
-
-		node.condition = astParser.parseAstNode<CompositionNode>(SyntaxTool.getEnclosedContents(code, parenthesisEnclosing), CompositionNode.name);
-		SyntaxTool.widenEnclosing(blockEnclosing, 1);
-		node.thenBlock = astParser.parseAstNode<BlockScope>(SyntaxTool.getEnclosedContents(code, blockEnclosing), BlockScope.name);
+		node.condition = condition;
+		node.thenBlock = SyntaxTool.parseBody(code, this.tokenSet.blockScopeTokenPair, astParser, this.constructor.name);
 
 		return node;
 	}

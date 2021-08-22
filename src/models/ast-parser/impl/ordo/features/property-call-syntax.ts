@@ -6,6 +6,7 @@ import { Identifier } from '../../../../ast-node/identifier';
 import { PropertyCallNode } from '../../../../ast-node/property-call-node';
 
 export class PropertyCallSyntax extends BaseSyntaxFeature {
+	public priority: number = 5;
 	//private regExp: RegExp = new RegExp(/^[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();
@@ -27,8 +28,16 @@ export class PropertyCallSyntax extends BaseSyntaxFeature {
 		}
 		node.id = new Identifier();
 		node.id.label = parts[0];
-		node.method = astParser.parseAstNode<FunctionCall>(parts[1], FunctionCall.name);
+		node.method = this.getFunctionCall(parts[1], astParser);
 
 		return node;
+	}
+
+	private getFunctionCall(code: string, astParser: BaseAstParser): FunctionCall {
+		const functionCall: FunctionCall | null = astParser.parseAstNode<FunctionCall>(code.trim(), FunctionCall.name);
+		if (!functionCall) {
+			throw Error('Property call must have child function');
+		}
+		return functionCall;
 	}
 }

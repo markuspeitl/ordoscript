@@ -4,6 +4,7 @@ import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 
 export class IdentifierSyntax extends BaseSyntaxFeature {
+	public priority: number = 100;
 	//private regExp: RegExp = new RegExp(/^[a-zA-Z0-9_]+/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();

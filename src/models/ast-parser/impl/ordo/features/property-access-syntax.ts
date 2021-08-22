@@ -5,6 +5,7 @@ import { PropertyAccessNode } from '../../../../ast-node/property-access-node';
 import { Identifier } from '../../../../ast-node/identifier';
 
 export class PropertyAccessSyntax extends BaseSyntaxFeature {
+	public priority: number = 6;
 	//private regExp: RegExp = new RegExp(/^[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();

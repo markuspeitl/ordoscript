@@ -8,6 +8,7 @@ import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 
 export class ImportSyntax extends BaseSyntaxFeature {
+	public priority: number = 1;
 	//private regExp: RegExp = new RegExp(/^import /);
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();
@@ -29,7 +30,11 @@ export class ImportSyntax extends BaseSyntaxFeature {
 
 		const importFromParts: string[] = code.split('from');
 		const fromLocationCode: string = importFromParts[1].trim();
-		node.locationSpecification = astParser.parseAstNode<StringLiteral>(fromLocationCode, StringLiteral.name);
+		const externLocation: StringLiteral | null = astParser.parseAstNode<StringLiteral>(fromLocationCode, StringLiteral.name);
+		if (!externLocation) {
+			throw Error('Import statement must have a resource location specified');
+		}
+		node.locationSpecification = externLocation;
 
 		return node;
 	}

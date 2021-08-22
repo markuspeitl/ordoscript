@@ -23,4 +23,26 @@ export class Uti {
 		const contents: string | null = fs.readFileSync(targetFilePath) as unknown as string;
 		return JSON.parse(contents);
 	}
+
+	public static matchModuleTypes(matchMaster: any, matchPool: any, matcherFn: (a: string, b: string) => boolean): Tuple<string>[] {
+		const masterKeys: string[] = Object.keys(matchMaster);
+		const poolKeys: string[] = Object.keys(matchPool);
+
+		const matches: Tuple<string>[] = [];
+		for (const key of masterKeys) {
+			const foundPoolType: string | undefined = poolKeys.find((poolType: string) => matcherFn(key, poolType));
+
+			if (foundPoolType) {
+				matches.push({ a: key, b: foundPoolType });
+			} else {
+				console.log('No node type found for: ' + String(key));
+			}
+		}
+		return matches;
+	}
+}
+
+export interface Tuple<Type> {
+	a: Type;
+	b: Type;
 }

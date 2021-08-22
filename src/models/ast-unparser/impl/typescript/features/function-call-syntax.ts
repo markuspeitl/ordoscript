@@ -4,8 +4,11 @@ import { BaseFeatureSyntax } from '../../../abstract/base-feature-syntax';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 
 export class FunctionCallSyntax extends BaseFeatureSyntax {
-	protected unParseFeatureInternal(node: BaseAstNode, astUnparser: BaseAstUnparser): string | null {
+	protected unParseFeatureInternal(node: BaseAstNode | null, astUnparser: BaseAstUnparser): string | null {
 		if (!(node instanceof FunctionCall)) {
+			return null;
+		}
+		if (!astUnparser) {
 			return null;
 		}
 

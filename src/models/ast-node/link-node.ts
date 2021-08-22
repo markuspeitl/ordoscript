@@ -5,7 +5,7 @@ import { ValueListingNode } from './value-listing-node';
 
 // Include any external resources
 export class LinkNode extends BaseAstNode {
-	public selectedResources: ValueListingNode;
+	public selectedResources: ValueListingNode | null;
 	public selectedIdentifiers: Identifier[];
 	public locationSpecification: StringLiteral;
 }

@@ -1,8 +1,11 @@
 import { BaseAstNode, AssignmentNode } from '../../../../ast-node';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
+import { SyntaxTool } from '../../../common/util/syntax-tool';
 
 export class AssignmentSyntax extends BaseSyntaxFeature {
+	public priority: number = 2;
+
 	public isFeatureDetected(code: string): boolean {
 		const trimmedCode: string = code.trim();
 		return this.matchSet.assignmentDetector.test(trimmedCode);
@@ -19,8 +22,9 @@ export class AssignmentSyntax extends BaseSyntaxFeature {
 			throw Error('Invalid amount of participants for an assignment: ' + String(parts.length));
 		}
 
-		node.left = astParser.parseAstNodeDetect(parts[0]);
-		node.right = astParser.parseAstNodeDetect(parts[1]);
+		const children: BaseAstNode[] = SyntaxTool.parseDetectArray(parts, astParser, this.constructor.name);
+		node.left = children[0];
+		node.right = children[1];
 
 		return node;
 	}

@@ -1,14 +1,14 @@
-import { SyntaxTool } from './../../../common/util/syntax-tool';
-import { Enclosing } from './../../../common/models/enclosing';
-import { Identifier } from './../../../../ast-node/identifier';
-import { ValueListingNode } from './../../../../ast-node/value-listing-node';
+import { SyntaxTool } from '../../../common/util/syntax-tool';
+import { Enclosing } from '../../../common/models/enclosing';
+import { Identifier } from '../../../../ast-node/identifier';
+import { ValueListingNode } from '../../../../ast-node/value-listing-node';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { FunctionDefinition } from '../../../../ast-node/function-definition';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
-import { BlockScope } from '../../../../ast-node/block-scope';
 
-export class FunctionSyntax extends BaseSyntaxFeature {
+export class FunctionDefinitionSyntax extends BaseSyntaxFeature {
+	public priority: number = 0.2;
 	//private regExp: RegExp = new RegExp(/^function [a-zA-Z0-9]+()/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();
@@ -46,9 +46,7 @@ export class FunctionSyntax extends BaseSyntaxFeature {
 			node.returnType = astParser.parseAstNode<Identifier>(enclosedType.trim(), Identifier.name);
 		}
 
-		SyntaxTool.widenEnclosing(blockEnclosing, 1);
-		const enclosedBlock: string = SyntaxTool.getEnclosedContents(code, blockEnclosing);
-		node.body = astParser.parseAstNode<BlockScope>(enclosedBlock, BlockScope.name);
+		node.body = SyntaxTool.parseBody(code, this.tokenSet.blockScopeTokenPair, astParser, this.constructor.name);
 
 		return node;
 	}

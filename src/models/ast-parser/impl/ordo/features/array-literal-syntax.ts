@@ -4,6 +4,8 @@ import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 import { SyntaxTool } from '../../../common/util/syntax-tool';
 
 export class ArrayLiteralSyntax extends BaseSyntaxFeature {
+	public priority: number = 100;
+
 	public isFeatureDetected(code: string): boolean {
 		const trimmedCode: string = code.trim();
 		return this.matchSet.arrayLiteralDetector.test(trimmedCode);

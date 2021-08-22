@@ -8,6 +8,7 @@ import { Enclosing } from '../../../common/models/enclosing';
 import { ValueListingNode } from '../../../../ast-node/value-listing-node';
 
 export class FunctionCallSyntax extends BaseSyntaxFeature {
+	public priority: number = 5;
 	//private regExp: RegExp = new RegExp(/^[a-zA-Z0-9_]+\([a-zA-Z0-9_,\'\"]*\)/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();

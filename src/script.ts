@@ -24,11 +24,11 @@ const unparse: boolean = false;
 if (documentContents) {
 	const ordoAstParser: BaseAstParser = new OrdoAstParser();
 	//console.log('Parsing: ' + String(documentContents));
-	const astNode: BaseAstNode = ordoAstParser.parseFileContent(String(documentContents));
+	const astNode: BaseAstNode | null = ordoAstParser.parseFileContent(String(documentContents));
 	if (astNode) {
 		Uti.writeDocument(JSON.stringify(astNode, null, 2), String(args.target) + '-tree.json');
 	}
-	if (unparse) {
+	if (astNode && unparse) {
 		const astUnparser: BaseAstUnparser = new TypeScriptAstUnparser();
 		const code: string | null = astUnparser.unParseAstNode(astNode);
 		if (code) {

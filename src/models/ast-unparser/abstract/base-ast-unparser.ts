@@ -16,16 +16,16 @@ export abstract class BaseAstUnparser {
 	}
 
 	protected getFeatureFor(unParseSubject: BaseAstNode): BaseFeatureSyntax {
-		if (!this.featureSetDict[unParseSubject.constructor.name]) {
+		/*if (!this.featureSetDict[unParseSubject.constructor.name]) {
 			throw new Error('Can not get missing unparsing feature for node: ' + unParseSubject.constructor.name);
-		}
+		}*/
 
 		return this.featureSetDict[unParseSubject.constructor.name];
 	}
 
 	public abstract initializeFeatureSet(): void;
 	//public abstract unParseAstNodeDetect(node: BaseAstNode): string | null;
-	public abstract unParseAstNode(node: BaseAstNode): string | null;
+	public abstract unParseAstNode(node: BaseAstNode | null): string | null;
 
 	public unParseFullAst(node: BlockContent): string | null {
 		ConsoleUtil.printNamedBody('Parse node content:', JSON.stringify(node, null, 2));

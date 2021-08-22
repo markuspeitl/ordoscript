@@ -5,7 +5,6 @@ export * from './ast-tree';
 export * from './block-content';
 export * from './block-scope';
 export * from './branch-node';
-export * from './composition-group';
 export * from './composition-node';
 export * from './condition-node';
 export * from './dict-literal';

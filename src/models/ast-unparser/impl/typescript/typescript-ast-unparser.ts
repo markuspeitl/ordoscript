@@ -63,6 +63,11 @@ export class TypeScriptAstUnparser extends BaseAstUnparser {
 		//return JSON.stringify(astNode, null, 2);
 
 		const feature: BaseFeatureSyntax = this.getFeatureFor(astNode);
+
+		if (!feature) {
+			return JSON.stringify(astNode, null, 2);
+		}
+
 		return feature.unParseFeature(astNode, this);
 	}
 }

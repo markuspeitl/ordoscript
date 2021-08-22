@@ -5,7 +5,7 @@ import { ValueListingNode } from './value-listing-node';
 
 export class FunctionDefinition extends BaseAstNode {
 	public label: string;
-	public parameters: ValueListingNode;
-	public returnType: Identifier;
+	public parameters: ValueListingNode | null;
+	public returnType: Identifier | null;
 	public body: BlockScope;
 }

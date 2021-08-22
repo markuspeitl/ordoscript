@@ -8,6 +8,7 @@ import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 import { BlockScope } from '../../../../ast-node/block-scope';
 
 export class ForSyntax extends BaseSyntaxFeature {
+	public priority: number = 0.1;
 	//private regExp: RegExp = new RegExp(/^for[ ]*\(/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();
@@ -30,19 +31,22 @@ export class ForSyntax extends BaseSyntaxFeature {
 
 		const node: ForNode = new ForNode();
 		//node.initializer = astParser.parseAstNode<VariableDeclarationNode>(forParamsParts[0].trim(), VariableDeclarationNode.name);
-		node.initializer = astParser.parseAstNodeDetect(forParamsParts[0].trim());
-		node.endCondition = astParser.parseAstNode<CompositionNode>(forParamsParts[1].trim(), CompositionNode.name);
-		node.incrementor = astParser.parseAstNodeDetect(forParamsParts[2].trim());
 
-		const forBlockEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, this.tokenSet.blockScopeTokenPair);
-
-		if (!forBlockEnclosing) {
-			throw new Error('For loop must have enclosed block as component.');
+		const childNode: CompositionNode | null = astParser.parseAstNode<CompositionNode>(forParamsParts[1].trim(), CompositionNode.name);
+		if (!childNode) {
+			throw new Error('Failed parsing endcondition.');
 		}
+		node.endCondition = childNode;
 
-		SyntaxTool.widenEnclosing(forBlockEnclosing, 1);
-		const enclosedBlock: string = SyntaxTool.getEnclosedContents(code, forBlockEnclosing);
-		node.body = astParser.parseAstNode<BlockScope>(enclosedBlock, BlockScope.name);
+		const children: BaseAstNode[] = SyntaxTool.parseDetectArray(
+			[forParamsParts[0].trim(), forParamsParts[2].trim()],
+			astParser,
+			this.constructor.name
+		);
+		node.initializer = children[0];
+		node.incrementor = children[1];
+
+		node.body = SyntaxTool.parseBody(code, this.tokenSet.blockScopeTokenPair, astParser, this.constructor.name);
 
 		return node;
 	}

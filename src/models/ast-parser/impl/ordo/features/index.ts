@@ -7,7 +7,7 @@ export * from './dict-literal-syntax';
 export * from './else-syntax';
 export * from './for-syntax';
 export * from './function-call-syntax';
-export * from './function-syntax';
+export * from './function-definition-syntax';
 export * from './identifier-syntax';
 export * from './if-syntax';
 export * from './import-syntax';

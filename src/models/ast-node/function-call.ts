@@ -4,5 +4,5 @@ import { ValueListingNode } from './value-listing-node';
 
 export class FunctionCall extends BaseAstNode {
 	public identifier: Identifier;
-	public parameters: ValueListingNode;
+	public parameters: ValueListingNode | null;
 }

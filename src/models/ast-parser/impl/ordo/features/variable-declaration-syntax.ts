@@ -4,6 +4,7 @@ import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 
 export class VariableDeclarationSyntax extends BaseSyntaxFeature {
+	public priority: number = 10;
 	//private regExp: RegExp = new RegExp(/^const|var|let[ ]+[:[ ]+[a-zA-Z0-9]+]?/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();

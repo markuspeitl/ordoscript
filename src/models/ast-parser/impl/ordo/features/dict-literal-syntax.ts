@@ -4,6 +4,8 @@ import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 
 export class DictLiteralSyntax extends BaseSyntaxFeature {
+	public priority: number = 100;
+
 	public isFeatureDetected(code: string): boolean {
 		return false;
 	}
