@@ -1,20 +1,18 @@
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
-import { OrdoAstParser } from '../ordo-ast-parser';
 import { BlockScope } from '../../../../ast-node/block-scope';
 import { IfNode } from '../../../../ast-node/if-node';
 import { CompositionNode } from '../../../../ast-node/composition-node';
-import { tokenSet } from '.';
+import { SyntaxTool } from '../../../common/util/syntax-tool';
+import { Enclosing } from '../../../common/models/enclosing';
 
 export class IfSyntax extends BaseSyntaxFeature {
-	public getTargetNodeType(): string {
-		return 'IfNode';
-	}
-	private regExp: RegExp = new RegExp(/^if[ ]*\(/);
+	//private regExp: RegExp = new RegExp(/^if[ ]*\(/);
 	public isFeatureDetected(code: string): boolean {
-		const trimmedCode: string = code.trim();
-		return this.regExp.test(trimmedCode);
+		const trimmed: string = code.trim();
+		//return this.regExp.test(trimmedCode);
+		return this.matchSet.ifDetector.test(trimmed);
 	}
 	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
 		if (!code) {
@@ -23,14 +21,19 @@ export class IfSyntax extends BaseSyntaxFeature {
 
 		const node: IfNode = new IfNode();
 
-		const parenthesisOpenIndex: number = code.indexOf(tokenSet.functionParamTokenPair.open);
-		const parenthesisCloseIndex: number = code.indexOf(tokenSet.functionParamTokenPair.close);
+		const parenthesisEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, this.tokenSet.ifParamTokenPair);
+		if (!parenthesisEnclosing) {
+			throw new Error('Could not find parameter definition of function');
+		}
 
-		const blockOpenIndex: number = code.indexOf(tokenSet.blockScopeTokenPair.open);
-		const blockCloseIndex: number = code.lastIndexOf(tokenSet.blockScopeTokenPair.close);
+		const blockEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, this.tokenSet.blockScopeTokenPair);
+		if (!blockEnclosing) {
+			throw new Error('Could not find body block of function.');
+		}
 
-		node.condition = astParser.parseAstNode<CompositionNode>(code.substring(parenthesisOpenIndex + 1, parenthesisCloseIndex - 1), CompositionNode.name);
-		node.thenBlock = astParser.parseAstNode<BlockScope>(code.substring(blockOpenIndex, blockCloseIndex), BlockScope.name);
+		node.condition = astParser.parseAstNode<CompositionNode>(SyntaxTool.getEnclosedContents(code, parenthesisEnclosing), CompositionNode.name);
+		SyntaxTool.widenEnclosing(blockEnclosing, 1);
+		node.thenBlock = astParser.parseAstNode<BlockScope>(SyntaxTool.getEnclosedContents(code, blockEnclosing), BlockScope.name);
 
 		return node;
 	}

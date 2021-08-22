@@ -1,17 +1,13 @@
 import { CompositionNode } from './../../../../ast-node/composition-node';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
-import { ConsoleUtil } from '../../../common/util/console-util';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
-import { tokenSet } from './token-set';
 
 export class CompositionSyntax extends BaseSyntaxFeature {
-	public getTargetNodeType(): string {
-		return 'BlockContent';
-	}
-
 	public isFeatureDetected(code: string): boolean {
-		return tokenSet.binaryExpressionTokens.some((token: string) => code.includes(token));
+		const trimmed: string = code.trim();
+		//return this.tokenSet.binaryExpressionTokens.some((token: string) => code.includes(token));
+		return this.matchSet.compositionDetector.test(trimmed);
 	}
 
 	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
@@ -19,7 +15,7 @@ export class CompositionSyntax extends BaseSyntaxFeature {
 			return null;
 		}
 
-		const tokensInStatement: string[] = tokenSet.binaryExpressionTokens.filter((token: string) => code.includes(token));
+		const tokensInStatement: string[] = this.tokenSet.binaryExpressionTokens.filter((token: string) => code.includes(token));
 		const tokenPositions: number[] = tokensInStatement.map((token: string) => code.indexOf(token));
 
 		//Parse the right side of the composition without redoing the mapping (more performant)
@@ -58,7 +54,7 @@ export class CompositionSyntax extends BaseSyntaxFeature {
 	private parseCompositionFullRecursive(code: string, astParser: BaseAstParser): CompositionNode {
 		const node: CompositionNode = new CompositionNode();
 
-		const tokensInStatement: string[] = tokenSet.binaryExpressionTokens.filter((token: string) => code.includes(token));
+		const tokensInStatement: string[] = this.tokenSet.binaryExpressionTokens.filter((token: string) => code.includes(token));
 		const tokenPositions: number[] = tokensInStatement.map((token: string) => code.indexOf(token));
 
 		const firstPosition: number = Math.min(...tokenPositions);

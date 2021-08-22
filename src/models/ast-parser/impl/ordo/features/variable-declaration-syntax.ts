@@ -4,14 +4,11 @@ import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 
 export class VariableDeclarationSyntax extends BaseSyntaxFeature {
-	public getTargetNodeType(): string {
-		return 'VariableDeclarationNode';
-	}
-
-	private regExp: RegExp = new RegExp(/^const|var|let[ ]+[:[ ]+[a-zA-Z0-9]+]?/);
+	//private regExp: RegExp = new RegExp(/^const|var|let[ ]+[:[ ]+[a-zA-Z0-9]+]?/);
 	public isFeatureDetected(code: string): boolean {
-		const trimmedCode: string = code.trim();
-		return this.regExp.test(trimmedCode);
+		const trimmed: string = code.trim();
+		//return this.regExp.test(trimmed);
+		return this.matchSet.variableDeclarationDetector.test(trimmed);
 	}
 	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
 		if (!code) {

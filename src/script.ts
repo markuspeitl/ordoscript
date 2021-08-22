@@ -1,10 +1,10 @@
 import { OrdoAstParser } from './models/ast-parser/impl/ordo/ordo-ast-parser';
 import { ArgumentParser } from 'argparse';
-import fs from 'fs';
 import { BaseAstParser } from './models/ast-parser/abstract/base-ast-parser';
 import { BaseAstNode } from './models/ast-node/abstract/base-ast-node';
 import { BaseAstUnparser } from './models/ast-unparser/abstract/base-ast-unparser';
 import { TypeScriptAstUnparser } from './models/ast-unparser/impl/typescript/typescript-ast-unparser';
+import { Uti } from './models/ast-parser/common/util/util';
 
 console.log('Script executed');
 
@@ -17,33 +17,23 @@ parser.add_argument('target', { help: 'Target path to write to' });
 
 const args: any = parser.parse_args();
 
-function readDocument(targetFilePath: string): string | null {
-	console.log('Reading document from: ' + targetFilePath);
-	if (!fs.existsSync(targetFilePath)) {
-		console.log('File does not exist');
-		return null;
-	}
+const documentContents: string | null = Uti.readDocument(args.source);
 
-	return fs.readFileSync(targetFilePath) as unknown as string;
-}
-function writeDocument(contents: string, targetFilePath: string): void {
-	//console.log('Writing: \n' + contents + '\nto: ' + targetFilePath + '\n');
-	fs.writeFileSync(targetFilePath, contents);
-}
-
-const documentContents: string | null = readDocument(args.source);
+const unparse: boolean = false;
 
 if (documentContents) {
 	const ordoAstParser: BaseAstParser = new OrdoAstParser();
 	//console.log('Parsing: ' + String(documentContents));
 	const astNode: BaseAstNode = ordoAstParser.parseFileContent(String(documentContents));
 	if (astNode) {
-		writeDocument(JSON.stringify(astNode, null, 2), String(args.target) + '-tree.json');
+		Uti.writeDocument(JSON.stringify(astNode, null, 2), String(args.target) + '-tree.json');
 	}
-	const astUnparser: BaseAstUnparser = new TypeScriptAstUnparser();
-	const code: string | null = astUnparser.unParseAstNode(astNode);
-	if (code) {
-		writeDocument(code, args.target);
+	if (unparse) {
+		const astUnparser: BaseAstUnparser = new TypeScriptAstUnparser();
+		const code: string | null = astUnparser.unParseAstNode(astNode);
+		if (code) {
+			Uti.writeDocument(code, args.target);
+		}
 	}
 }
 

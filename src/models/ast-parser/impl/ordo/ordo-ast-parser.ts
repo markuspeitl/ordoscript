@@ -1,3 +1,4 @@
+import { TokenSet, MatchSet } from './features/token-set';
 import { ReturnSyntax } from './features/return-syntax';
 import { ReturnNode } from './../../../ast-node/return-node';
 import { ForSyntax } from './features/for-syntax';
@@ -23,7 +24,7 @@ import {
 	DictLiteral,
 	ParameterDeclaration,
 	Identifier
-} from '../../../ast-node';
+} from '../../../ast-node/index';
 import {
 	ImportSyntax,
 	FunctionSyntax,
@@ -43,7 +44,7 @@ import {
 	DictLiteralSyntax,
 	ParameterDeclarationSyntax,
 	IdentifierSyntax
-} from './features/index';
+} from './features';
 import { OrdoSyntaxCurator } from './features/util/ordo-syntax-curator';
 import { BaseAstNode } from '../../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from '../../abstract/base-ast-parser';
@@ -57,8 +58,9 @@ export class OrdoAstParser extends BaseAstParser {
 	public initializeFeatureSet(): void {
 		//Optimization todo -> order by usage probability
 		const syntaxCurator: ISyntaxCurator = new OrdoSyntaxCurator();
-		this.addFeature(ReturnNode, ReturnSyntax, syntaxCurator);
+
 		this.addFeature(ForNode, ForSyntax, syntaxCurator);
+		this.addFeature(ReturnNode, ReturnSyntax, syntaxCurator);
 		this.addFeature(LinkNode, ImportSyntax, syntaxCurator);
 		this.addFeature(FunctionDefinition, FunctionSyntax, syntaxCurator);
 		this.addFeature(BlockScope, BlockScopeSyntax, syntaxCurator);
@@ -79,6 +81,12 @@ export class OrdoAstParser extends BaseAstParser {
 		this.addFeature(ParameterDeclaration, ParameterDeclarationSyntax, syntaxCurator);
 		this.addFeature(ArrayLiteral, ArrayLiteralSyntax, syntaxCurator);
 		this.addFeature(Identifier, IdentifierSyntax, syntaxCurator);
+
+		const tokenSet: TokenSet = new TokenSet();
+		this.loadTokenSet(tokenSet);
+		const matchSet: MatchSet = new MatchSet();
+		matchSet.reconstructDetectors(tokenSet);
+		this.loadMatchSet(matchSet);
 
 		//Todo add detection tree hierarchy
 	}

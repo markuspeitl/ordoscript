@@ -1,3 +1,4 @@
+import { TokenSet, MatchSet } from './../impl/ordo/features/token-set';
 import { BaseAstNode } from '../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from './base-ast-parser';
 import { ISyntaxFeature } from '../interfaces/i-syntax-feature';
@@ -5,7 +6,7 @@ import { ConsoleUtil } from '../common/util/console-util';
 import { ISyntaxCurator } from '../interfaces/i-syntax-curator';
 
 export abstract class BaseSyntaxFeature implements ISyntaxFeature {
-	private printOutPut: boolean = false;
+	private printOutPut: boolean = true;
 	protected syntaxCurator: ISyntaxCurator;
 	public constructor(syntaxCurator: ISyntaxCurator) {
 		this.syntaxCurator = syntaxCurator;
@@ -41,5 +42,14 @@ export abstract class BaseSyntaxFeature implements ISyntaxFeature {
 			return null;
 		}
 		return this.parseFeature(code, astParser);
+	}
+
+	protected tokenSet: TokenSet;
+	public loadTokenSet(tokenSet: TokenSet): void {
+		this.tokenSet = tokenSet;
+	}
+	protected matchSet: MatchSet;
+	public loadMatchSet(matchSet: MatchSet): void {
+		this.matchSet = matchSet;
 	}
 }

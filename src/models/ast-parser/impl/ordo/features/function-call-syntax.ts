@@ -3,19 +3,16 @@ import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 import { Identifier } from '../../../../ast-node/identifier';
 import { FunctionCall } from '../../../../ast-node/function-call';
-import { tokenSet } from './token-set';
 import { SyntaxTool } from '../../../common/util/syntax-tool';
 import { Enclosing } from '../../../common/models/enclosing';
 import { ValueListingNode } from '../../../../ast-node/value-listing-node';
 
 export class FunctionCallSyntax extends BaseSyntaxFeature {
-	public getTargetNodeType(): string {
-		return 'FunctionCall';
-	}
-	private regExp: RegExp = new RegExp(/^[a-zA-Z0-9_]+\([a-zA-Z0-9_,\'\"]*\)/);
+	//private regExp: RegExp = new RegExp(/^[a-zA-Z0-9_]+\([a-zA-Z0-9_,\'\"]*\)/);
 	public isFeatureDetected(code: string): boolean {
-		const trimmedCode: string = code.trim();
-		return this.regExp.test(trimmedCode);
+		const trimmed: string = code.trim();
+		//return this.regExp.test(trimmedCode);
+		return this.matchSet.functionCallDetector.test(trimmed);
 	}
 	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
 		if (!code) {
@@ -24,7 +21,7 @@ export class FunctionCallSyntax extends BaseSyntaxFeature {
 
 		const node: FunctionCall = new FunctionCall();
 
-		const parenthesisEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, tokenSet.functionParamTokenPair);
+		const parenthesisEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, this.tokenSet.functionParamTokenPair);
 		if (!parenthesisEnclosing) {
 			throw new Error('Could not find parameter definition of function call');
 		}

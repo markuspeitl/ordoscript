@@ -6,18 +6,14 @@ import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { FunctionDefinition } from '../../../../ast-node/function-definition';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
-import { OrdoAstParser } from '../ordo-ast-parser';
 import { BlockScope } from '../../../../ast-node/block-scope';
-import { tokenSet } from './token-set';
 
 export class FunctionSyntax extends BaseSyntaxFeature {
-	public getTargetNodeType(): string {
-		return 'FunctionDefinition';
-	}
-	private regExp: RegExp = new RegExp(/^function [a-zA-Z0-9]+()/);
+	//private regExp: RegExp = new RegExp(/^function [a-zA-Z0-9]+()/);
 	public isFeatureDetected(code: string): boolean {
-		const trimmedCode: string = code.trim();
-		return this.regExp.test(trimmedCode);
+		const trimmed: string = code.trim();
+		//return this.regExp.test(trimmed);
+		return this.matchSet.functionDefDetector.test(trimmed);
 	}
 	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
 		if (!code) {
@@ -27,17 +23,17 @@ export class FunctionSyntax extends BaseSyntaxFeature {
 		const node: FunctionDefinition = new FunctionDefinition();
 
 		const whitespaceIndex: number = code.indexOf(' ');
-		const parenthesisEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, tokenSet.functionParamTokenPair);
+		const parenthesisEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, this.tokenSet.functionParamTokenPair);
 		if (!parenthesisEnclosing) {
 			throw new Error('Could not find parameter definition of function');
 		}
 
-		const blockEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, tokenSet.blockScopeTokenPair);
+		const blockEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, this.tokenSet.blockScopeTokenPair);
 		if (!blockEnclosing) {
 			throw new Error('Could not find body block of function.');
 		}
 
-		const returnTypeStartIndex: number = code.indexOf(tokenSet.typeDefinitionStartToken);
+		const returnTypeStartIndex: number = code.indexOf(this.tokenSet.typeDefinitionStartToken);
 		const typeEnclosing: Enclosing = new Enclosing(returnTypeStartIndex, blockEnclosing.open);
 
 		const enclosedParam: string = SyntaxTool.getEnclosedContents(code, parenthesisEnclosing);

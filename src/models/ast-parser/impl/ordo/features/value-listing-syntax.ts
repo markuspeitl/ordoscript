@@ -1,15 +1,9 @@
-import { Identifier } from './../../../../ast-node/identifier';
-import { AssignmentNode } from './../../../../ast-node/assignment-node';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 import { ValueListingNode } from '../../../../ast-node/value-listing-node';
 
 export class ValueListingSyntax extends BaseSyntaxFeature {
-	public getTargetNodeType(): string {
-		return 'ValueListingNode';
-	}
-
 	public isFeatureDetected(code: string): boolean {
 		return false;
 	}

@@ -5,12 +5,10 @@ import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 
 export class BlockScopeSyntax extends BaseSyntaxFeature {
-	public getTargetNodeType(): string {
-		return 'BlockScope';
-	}
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();
-		return trimmed.startsWith('{') && trimmed.endsWith('}');
+		//return trimmed.startsWith('{') && trimmed.endsWith('}');
+		return this.matchSet.blockScopeDetector.test(trimmed);
 	}
 
 	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {

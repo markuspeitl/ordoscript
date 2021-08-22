@@ -2,17 +2,17 @@ import { FunctionCall } from './../../../../ast-node/function-call';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
-import { PropertyAccessNode } from '../../../../ast-node/property-access-node';
 import { Identifier } from '../../../../ast-node/identifier';
 import { PropertyCallNode } from '../../../../ast-node/property-call-node';
 
 export class PropertyCallSyntax extends BaseSyntaxFeature {
-	private regExp: RegExp = new RegExp(/^[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+/);
+	//private regExp: RegExp = new RegExp(/^[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+/);
 	public isFeatureDetected(code: string): boolean {
-		const trimmedCode: string = code.trim();
-		const propertyAccessed: boolean = this.regExp.test(trimmedCode);
-		const isFunctionCall: boolean = code.includes('(') && code.includes(')');
-		return propertyAccessed && isFunctionCall;
+		const trimmed: string = code.trim();
+		//const propertyAccessed: boolean = this.regExp.test(trimmed);
+		//const isFunctionCall: boolean = code.includes('(') && code.includes(')');
+		//return propertyAccessed && isFunctionCall;
+		return this.matchSet.propertyCallDetector.test(trimmed);
 	}
 	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
 		if (!code) {

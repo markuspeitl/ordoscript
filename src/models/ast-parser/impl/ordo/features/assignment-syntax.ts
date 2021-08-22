@@ -1,16 +1,11 @@
-import { AssignmentNode } from './../../../../ast-node/assignment-node';
-import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
+import { BaseAstNode, AssignmentNode } from '../../../../ast-node';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 
 export class AssignmentSyntax extends BaseSyntaxFeature {
-	public getTargetNodeType(): string {
-		return 'AssignmentNode';
-	}
-
 	public isFeatureDetected(code: string): boolean {
 		const trimmedCode: string = code.trim();
-		return trimmedCode.includes('=');
+		return this.matchSet.assignmentDetector.test(trimmedCode);
 	}
 	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
 		if (!code) {

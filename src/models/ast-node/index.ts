@@ -1,3 +1,5 @@
+export * from './abstract/base-ast-node';
+export * from './array-literal';
 export * from './assignment-node';
 export * from './ast-tree';
 export * from './block-content';
@@ -24,5 +26,6 @@ export * from './property-call-node';
 export * from './return-node';
 export * from './string-literal';
 export * from './string-node';
+export * from './unary-composition-node';
 export * from './value-listing-node';
 export * from './variable-declaration-node';

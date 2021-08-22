@@ -4,10 +4,11 @@ import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 
 export class IdentifierSyntax extends BaseSyntaxFeature {
-	private regExp: RegExp = new RegExp(/^[a-zA-Z0-9_]+/);
+	//private regExp: RegExp = new RegExp(/^[a-zA-Z0-9_]+/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();
-		return this.regExp.test(trimmed);
+		//return this.regExp.test(trimmed);
+		return this.matchSet.identifierDetector.test(trimmed);
 	}
 
 	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {

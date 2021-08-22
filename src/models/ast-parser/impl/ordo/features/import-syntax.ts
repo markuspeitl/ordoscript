@@ -6,13 +6,13 @@ import { LinkNode } from './../../../../ast-node/link-node';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
-import { tokenSet } from './token-set';
 
 export class ImportSyntax extends BaseSyntaxFeature {
-	private regExp: RegExp = new RegExp(/^import /);
+	//private regExp: RegExp = new RegExp(/^import /);
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();
-		return this.regExp.test(trimmed);
+		//return this.regExp.test(trimmed);
+		return this.matchSet.importDetector.test(trimmed);
 	}
 
 	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
@@ -20,7 +20,7 @@ export class ImportSyntax extends BaseSyntaxFeature {
 			return null;
 		}
 		const node: LinkNode = new LinkNode();
-		const selectionEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, tokenSet.foreignScopeTokenPair);
+		const selectionEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, this.tokenSet.foreignScopeTokenPair);
 
 		if (selectionEnclosing) {
 			const selectionContents: string = SyntaxTool.getEnclosedContents(code, selectionEnclosing);

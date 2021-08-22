@@ -4,10 +4,11 @@ import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 import { NumberLiteral } from '../../../../ast-node/number-literal';
 
 export class NumberLiteralSyntax extends BaseSyntaxFeature {
-	private regExp: RegExp = new RegExp(/^[0-9]+/);
+	//private regExp: RegExp = new RegExp(/^[0-9]+/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();
-		return this.regExp.test(trimmed);
+		//return this.regExp.test(trimmed);
+		return this.matchSet.numberLiteralDetector.test(trimmed);
 	}
 
 	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {

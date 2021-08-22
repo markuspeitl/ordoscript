@@ -1,3 +1,4 @@
+import { TokenSet, MatchSet } from './../impl/ordo/features/token-set';
 import { ISyntaxFeature } from '../interfaces/i-syntax-feature';
 import { BaseAstNode } from '../../ast-node/abstract/base-ast-node';
 import { BlockContent } from '../../ast-node/block-content';
@@ -10,7 +11,11 @@ export abstract class BaseAstParser {
 		this.initializeFeatureSet();
 	}
 
-	protected addFeature(AstNodeConstructor: new () => BaseAstNode, FeatureConstructor: new (codeCurator: ISyntaxCurator) => ISyntaxFeature, codeCurator: ISyntaxCurator): void {
+	protected addFeature(
+		AstNodeConstructor: new () => BaseAstNode,
+		FeatureConstructor: new (codeCurator: ISyntaxCurator) => ISyntaxFeature,
+		codeCurator: ISyntaxCurator
+	): void {
 		const astNode: BaseAstNode = new AstNodeConstructor();
 		const feature: ISyntaxFeature = new FeatureConstructor(codeCurator);
 		this.featureSetDict[astNode.constructor.name] = feature;
@@ -19,6 +24,17 @@ export abstract class BaseAstParser {
 	protected getFeature(AstNodeConstructor: new () => BaseAstNode): ISyntaxFeature {
 		const node: BaseAstNode = new AstNodeConstructor();
 		return this.featureSetDict[node.constructor.name];
+	}
+
+	public loadTokenSet(tokenSet: TokenSet): void {
+		for (const key of Object.keys(this.featureSetDict)) {
+			this.featureSetDict[key].loadTokenSet(tokenSet);
+		}
+	}
+	public loadMatchSet(matchSet: MatchSet): void {
+		for (const key of Object.keys(this.featureSetDict)) {
+			this.featureSetDict[key].loadMatchSet(matchSet);
+		}
 	}
 
 	public abstract initializeFeatureSet(): void;

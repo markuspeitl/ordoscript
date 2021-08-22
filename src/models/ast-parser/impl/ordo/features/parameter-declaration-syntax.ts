@@ -1,5 +1,4 @@
 import { Identifier } from './../../../../ast-node/identifier';
-import { VariableDeclarationNode } from './../../../../ast-node/variable-declaration-node';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
