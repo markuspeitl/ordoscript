@@ -55,37 +55,13 @@ export abstract class BaseAstParser implements IAstParser {
 	}
 
 	protected loadSyntaxFeaturesDynamic(nodeModule: any, syntaxModule: any, syntaxCurator: ISyntaxCurator): void {
-		const nodeModuleKeys: string[] = Object.keys(nodeModule);
-		const syntaxModuleKeys: string[] = Object.keys(syntaxModule);
-
 		const matches: Tuple<string>[] = Uti.matchModuleTypes(syntaxModule, nodeModule, this.moduleTypesMatch);
 
 		for (const match of matches) {
 			console.log('\nLinking: ' + match.b + ' -> ' + match.a);
 			this.addFeature(nodeModule[match.b], syntaxModule[match.a], syntaxCurator);
 		}
-
-		/*for (const key of syntaxModuleKeys) {
-			//const syntaxNameParts: string[] = key.split(/.[A-Z]/);
-			//console.log(syntaxNameParts);
-			const checkForName: string = key.toLowerCase().replace('syntax', '');
-
-			const foundType: string | undefined = nodeModuleKeys.find((nodeType: string) =>
-				nodeType.toLowerCase().startsWith(checkForName.toLowerCase())
-			);
-			if (foundType) {
-				console.log('\nLinking: ' + foundType + ' -> ' + key);
-				this.addFeature(nodeModule[foundType], syntaxModule[key], syntaxCurator);
-			} else {
-				console.log('No node type found for syntax parser: ' + key);
-			}
-
-			//console.log(key);
-			//console.log((syntaxParsers as any)[key]);
-			//const featureType: BaseSyntaxFeature = (syntaxParsers as any)[key] as BaseSyntaxFeature;
-			//this.addFeature(ForNode, (syntaxParsers as any)[key], syntaxCurator);
-		}*/
-		console.log(this.featuresArray);
+		//console.log(this.featuresArray);
 	}
 
 	protected getFeature(astNodeName: string): ISyntaxFeature {
@@ -158,9 +134,8 @@ export abstract class BaseAstParser implements IAstParser {
 		console.log(code);
 		const selectedFeature: ISyntaxFeature = this.getFeature(astNodeType);
 
-		this.printParserMapping();
 		console.log('Selected parser: ');
-		console.log(selectedFeature);
+		console.log(selectedFeature.constructor.name);
 		if (!selectedFeature) {
 			throw new Error('Can not parse code for which no Syntax Parser was found: ' + astNodeType);
 		}

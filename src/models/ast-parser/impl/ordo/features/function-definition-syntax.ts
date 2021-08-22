@@ -41,7 +41,7 @@ export class FunctionDefinitionSyntax extends BaseSyntaxFeature {
 		node.label = code.substring(whitespaceIndex + 1, parenthesisEnclosing.open);
 		node.parameters = astParser.parseAstNode<ValueListingNode>(enclosedParam, ValueListingNode.name);
 
-		if (returnTypeStartIndex > -1 && returnTypeStartIndex < parenthesisEnclosing.open) {
+		if (returnTypeStartIndex > -1 && returnTypeStartIndex < blockEnclosing.open) {
 			const enclosedType: string = SyntaxTool.getEnclosedContents(code, typeEnclosing);
 			node.returnType = astParser.parseAstNode<Identifier>(enclosedType.trim(), Identifier.name);
 		}

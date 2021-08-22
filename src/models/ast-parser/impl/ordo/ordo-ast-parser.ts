@@ -46,6 +46,8 @@ export class OrdoAstParser extends BaseAstParser {
 		matchSet.reconstructDetectors(tokenSet);
 		this.loadMatchSet(matchSet);
 
+		this.printParserMapping();
+
 		//Todo add detection tree hierarchy
 	}
 }

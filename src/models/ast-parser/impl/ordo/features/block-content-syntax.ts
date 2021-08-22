@@ -1,3 +1,4 @@
+import { ConsoleUtil } from './../../../common/util/console-util';
 import { BlockContent } from './../../../../ast-node/block-content';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { BaseAstParser } from '../../../abstract/base-ast-parser';
@@ -26,6 +27,8 @@ export class BlockContentSyntax extends BaseSyntaxFeature {
 			return node;
 		}
 
+		ConsoleUtil.printNamedBody('BLOCKCURATEDLINES', JSON.stringify(curatedLines, null, 2));
+
 		const statements: string[] = [];
 
 		let blockCode: string | null = null;
@@ -36,11 +39,12 @@ export class BlockContentSyntax extends BaseSyntaxFeature {
 				const previousCode: string = line.substring(0, line.indexOf('{'));
 				const previousLineIndex: number = i - 1;
 				if (previousCode.trim().length > 0) {
-					blockCode = line;
+					blockCode = '';
 				} else if (curatedLines.length > previousLineIndex && curatedLines[previousLineIndex].trim().length > 0) {
-					blockCode = curatedLines[previousLineIndex] + line;
+					blockCode = curatedLines[previousLineIndex];
 				}
-			} else if (blockCode !== null) {
+			}
+			if (blockCode !== null) {
 				blockCode = blockCode + '\n' + line;
 				if (line.includes('}')) {
 					statements.push(blockCode);
@@ -50,6 +54,8 @@ export class BlockContentSyntax extends BaseSyntaxFeature {
 				statements.push(line);
 			}
 		}
+
+		ConsoleUtil.printNamedBody('BLOCKSTATEMENTS', JSON.stringify(statements, null, 2));
 
 		if (statements.length > 0) {
 			node.children = [];

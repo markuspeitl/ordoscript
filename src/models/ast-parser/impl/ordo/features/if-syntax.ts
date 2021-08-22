@@ -8,7 +8,7 @@ import { SyntaxTool } from '../../../common/util/syntax-tool';
 import { Enclosing } from '../../../common/models/enclosing';
 
 export class IfSyntax extends BaseSyntaxFeature {
-	public priority: number = 4;
+	public priority: number = 2;
 	//private regExp: RegExp = new RegExp(/^if[ ]*\(/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();

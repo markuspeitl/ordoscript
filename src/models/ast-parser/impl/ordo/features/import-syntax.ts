@@ -28,8 +28,8 @@ export class ImportSyntax extends BaseSyntaxFeature {
 			node.selectedResources = astParser.parseAstNode<ValueListingNode>(selectionContents, ValueListingNode.name);
 		}
 
-		const importFromParts: string[] = code.split('from');
-		const fromLocationCode: string = importFromParts[1].trim();
+		const importFromParts: string[] = code.split(/from[ ]*/);
+		const fromLocationCode: string = importFromParts[1].replace(';', '').trim();
 		const externLocation: StringLiteral | null = astParser.parseAstNode<StringLiteral>(fromLocationCode, StringLiteral.name);
 		if (!externLocation) {
 			throw Error('Import statement must have a resource location specified');

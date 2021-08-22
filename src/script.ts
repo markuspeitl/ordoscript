@@ -19,7 +19,7 @@ const args: any = parser.parse_args();
 
 const documentContents: string | null = Uti.readDocument(args.source);
 
-const unparse: boolean = false;
+const unparse: boolean = true;
 
 if (documentContents) {
 	const ordoAstParser: BaseAstParser = new OrdoAstParser();
@@ -32,7 +32,7 @@ if (documentContents) {
 		const astUnparser: BaseAstUnparser = new TypeScriptAstUnparser();
 		const code: string | null = astUnparser.unParseAstNode(astNode);
 		if (code) {
-			Uti.writeDocument(code, args.target);
+			Uti.writeDocument(code, String(args.target) + '.ts');
 		}
 	}
 }

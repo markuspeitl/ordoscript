@@ -3,7 +3,7 @@ import { BaseFeatureSyntax } from '../../../abstract/base-feature-syntax';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { FunctionDefinition } from '../../../../ast-node';
 
-export class FunctionSyntax extends BaseFeatureSyntax {
+export class FunctionDefinitionSyntax extends BaseFeatureSyntax {
 	protected unParseFeatureInternal(node: BaseAstNode, astUnparser: BaseAstUnparser): string | null {
 		if (!(node instanceof FunctionDefinition)) {
 			return null;

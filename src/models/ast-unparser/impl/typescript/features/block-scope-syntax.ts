@@ -16,11 +16,13 @@ export class BlockScopeSyntax extends BaseFeatureSyntax {
 			if (unParsedBlock) {
 				const lines: string[] = unParsedBlock.split('\n');
 				for (const line of lines) {
-					code += '\t' + line;
+					if (line && line.length > 0) {
+						code += '\t' + line.trim() + '\n';
+					}
 				}
 			}
 		}
-		code += '\n}';
+		code += '}';
 		return code;
 	}
 }

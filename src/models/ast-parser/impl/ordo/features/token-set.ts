@@ -64,6 +64,7 @@ export class MatchSet {
 	private white: string = '[ ]+';
 	private opwhite: string = '[ ]*';
 	private anyThing: string = '.+';
+	private anyThingOrNothing: string = '.*';
 	private anyThingAll: string = '[\\s\\S]*';
 
 	public functionDefDetector: RegExp;
@@ -158,7 +159,7 @@ export class MatchSet {
 			'^',
 			this.validIdentifierLabel,
 			this.escapeChar(tokens.functionCallParamTokenPair.open),
-			this.anyThing,
+			this.anyThingOrNothing,
 			this.escapeChar(tokens.functionCallParamTokenPair.close)
 		];
 		this.functionCallDetector = this.applyPartsToRegex(functionCallParts, 'functionCallDetector');
@@ -169,7 +170,7 @@ export class MatchSet {
 			'\\.',
 			this.validIdentifierLabel,
 			this.escapeChar(tokens.functionCallParamTokenPair.open),
-			this.anyThing,
+			this.anyThingOrNothing,
 			this.escapeChar(tokens.functionCallParamTokenPair.close)
 		];
 		this.propertyCallDetector = this.applyPartsToRegex(propertyCallParts, 'propertyCallDetector');
@@ -187,7 +188,7 @@ export class MatchSet {
 
 		const openTokens: string[] = tokens.stringEscapeTokens.map((tokenPair: TokenPair) => tokenPair.open);
 		//const closeTokens: string[] = tokens.stringEscapeTokens.map((tokenPair: TokenPair) => tokenPair.close);
-		const stringLiteralParts: string[] = ['^', '(', openTokens.join('|'), ')', this.anyThing, '\\1'];
+		const stringLiteralParts: string[] = ['^', '(', openTokens.join('|'), ')', this.anyThingOrNothing, '\\1'];
 		this.stringLiteralDetector = this.applyPartsToRegex(stringLiteralParts, 'stringLiteralDetector');
 
 		const returnParts: string[] = ['^', tokens.returnKeyword, this.opwhite];

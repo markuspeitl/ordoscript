@@ -3,7 +3,7 @@ import { ConsoleUtil } from '../../ast-parser/common/util/console-util';
 import { BaseAstUnparser } from './base-ast-unparser';
 
 export abstract class BaseFeatureSyntax {
-	private printOutPut: boolean = false;
+	private printOutPut: boolean = true;
 
 	public unParseFeature(node: BaseAstNode | null, astUnparser: BaseAstUnparser): string | null {
 		if (!node) {
