@@ -1,22 +1,76 @@
 {
-  "children": [
+  "children": [{
+      "selectedResources": {
+        "values": [{
+          "label": "SampleType",
+          "type": "Identifier",
+          "original": "SampleType"
+        }],
+        "type": "ValueListingNode",
+        "original": " SampleType "
+      },
+      "locationSpecification": {
+        "text": "test",
+        "type": "StringLiteral",
+        "original": "\"test\""
+      },
+      "type": "LinkNode",
+      "original": "\nimport { SampleType } from \"test\";"
+    },
+    {
+      "left": {
+        "declaretype": "const",
+        "label": "test",
+        "type": "VariableDeclarationNode",
+        "original": "const test "
+      },
+      "right": {
+        "compositorToken": "+",
+        "left": {
+          "value": 1,
+          "type": "NumberLiteral",
+          "original": "1 "
+        },
+        "right": {
+          "compositorToken": "*",
+          "left": {
+            "value": 4,
+            "type": "NumberLiteral",
+            "original": "4 "
+          },
+          "right": {
+            "value": 3,
+            "type": "NumberLiteral",
+            "original": " 3"
+          },
+          "type": "CompositionNode",
+          "original": " 4 * 3"
+        },
+        "type": "CompositionNode",
+        "original": " 1 + 4 * 3"
+      },
+      "type": "AssignmentNode",
+      "original": "const test = 1 + 4 * 3"
+    },
     {
       "label": "print_hello",
       "parameters": {
-        "values": [
-          {
-            "label": "hello_text",
-            "type": "Identifier",
-            "original": "hello_text"
-          }
-        ],
+        "values": [{
+          "label": "hello_text",
+          "type": "Identifier",
+          "original": "hello_text"
+        }],
         "type": "ValueListingNode",
         "original": "hello_text"
       },
+      "returnType": {
+        "label": "TestClass",
+        "type": "Identifier",
+        "original": "TestClass"
+      },
       "body": {
         "content": {
-          "children": [
-            {
+          "children": [{
               "id": {
                 "label": "console"
               },
@@ -25,13 +79,11 @@
                   "label": "log"
                 },
                 "parameters": {
-                  "values": [
-                    {
-                      "label": "hello_text",
-                      "type": "Identifier",
-                      "original": "hello_text"
-                    }
-                  ],
+                  "values": [{
+                    "label": "hello_text",
+                    "type": "Identifier",
+                    "original": "hello_text"
+                  }],
                   "type": "ValueListingNode",
                   "original": "hello_text"
                 },
@@ -58,12 +110,74 @@
         "original": "{\nconsole.log(hello_text);\nreturn \"sdfqrwe\"\n}"
       },
       "type": "FunctionDefinition",
-      "original": "function print_hello(hello_text): TestClass {\nconsole.log(hello_text);\nreturn \"sdfqrwe\"\n}"
+      "original": "\nfunction print_hello(hello_text): TestClass {\nconsole.log(hello_text);\nreturn \"sdfqrwe\"\n}"
     },
     {
-      "label": "print_hello('hello world from ordo');",
-      "type": "Identifier",
+      "identifier": {
+        "label": "print_hello"
+      },
+      "parameters": {
+        "values": [{
+          "text": "hello world from ordo",
+          "type": "StringLiteral",
+          "original": "'hello world from ordo'"
+        }],
+        "type": "ValueListingNode",
+        "original": "'hello world from ordo'"
+      },
+      "type": "FunctionCall",
       "original": "print_hello('hello world from ordo');"
+    },
+    {
+      "left": {
+        "declaretype": "const",
+        "valuetype": "any",
+        "label": "newall",
+        "type": "VariableDeclarationNode",
+        "original": "const newall: any "
+      },
+      "right": {
+        "content": null,
+        "type": "BlockScope",
+        "original": " {}"
+      },
+      "type": "AssignmentNode",
+      "original": "\nconst newall: any = {}"
+    },
+    {
+      "left": {
+        "declaretype": "const",
+        "valuetype": "any",
+        "label": "newallss",
+        "type": "VariableDeclarationNode",
+        "original": "const newallss: any "
+      },
+      "right": {
+        "value": {
+          "values": [{
+              "value": 1,
+              "type": "NumberLiteral",
+              "original": "1"
+            },
+            {
+              "value": 2,
+              "type": "NumberLiteral",
+              "original": "2"
+            },
+            {
+              "label": "newall",
+              "type": "Identifier",
+              "original": "newall"
+            }
+          ],
+          "type": "ValueListingNode",
+          "original": "1, 2, newall"
+        },
+        "type": "ArrayLiteral",
+        "original": " [1, 2, newall]"
+      },
+      "type": "AssignmentNode",
+      "original": "const newallss: any = [1, 2, newall]"
     },
     {
       "condition": {
@@ -74,48 +188,67 @@
           "original": "newall "
         },
         "right": {
-          "value": 4,
+          "value": 40,
           "type": "NumberLiteral",
-          "original": " 4"
+          "original": " 40"
         },
         "type": "CompositionNode",
-        "original": "newall < 4"
+        "original": "newall < 40"
       },
       "thenBlock": {
         "content": {
-          "children": [
-            {
-              "identifier": {
-                "label": "print_hello"
-              },
-              "parameters": {
-                "values": [
-                  {
-                    "text": "hello",
-                    "type": "StringLiteral",
-                    "original": "'hello'"
-                  }
-                ],
-                "type": "ValueListingNode",
+          "children": [{
+            "identifier": {
+              "label": "print_hello"
+            },
+            "parameters": {
+              "values": [{
+                "text": "hello",
+                "type": "StringLiteral",
                 "original": "'hello'"
-              },
-              "type": "FunctionCall",
-              "original": "print_hello('hello')"
-            }
-          ],
+              }],
+              "type": "ValueListingNode",
+              "original": "'hello'"
+            },
+            "type": "FunctionCall",
+            "original": "print_hello('hello');"
+          }],
           "type": "BlockContent",
-          "original": "\nprint_hello('hello')"
+          "original": "\nprint_hello('hello');\n"
         },
         "type": "BlockScope",
-        "original": "{\nprint_hello('hello');\n"
+        "original": "{\nprint_hello('hello');\n}"
       },
       "type": "IfNode",
-      "original": "if(newall < 40){\nprint_hello('hello');\n}"
+      "original": "\nif(newall < 40){\nprint_hello('hello');\n}"
     },
     {
-      "label": "else {\nprint_hello('sss');\n}",
-      "type": "Identifier",
-      "original": "else {\nprint_hello('sss');\n}"
+      "thenBlock": {
+        "content": {
+          "children": [{
+            "identifier": {
+              "label": "print_hello"
+            },
+            "parameters": {
+              "values": [{
+                "text": "sss",
+                "type": "StringLiteral",
+                "original": "'sss'"
+              }],
+              "type": "ValueListingNode",
+              "original": "'sss'"
+            },
+            "type": "FunctionCall",
+            "original": "print_hello('sss');"
+          }],
+          "type": "BlockContent",
+          "original": "\nprint_hello('sss');\n"
+        },
+        "type": "BlockScope",
+        "original": "{\nprint_hello('sss');\n}"
+      },
+      "type": "ElseNode",
+      "original": "\nelse {\nprint_hello('sss');\n}"
     },
     {
       "left": {
@@ -143,6 +276,21 @@
       "original": "const test = newall.prop();"
     },
     {
+      "endCondition": {
+        "compositorToken": "<",
+        "left": {
+          "label": "i",
+          "type": "Identifier",
+          "original": "i "
+        },
+        "right": {
+          "value": 10,
+          "type": "NumberLiteral",
+          "original": " 10"
+        },
+        "type": "CompositionNode",
+        "original": "i < 10"
+      },
       "initializer": {
         "left": {
           "declaretype": "var",
@@ -159,21 +307,6 @@
         "type": "AssignmentNode",
         "original": "var i: number = 0"
       },
-      "endCondition": {
-        "compositorToken": "<",
-        "left": {
-          "label": "i",
-          "type": "Identifier",
-          "original": "i "
-        },
-        "right": {
-          "value": 10,
-          "type": "NumberLiteral",
-          "original": " 10"
-        },
-        "type": "CompositionNode",
-        "original": "i < 10"
-      },
       "incrementor": {
         "operationToken": "++",
         "target": {
@@ -186,33 +319,29 @@
       },
       "body": {
         "content": {
-          "children": [
-            {
-              "id": {
-                "label": "console"
+          "children": [{
+            "id": {
+              "label": "console"
+            },
+            "method": {
+              "identifier": {
+                "label": "log"
               },
-              "method": {
-                "identifier": {
-                  "label": "log"
-                },
-                "parameters": {
-                  "values": [
-                    {
-                      "label": "hello_text",
-                      "type": "Identifier",
-                      "original": "hello_text"
-                    }
-                  ],
-                  "type": "ValueListingNode",
+              "parameters": {
+                "values": [{
+                  "label": "hello_text",
+                  "type": "Identifier",
                   "original": "hello_text"
-                },
-                "type": "FunctionCall",
-                "original": "log(hello_text);"
+                }],
+                "type": "ValueListingNode",
+                "original": "hello_text"
               },
-              "type": "PropertyCallNode",
-              "original": "console.log(hello_text);"
-            }
-          ],
+              "type": "FunctionCall",
+              "original": "log(hello_text);"
+            },
+            "type": "PropertyCallNode",
+            "original": "console.log(hello_text);"
+          }],
           "type": "BlockContent",
           "original": "\nconsole.log(hello_text);\n"
         },
@@ -220,7 +349,7 @@
         "original": "{\nconsole.log(hello_text);\n}"
       },
       "type": "ForNode",
-      "original": "for(var i: number = 0; i < 10; i++){\nconsole.log(hello_text);\n};"
+      "original": "\nfor(var i: number = 0; i < 10; i++){\nconsole.log(hello_text);\n};"
     }
   ],
   "type": "BlockContent",
