@@ -1,11 +1,10 @@
-import { TypeScriptAstUnparser } from './models/ast-unparser/impl/typescript-ast-unparser';
-import { AstTree } from './models/ast-node/ast-tree';
 import { OrdoAstParser } from './models/ast-parser/impl/ordo/ordo-ast-parser';
 import { ArgumentParser } from 'argparse';
 import fs from 'fs';
 import { BaseAstParser } from './models/ast-parser/abstract/base-ast-parser';
 import { BaseAstNode } from './models/ast-node/abstract/base-ast-node';
 import { BaseAstUnparser } from './models/ast-unparser/abstract/base-ast-unparser';
+import { TypeScriptAstUnparser } from './models/ast-unparser/impl/typescript/typescript-ast-unparser';
 
 console.log('Script executed');
 
@@ -28,7 +27,7 @@ function readDocument(targetFilePath: string): string | null {
 	return fs.readFileSync(targetFilePath) as unknown as string;
 }
 function writeDocument(contents: string, targetFilePath: string): void {
-	console.log('Writing: ' + contents + '\nto: ' + targetFilePath);
+	console.log('Writing: \n' + contents + '\nto: ' + targetFilePath + '\n');
 	fs.writeFileSync(targetFilePath, contents);
 }
 
@@ -37,10 +36,15 @@ const documentContents: string | null = readDocument(args.source);
 if (documentContents) {
 	const ordoAstParser: BaseAstParser = new OrdoAstParser();
 	//console.log('Parsing: ' + String(documentContents));
-	const astTree: BaseAstNode = ordoAstParser.parseFileContent(String(documentContents));
+	const astNode: BaseAstNode = ordoAstParser.parseFileContent(String(documentContents));
 	const astUnparser: BaseAstUnparser = new TypeScriptAstUnparser();
-	const code: string = astUnparser.unParseAstNode(astTree);
-	writeDocument(code, args.target);
+	const code: string | null = astUnparser.unParseAstNode(astNode);
+	if (astNode) {
+		writeDocument(JSON.stringify(astNode, null, 2), String(args.target) + '-tree.json');
+	}
+	if (code) {
+		writeDocument(code, args.target);
+	}
 }
 
 console.log('Script finished -> exiting');

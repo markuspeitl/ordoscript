@@ -15,13 +15,12 @@ export abstract class BaseAstUnparser {
 		this.featureSetDict[astNode.constructor.name] = feature;
 	}
 
-	protected getFeature(AstNodeConstructor: new () => BaseAstNode): BaseFeatureSyntax {
-		const node: BaseAstNode = new AstNodeConstructor();
-		return this.featureSetDict[node.constructor.name];
+	protected getFeatureFor(unParseSubject: BaseAstNode): BaseFeatureSyntax {
+		return this.featureSetDict[unParseSubject.constructor.name];
 	}
 
 	public abstract initializeFeatureSet(): void;
-	public abstract unParseAstNodeDetect(node: BaseAstNode): string | null;
+	//public abstract unParseAstNodeDetect(node: BaseAstNode): string | null;
 	public abstract unParseAstNode(node: BaseAstNode): string | null;
 
 	public unParseFullAst(node: BlockContent): string | null {
