@@ -3,6 +3,6 @@ import { Identifier } from './identifier';
 import { BaseAstNode } from './abstract/base-ast-node';
 
 export class PropertyCallNode extends BaseAstNode {
-	public id: Identifier;
+	public subject: Identifier;
 	public method: FunctionCall;
 }

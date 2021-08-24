@@ -4,7 +4,8 @@ import { MatchSet, TokenSet } from '../impl/ordo/features';
 
 export interface ISyntaxFeature {
 	//getTargetNodeType(): string;
-	parseFeature(trimmedCode: string, astParser: BaseAstParser): BaseAstNode | null;
+	parseFeature(code: string): BaseAstNode | null;
+	tryParseFeature(code: string): BaseAstNode | null;
 	loadTokenSet(tokenSet: TokenSet): void;
 	loadMatchSet(matchSet: MatchSet): void;
 }

@@ -1,52 +1,39 @@
+import { Enclosing } from './../../../common/models/enclosing';
 import { CompositionNode } from './../../../../ast-node/composition-node';
 import { ForNode } from './../../../../ast-node/for-node';
 import { SyntaxTool } from './../../../common/util/syntax-tool';
-import { Enclosing } from './../../../common/models/enclosing';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
-import { BaseAstParser } from '../../../abstract/base-ast-parser';
-import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
-import { BlockScope } from '../../../../ast-node/block-scope';
+import { BaseBodiedSyntax } from '../../../abstract/base-bodied-syntax';
 
-export class ForSyntax extends BaseSyntaxFeature {
+export class ForSyntax extends BaseBodiedSyntax {
 	public priority: number = 0.1;
-	//private regExp: RegExp = new RegExp(/^for[ ]*\(/);
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();
-		//return this.regExp.test(trimmed);
 		return this.matchSet.forDetector.test(trimmed);
 	}
-	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
+	public parseFeatureInternal(code: string): BaseAstNode | null {
 		if (!code) {
 			return null;
 		}
 
-		const forParams: string | null = SyntaxTool.getTokenEnclosedContents(code, this.tokenSet.functionParamTokenPair);
-		if (!forParams) {
+		const forParamsEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, this.tokenSet.functionParamTokenPair);
+		const forParams: string | null = SyntaxTool.getEnclosedContents(code, forParamsEnclosing);
+		if (!forParams || !forParamsEnclosing) {
 			throw new Error('For loop must have params!');
 		}
-		const forParamsParts: string[] = forParams.split(';');
-		if (!forParamsParts || forParamsParts.length < 3) {
-			throw new Error('Invalid number of for param parts -> must be 3 and received: ' + String(forParamsParts?.length));
+		const forParamStatements: string[] = forParams.split(';');
+		if (!forParamStatements || forParamStatements.length < 3) {
+			throw new Error('Invalid number of for param parts -> must be 3 and received: ' + String(forParamStatements?.length));
 		}
 
 		const node: ForNode = new ForNode();
-		//node.initializer = astParser.parseAstNode<VariableDeclarationNode>(forParamsParts[0].trim(), VariableDeclarationNode.name);
+		//node.initializer = this.getNodeNullable <VariableDeclarationNode>(forParamsParts[0].trim(), VariableDeclarationNode.name);
+		node.initializer = this.getNode<CompositionNode>(forParamStatements[0].trim(), CompositionNode.name, 'initializer');
+		node.endCondition = this.getNode<CompositionNode>(forParamStatements[1].trim(), CompositionNode.name, 'endCondition');
+		node.incrementor = this.getNode<CompositionNode>(forParamStatements[2].trim(), CompositionNode.name, 'incrementor');
 
-		const childNode: CompositionNode | null = astParser.parseAstNode<CompositionNode>(forParamsParts[1].trim(), CompositionNode.name);
-		if (!childNode) {
-			throw new Error('Failed parsing endcondition.');
-		}
-		node.endCondition = childNode;
-
-		const children: BaseAstNode[] = SyntaxTool.parseDetectArray(
-			[forParamsParts[0].trim(), forParamsParts[2].trim()],
-			astParser,
-			this.constructor.name
-		);
-		node.initializer = children[0];
-		node.incrementor = children[1];
-
-		node.body = SyntaxTool.parseBody(code, this.tokenSet.blockScopeTokenPair, astParser, this.constructor.name);
+		const afterParams: string = SyntaxTool.afterEnclosing(code, forParamsEnclosing);
+		node.body = this.parseBody(afterParams, this.tokenSet.blockScopeTokenPair);
 
 		return node;
 	}

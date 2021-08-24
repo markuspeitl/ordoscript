@@ -24,6 +24,8 @@ export class TokenSet {
 	public linkExtLocationToken: string = 'from';
 	public returnKeyword: string = 'return';
 	public assignMentToken: string = '=';
+	public propertyAccessToken: string = '.';
+	public listSeperator: string = ',';
 	public binaryExpressionTokens: string[] = [
 		'+',
 		'-',

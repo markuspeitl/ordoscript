@@ -1,9 +1,6 @@
-import { SyntaxTool } from './../../../common/util/syntax-tool';
 import { CompositionNode } from './../../../../ast-node/composition-node';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
-import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
-import { Uti } from '../../../common/util/util';
 
 export class CompositionSyntax extends BaseSyntaxFeature {
 	public priority: number = 3;
@@ -14,7 +11,7 @@ export class CompositionSyntax extends BaseSyntaxFeature {
 		return this.matchSet.compositionDetector.test(trimmed);
 	}
 
-	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
+	public parseFeatureInternal(code: string): BaseAstNode | null {
 		if (!code) {
 			return null;
 		}
@@ -26,7 +23,7 @@ export class CompositionSyntax extends BaseSyntaxFeature {
 		//const node: CompositionNode = this.parseComposition(code, astParser, tokensInStatement, tokenPositions);
 
 		//Just parse the right side recursively like usual
-		const node: CompositionNode = this.parseCompositionFullRecursive(code, astParser);
+		const node: CompositionNode = this.parseCompositionFullRecursive(code);
 
 		return node;
 	}
@@ -44,18 +41,18 @@ export class CompositionSyntax extends BaseSyntaxFeature {
 		tokensInStatement.shift();
 		tokenPositions.shift();
 
-		node.left = astParser.parseAstNodeDetect(leftRightParts[0]);
+		node.left = this.getNodeDetectNullable(leftRightParts[0]);
 
 		if (tokensInStatement.length > 0) {
 			node.right = this.parseComposition(leftRightParts[1], astParser, tokensInStatement, tokenPositions);
 		} else {
-			node.right = astParser.parseAstNodeDetect(leftRightParts[1]);
+			node.right = this.getNodeDetectNullable(leftRightParts[1]);
 		}
 
 		return node;
 	}*/
 
-	private parseCompositionFullRecursive(code: string, astParser: BaseAstParser): CompositionNode {
+	private parseCompositionFullRecursive(code: string): CompositionNode {
 		const node: CompositionNode = new CompositionNode();
 
 		const tokensInStatement: string[] = this.tokenSet.binaryExpressionTokens.filter((token: string) => code.includes(token));
@@ -64,12 +61,11 @@ export class CompositionSyntax extends BaseSyntaxFeature {
 		const firstPosition: number = Math.min(...tokenPositions);
 		const firstTokenIndex: number = tokenPositions.indexOf(firstPosition);
 		const firstToken: string = tokensInStatement[firstTokenIndex];
-		const leftRightParts: string[] = code.split(firstToken);
+		const parts: string[] = code.split(firstToken);
 		node.compositorToken = firstToken;
 
-		const children: BaseAstNode[] = SyntaxTool.parseDetectArray(leftRightParts, astParser, this.constructor.name);
-		node.left = children[0];
-		node.right = children[1];
+		node.left = this.getNodeDetect(parts[0], 'left');
+		node.right = this.getNodeDetect(parts[1], 'right');
 
 		return node;
 	}

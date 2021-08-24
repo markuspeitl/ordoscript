@@ -19,11 +19,11 @@ export abstract class BaseAstParser implements IAstParser {
 
 	protected addFeature(
 		AstNodeConstructor: new () => BaseAstNode,
-		FeatureConstructor: new (codeCurator: ISyntaxCurator) => BaseSyntaxFeature,
-		codeCurator: ISyntaxCurator
+		FeatureConstructor: new (astParser: IAstParser, codeCurator?: ISyntaxCurator) => BaseSyntaxFeature,
+		codeCurator: ISyntaxCurator,
 	): void {
 		const astNode: BaseAstNode = new AstNodeConstructor();
-		const feature: BaseSyntaxFeature = new FeatureConstructor(codeCurator);
+		const feature: BaseSyntaxFeature = new FeatureConstructor(this, codeCurator);
 		this.featureSetDict[astNode.constructor.name] = feature;
 		this.featuresArray.push(feature);
 		console.log('Adding feature for ast: ' + astNode.constructor.name);
@@ -74,11 +74,6 @@ export abstract class BaseAstParser implements IAstParser {
 		}
 	}
 
-	/*protected getFeature(AstNodeConstructor: new () => BaseAstNode): ISyntaxFeature {
-		const node: BaseAstNode = new AstNodeConstructor();
-		return this.featureSetDict[node.constructor.name];
-	}*/
-
 	public loadTokenSet(tokenSet: TokenSet): void {
 		for (const key of Object.keys(this.featureSetDict)) {
 			this.featureSetDict[key].loadTokenSet(tokenSet);
@@ -120,7 +115,7 @@ export abstract class BaseAstParser implements IAstParser {
 		const selectedFeature: ISyntaxFeature = feature;
 		if (selectedFeature instanceof BaseSyntaxFeature) {
 			//console.log('Try parsing with: ' + selectedFeature.constructor.name + ' : ' + code);
-			const parsedNode: BaseAstNode | null = selectedFeature.tryParseFeature(code, this);
+			const parsedNode: BaseAstNode | null = selectedFeature.tryParseFeature(code);
 			return parsedNode;
 		}
 		return null;
@@ -139,6 +134,6 @@ export abstract class BaseAstParser implements IAstParser {
 		if (!selectedFeature) {
 			throw new Error('Can not parse code for which no Syntax Parser was found: ' + astNodeType);
 		}
-		return selectedFeature.parseFeature(code, this) as AstNodeType;
+		return selectedFeature.parseFeature(code) as AstNodeType;
 	}
 }

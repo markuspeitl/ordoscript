@@ -1,6 +1,5 @@
 import { DictLiteral } from './../../../../ast-node/dict-literal';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
-import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 
 export class DictLiteralSyntax extends BaseSyntaxFeature {
@@ -10,7 +9,7 @@ export class DictLiteralSyntax extends BaseSyntaxFeature {
 		return false;
 	}
 
-	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
+	public parseFeatureInternal(code: string): BaseAstNode | null {
 		if (!code) {
 			return null;
 		}

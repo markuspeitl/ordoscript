@@ -23,15 +23,26 @@ export class SyntaxTool {
 
 		return this.getEnclosedContents(code, enclosing);
 	}
-	public static getEnclosedContents(code: string, enclosing: Enclosing): string {
+	public static getEnclosedContents(code: string, enclosing: Enclosing | null): string | null {
+		if (!enclosing) {
+			return null;
+		}
 		return code.substring(enclosing.open + 1, enclosing.close);
 	}
-	public static widenEnclosing(enclosing: Enclosing, widenSize: number): void {
-		enclosing.open -= widenSize;
-		enclosing.close += widenSize;
+	public static widenEnclosing(enclosing: Enclosing | null, widenSize: number): void {
+		if (enclosing && widenSize) {
+			enclosing.open -= widenSize;
+			enclosing.close += widenSize;
+		}
+	}
+	public static afterEnclosing(code: string, enclosing: Enclosing): string {
+		return code.substring(enclosing.close);
+	}
+	public static beforeOpening(code: string, enclosing: Enclosing): string {
+		return code.substring(0, enclosing.open);
 	}
 
-	public static parseDetectArrayNullable(codes: string[], astParser: BaseAstParser, errorLabel: string): Array<BaseAstNode | null> {
+	/*public static parseDetectArrayNullable(codes: string[], astParser: BaseAstParser, errorLabel: string): Array<BaseAstNode | null> {
 		const children: Array<BaseAstNode | null> = new Array<BaseAstNode | null>();
 		for (const code of codes) {
 			const child: BaseAstNode | null = astParser.parseAstNodeDetect(code);
@@ -51,35 +62,5 @@ export class SyntaxTool {
 			children.push(child);
 		}
 		return children;
-	}
-
-	public static parseBody(code: string, tokenPair: TokenPair, astParser: BaseAstParser, errorLabel: string): BlockScope {
-		const blockEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, tokenPair);
-		if (!blockEnclosing) {
-			throw new Error(errorLabel + ': could not find body block of function.');
-		}
-		SyntaxTool.widenEnclosing(blockEnclosing, 1);
-		const enclosedBlock: string = SyntaxTool.getEnclosedContents(code, blockEnclosing);
-		const body: BlockScope | null = astParser.parseAstNode<BlockScope>(enclosedBlock, BlockScope.name);
-		if (!body) {
-			throw new Error(errorLabel + ': must have a body scope');
-		}
-		return body;
-	}
-
-	public static getNodeDetect<BaseAstNode>(code: string, astParser: BaseAstParser): BaseAstNode {
-		const node: BaseAstNode | null = astParser.parseAstNodeDetect(code.trim()) as BaseAstNode | null;
-		if (!node) {
-			throw Error('Property call must have child function');
-		}
-		return node;
-	}
-
-	public static getNode<Type extends BaseAstNode>(code: string, astParser: BaseAstParser, typeName: string): Type {
-		const node: Type | null = astParser.parseAstNode<Type>(code.trim(), typeName);
-		if (!node) {
-			throw Error('Property call must have child function');
-		}
-		return node;
-	}
+	}*/
 }

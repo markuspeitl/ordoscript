@@ -16,7 +16,7 @@ export class ImportSyntax extends BaseSyntaxFeature {
 		return this.matchSet.importDetector.test(trimmed);
 	}
 
-	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
+	public parseFeatureInternal(code: string): BaseAstNode | null {
 		if (!code) {
 			return null;
 		}
@@ -24,13 +24,15 @@ export class ImportSyntax extends BaseSyntaxFeature {
 		const selectionEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, this.tokenSet.foreignScopeTokenPair);
 
 		if (selectionEnclosing) {
-			const selectionContents: string = SyntaxTool.getEnclosedContents(code, selectionEnclosing);
-			node.selectedResources = astParser.parseAstNode<ValueListingNode>(selectionContents, ValueListingNode.name);
+			const selectionContents: string | null = SyntaxTool.getEnclosedContents(code, selectionEnclosing);
+			if (selectionContents) {
+				node.selectedResources = this.getNodeNullable<ValueListingNode>(selectionContents, ValueListingNode.name);
+			}
 		}
 
 		const importFromParts: string[] = code.split(/from[ ]*/);
 		const fromLocationCode: string = importFromParts[1].replace(';', '').trim();
-		const externLocation: StringLiteral | null = astParser.parseAstNode<StringLiteral>(fromLocationCode, StringLiteral.name);
+		const externLocation: StringLiteral | null = this.getNodeNullable<StringLiteral>(fromLocationCode, StringLiteral.name);
 		if (!externLocation) {
 			throw Error('Import statement must have a resource location specified');
 		}

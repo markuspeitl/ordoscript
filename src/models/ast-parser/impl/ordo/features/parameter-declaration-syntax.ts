@@ -1,6 +1,5 @@
 import { Identifier } from './../../../../ast-node/identifier';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
-import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 import { ParameterDeclaration } from '../../../../ast-node/parameter-declaration';
 
@@ -9,7 +8,7 @@ export class ParameterDeclarationSyntax extends BaseSyntaxFeature {
 	public isFeatureDetected(code: string): boolean {
 		return false;
 	}
-	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
+	public parseFeatureInternal(code: string): BaseAstNode | null {
 		if (!code) {
 			return null;
 		}
@@ -17,21 +16,21 @@ export class ParameterDeclarationSyntax extends BaseSyntaxFeature {
 		const node: ParameterDeclaration = new ParameterDeclaration();
 
 		if (!code.includes(':')) {
-			node.id = this.getId(code.trim(), astParser);
+			node.id = this.getId(code.trim());
 			return node;
 		}
 
 		const typedParts: string[] = code.split(':');
 		if (typedParts && typedParts.length > 1) {
-			node.id = this.getId(typedParts[0].trim(), astParser);
+			node.id = this.getId(typedParts[0].trim());
 			node.valueType = typedParts[1].trim();
 		}
 
 		return node;
 	}
 
-	private getId(code: string, astParser: BaseAstParser): Identifier {
-		const identifier: Identifier | null = astParser.parseAstNode<Identifier>(code.trim(), Identifier.name);
+	private getId(code: string): Identifier {
+		const identifier: Identifier | null = this.getNodeNullable<Identifier>(code.trim(), Identifier.name);
 		if (!identifier) {
 			throw Error('Parameter declaration must have an identifier if names are in code');
 		}

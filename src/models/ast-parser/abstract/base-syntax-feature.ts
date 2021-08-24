@@ -1,32 +1,39 @@
 import { TokenSet, MatchSet } from './../impl/ordo/features/token-set';
 import { BaseAstNode } from '../../ast-node/abstract/base-ast-node';
-import { BaseAstParser } from './base-ast-parser';
 import { ISyntaxFeature } from '../interfaces/i-syntax-feature';
 import { ConsoleUtil } from '../common/util/console-util';
 import { ISyntaxCurator } from '../interfaces/i-syntax-curator';
+import { BaseAstParser } from './base-ast-parser';
 
 export abstract class BaseSyntaxFeature implements ISyntaxFeature {
 	private printOutPut: boolean = false;
-	protected syntaxCurator: ISyntaxCurator;
+	protected syntaxCurator: ISyntaxCurator | null = null;
 	public abstract priority: number = 10;
-	public constructor(syntaxCurator: ISyntaxCurator) {
-		this.syntaxCurator = syntaxCurator;
+	private astParser: BaseAstParser;
+	public constructor(astParser: BaseAstParser, syntaxCurator?: ISyntaxCurator) {
+		this.astParser = astParser;
+		if (syntaxCurator) {
+			this.syntaxCurator = syntaxCurator;
+		}
 	}
 
 	//public abstract getTargetNodeType(): string;
 	public abstract isFeatureDetected(code: string): boolean;
-	public parseFeature(code: string, astParser: BaseAstParser): BaseAstNode | null {
+	public parseFeature(code: string): BaseAstNode | null {
 		if (!code) {
 			return null;
 		}
 
-		const curatedCode: string | null = this.syntaxCurator.getCuratedCode(code);
+		let curatedCode: string | null = code;
+		if (this.syntaxCurator) {
+			curatedCode = this.syntaxCurator.getCuratedCode(code);
+		}
 		if (!curatedCode) {
 			return null;
 		}
 		console.log(String(this.constructor.name));
 		ConsoleUtil.printNamedBody('Parsing Syntax feature ' + String(this.constructor.name), code, this.printOutPut);
-		const node: BaseAstNode | null = this.parseFeatureInternal(curatedCode, astParser);
+		const node: BaseAstNode | null = this.parseFeatureInternal(curatedCode);
 		if (node) {
 			ConsoleUtil.printNamedBody(String(this.constructor.name) + ' AST: ', JSON.stringify(node, null, 2), this.printOutPut);
 			node.type = String(node.constructor.name);
@@ -34,15 +41,15 @@ export abstract class BaseSyntaxFeature implements ISyntaxFeature {
 		}
 		return node;
 	}
-	protected abstract parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null;
-	public tryParseFeature(code: string, astParser: BaseAstParser): BaseAstNode | null {
+	protected abstract parseFeatureInternal(code: string): BaseAstNode | null;
+	public tryParseFeature(code: string): BaseAstNode | null {
 		if (!code) {
 			return null;
 		}
 		if (!this.isFeatureDetected(code)) {
 			return null;
 		}
-		return this.parseFeature(code, astParser);
+		return this.parseFeature(code);
 	}
 
 	protected tokenSet: TokenSet;
@@ -52,5 +59,35 @@ export abstract class BaseSyntaxFeature implements ISyntaxFeature {
 	protected matchSet: MatchSet;
 	public loadMatchSet(matchSet: MatchSet): void {
 		this.matchSet = matchSet;
+	}
+
+	public getNodeName(): string {
+		return String(this.constructor.name);
+	}
+	public prependNodeName(childName: string): string {
+		return this.getNodeName() + '.' + childName;
+	}
+
+	public getNodeDetect<BaseAstNode>(code: string, errorLabel: string): BaseAstNode {
+		const node: BaseAstNode | null = this.getNodeDetectNullable(code.trim()) as BaseAstNode | null;
+		if (!node) {
+			throw Error(this.prependNodeName(errorLabel) + 'must detect and parse to a valid Node');
+		}
+		return node;
+	}
+
+	public getNode<Type extends BaseAstNode>(code: string, typeName: string, errorLabel: string): Type {
+		const node: Type | null = this.getNodeNullable<Type>(code.trim(), typeName);
+		if (!node) {
+			throw Error(this.prependNodeName(errorLabel) + 'must parse to a valid Node');
+		}
+		return node;
+	}
+
+	public getNodeNullable<Type extends BaseAstNode>(code: string, typeName: string): Type | null {
+		return this.astParser.parseAstNode<Type>(code, typeName);
+	}
+	public getNodeDetectNullable(code: string): BaseAstNode | null {
+		return this.astParser.parseAstNodeDetect(code);
 	}
 }

@@ -1,5 +1,4 @@
 import { BaseAstNode, ArrayLiteral, ValueListingNode } from '../../../../ast-node/index';
-import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 import { SyntaxTool } from '../../../common/util/syntax-tool';
 
@@ -10,7 +9,7 @@ export class ArrayLiteralSyntax extends BaseSyntaxFeature {
 		const trimmedCode: string = code.trim();
 		return this.matchSet.arrayLiteralDetector.test(trimmedCode);
 	}
-	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
+	public parseFeatureInternal(code: string): BaseAstNode | null {
 		if (!code) {
 			return null;
 		}
@@ -21,7 +20,7 @@ export class ArrayLiteralSyntax extends BaseSyntaxFeature {
 		}
 
 		const node: ArrayLiteral = new ArrayLiteral();
-		node.value = astParser.parseAstNode<ValueListingNode>(arrayContents, ValueListingNode.name);
+		node.value = this.getNodeNullable<ValueListingNode>(arrayContents, ValueListingNode.name);
 
 		return node;
 	}

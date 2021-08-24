@@ -1,6 +1,5 @@
 import { SyntaxTool } from './../../../common/util/syntax-tool';
 import { ReturnNode } from './../../../../ast-node/return-node';
-import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 import { BaseAstNode } from '../../../../ast-node';
 
@@ -11,14 +10,15 @@ export class ReturnSyntax extends BaseSyntaxFeature {
 		const trimmed: string = code.trim();
 		return this.matchSet.returnDetector.test(trimmed);
 	}
-	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
+	public parseFeatureInternal(code: string): BaseAstNode | null {
 		if (!code) {
 			return null;
 		}
 
 		const node: ReturnNode = new ReturnNode();
-		const afterReturn: string = code.replace(this.matchSet.returnDetector, '').replace(';', '').trim();
-		node.returnValue = SyntaxTool.getNodeDetect(afterReturn, astParser);
+
+		const afterReturn: string = code.substring(this.tokenSet.returnKeyword.length).trim();
+		node.returnValue = this.getNodeDetectNullable(afterReturn.replace(';', ''));
 
 		return node;
 	}

@@ -1,17 +1,17 @@
 import { ConsoleUtil } from './../../../common/util/console-util';
 import { BlockContent } from './../../../../ast-node/block-content';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
-import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 
 export class BlockContentSyntax extends BaseSyntaxFeature {
 	public priority: number = 0.5;
 
+	//Is always dependent on other feature -> can not be detected on its own
 	public isFeatureDetected(code: string): boolean {
 		return false;
 	}
 
-	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
+	public parseFeatureInternal(code: string): BaseAstNode | null {
 		if (!code) {
 			return null;
 		}
@@ -21,7 +21,12 @@ export class BlockContentSyntax extends BaseSyntaxFeature {
 		}
 
 		const node: BlockContent = new BlockContent();
-		const curatedLines: string[] | null = this.syntaxCurator.getCuratedLines(code);
+		let curatedLines: string[] | null = null;
+		if (!this.syntaxCurator) {
+			curatedLines = code.split('\n');
+		} else {
+			curatedLines = this.syntaxCurator.getCuratedLines(code);
+		}
 
 		if (!curatedLines) {
 			return node;
@@ -35,8 +40,9 @@ export class BlockContentSyntax extends BaseSyntaxFeature {
 		for (let i: number = 0; i < curatedLines.length; i++) {
 			const line: string = curatedLines[i];
 
-			if (line.includes('{')) {
-				const previousCode: string = line.substring(0, line.indexOf('{'));
+			const openBlockIndex: number = line.indexOf(this.tokenSet.blockScopeTokenPair.open);
+			if (openBlockIndex > -1) {
+				const previousCode: string = line.substring(0, openBlockIndex);
 				const previousLineIndex: number = i - 1;
 				if (previousCode.trim().length > 0) {
 					blockCode = '';
@@ -46,7 +52,7 @@ export class BlockContentSyntax extends BaseSyntaxFeature {
 			}
 			if (blockCode !== null) {
 				blockCode = blockCode + '\n' + line;
-				if (line.includes('}')) {
+				if (line.includes(this.tokenSet.blockScopeTokenPair.close)) {
 					statements.push(blockCode);
 					blockCode = null;
 				}
@@ -60,7 +66,7 @@ export class BlockContentSyntax extends BaseSyntaxFeature {
 		if (statements.length > 0) {
 			node.children = [];
 			for (const statement of statements) {
-				const childStatement: BaseAstNode | null = astParser.parseAstNodeDetect(statement);
+				const childStatement: BaseAstNode | null = this.getNodeDetectNullable(statement);
 
 				if (!childStatement) {
 					throw new Error('Block child statement with non empty code must result in an Ast node');
@@ -73,8 +79,8 @@ export class BlockContentSyntax extends BaseSyntaxFeature {
 	}
 
 	private isValid(code: string): boolean {
-		const openParts: string[] = code.split('{');
-		const closeParts: string[] = code.split('}');
+		const openParts: string[] = code.split(this.tokenSet.blockScopeTokenPair.open);
+		const closeParts: string[] = code.split(this.tokenSet.blockScopeTokenPair.close);
 		//The amount of open and close tokens must match for a valid block to be created
 		return openParts.length === closeParts.length;
 	}

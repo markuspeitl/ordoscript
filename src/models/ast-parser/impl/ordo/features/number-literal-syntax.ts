@@ -1,5 +1,4 @@
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
-import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 import { NumberLiteral } from '../../../../ast-node/number-literal';
 
@@ -12,7 +11,7 @@ export class NumberLiteralSyntax extends BaseSyntaxFeature {
 		return this.matchSet.numberLiteralDetector.test(trimmed);
 	}
 
-	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
+	public parseFeatureInternal(code: string): BaseAstNode | null {
 		if (!code) {
 			return null;
 		}

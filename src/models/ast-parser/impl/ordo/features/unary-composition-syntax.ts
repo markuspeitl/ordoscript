@@ -1,6 +1,4 @@
-import { SyntaxTool } from './../../../common/util/syntax-tool';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
-import { BaseAstParser } from '../../../abstract/base-ast-parser';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
 import { UnaryCompositionNode } from '../../../../ast-node/unary-composition-node';
 
@@ -8,11 +6,10 @@ export class UnaryCompositionSyntax extends BaseSyntaxFeature {
 	public priority: number = 2;
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();
-		//return this.tokenSet.unaryExpressionTokens.some((token: string) => code.includes(token));
 		return this.matchSet.unaryCompositionDetector.test(trimmed);
 	}
 
-	public parseFeatureInternal(code: string, astParser: BaseAstParser): BaseAstNode | null {
+	public parseFeatureInternal(code: string): BaseAstNode | null {
 		if (!code) {
 			return null;
 		}
@@ -27,7 +24,7 @@ export class UnaryCompositionSyntax extends BaseSyntaxFeature {
 		const leftRightParts: string[] = code.split(firstToken);
 
 		node.operationToken = firstToken;
-		node.target = SyntaxTool.getNodeDetect(leftRightParts[0].trim(), astParser);
+		node.target = this.getNodeDetect(leftRightParts[0].trim(), 'target');
 
 		return node;
 	}
