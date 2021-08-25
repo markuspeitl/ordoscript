@@ -4,9 +4,9 @@ import { ISyntaxFeature } from '../interfaces/i-syntax-feature';
 import { ConsoleUtil } from '../common/util/console-util';
 import { ISyntaxCurator } from '../interfaces/i-syntax-curator';
 import { BaseAstParser } from './base-ast-parser';
+import { Slog } from '../common/util/slog';
 
 export abstract class BaseSyntaxFeature implements ISyntaxFeature {
-	private printOutPut: boolean = false;
 	protected syntaxCurator: ISyntaxCurator | null = null;
 	public abstract priority: number = 10;
 	private astParser: BaseAstParser;
@@ -31,11 +31,11 @@ export abstract class BaseSyntaxFeature implements ISyntaxFeature {
 		if (!curatedCode) {
 			return null;
 		}
-		console.log(String(this.constructor.name));
-		ConsoleUtil.printNamedBody('Parsing Syntax feature ' + String(this.constructor.name), code, this.printOutPut);
+		Slog.log('BaseSyntaxFeature', String(this.constructor.name));
+		ConsoleUtil.printNamedBody('BaseSyntaxFeature', 'Parsing Syntax feature: ' + String(this.constructor.name), code);
 		const node: BaseAstNode | null = this.parseFeatureInternal(curatedCode);
 		if (node) {
-			ConsoleUtil.printNamedBody(String(this.constructor.name) + ' AST: ', JSON.stringify(node, null, 2), this.printOutPut);
+			ConsoleUtil.printNamedBody('BaseSyntaxFeature', String(this.constructor.name) + ' AST: ', JSON.stringify(node, null, 2));
 			node.type = String(node.constructor.name);
 			node.original = code;
 		}
@@ -65,10 +65,13 @@ export abstract class BaseSyntaxFeature implements ISyntaxFeature {
 		return String(this.constructor.name);
 	}
 	public prependNodeName(childName: string): string {
-		return this.getNodeName() + '.' + childName;
+		return '"' + this.getNodeName() + '.' + childName + '" ';
 	}
 
 	public getNodeDetect<BaseAstNode>(code: string, errorLabel: string): BaseAstNode {
+		if (!code) {
+			throw Error(this.prependNodeName(errorLabel) + 'Can not detect non nullable required node, if the passed code is not defined');
+		}
 		const node: BaseAstNode | null = this.getNodeDetectNullable(code.trim()) as BaseAstNode | null;
 		if (!node) {
 			throw Error(this.prependNodeName(errorLabel) + 'must detect and parse to a valid Node');

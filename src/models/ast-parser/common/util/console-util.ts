@@ -1,19 +1,18 @@
+import { Slog } from './slog';
 export class ConsoleUtil {
-	public static printSep(): void {
-		console.log('--------------------------------');
+	public static printSep(label: string): void {
+		Slog.log(label, '--------------------------------');
 	}
-	public static printEnclosed(value: string): void {
-		ConsoleUtil.printSep();
-		console.log(value);
-		ConsoleUtil.printSep();
+	public static printEnclosed(label: string, value: string): void {
+		ConsoleUtil.printSep(label);
+		Slog.log(label, value);
+		ConsoleUtil.printSep(label);
 	}
-	public static printNamedBody(name: string, body: string, printOutPut: boolean = true): void {
-		if (printOutPut) {
-			console.log('\n\n----' + name);
-			ConsoleUtil.printSep();
-			console.log(body);
-			ConsoleUtil.printSep();
-			console.log('\n');
-		}
+	public static printNamedBody(label: string, name: string, body: string): void {
+		Slog.log(label, '----' + name);
+		ConsoleUtil.printSep(label);
+		Slog.log(label, body);
+		ConsoleUtil.printSep(label);
+		Slog.log(label, '\n');
 	}
 }

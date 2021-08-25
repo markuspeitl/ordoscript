@@ -1,3 +1,4 @@
+import { Slog } from './../../../common/util/slog';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { Identifier } from '../../../../ast-node/identifier';
 import { FunctionCall } from '../../../../ast-node/function-call';
@@ -22,16 +23,19 @@ export class FunctionCallSyntax extends BaseSyntaxFeature {
 		const node: FunctionCall = new FunctionCall();
 
 		const parenthesisEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, this.tokenSet.functionParamTokenPair);
+		Slog.jlog('default', parenthesisEnclosing);
 
 		const enclosedParams: string | null = SyntaxTool.getEnclosedContents(code, parenthesisEnclosing);
-		if (!parenthesisEnclosing || !enclosedParams) {
+		if (!parenthesisEnclosing) {
 			throw new Error('Could not find parameter definition of function call');
 		}
 
 		const functionName: string = SyntaxTool.beforeOpening(code, parenthesisEnclosing).trim();
 
 		node.identifier = this.getNode<Identifier>(functionName, Identifier.name, 'identifier');
-		node.parameters = this.getNodeNullable<ValueListingNode>(enclosedParams, ValueListingNode.name);
+		if (enclosedParams) {
+			node.parameters = this.getNodeNullable<ValueListingNode>(enclosedParams, ValueListingNode.name);
+		}
 
 		return node;
 	}

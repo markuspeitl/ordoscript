@@ -1,3 +1,4 @@
+import { Slog } from '../../../common/util/slog';
 import { Uti } from './../../../common/util/util';
 export class TokenSet {
 	public delimiterTokens: string[] = [';', '\n'];
@@ -26,6 +27,7 @@ export class TokenSet {
 	public assignMentToken: string = '=';
 	public propertyAccessToken: string = '.';
 	public listSeperator: string = ',';
+	public declarationSeperatorToken: string = ' ';
 	public binaryExpressionTokens: string[] = [
 		'+',
 		'-',
@@ -208,9 +210,9 @@ export class MatchSet {
 	}
 
 	public applyToRegex(regexString: string, name: string): RegExp {
-		console.log('Loading: ' + regexString);
+		Slog.log('MatchSet', 'Loading: ' + regexString);
 		const regEx: RegExp = new RegExp(regexString);
-		console.log(name + ': ' + regEx.source);
+		Slog.log('MatchSet', name + ': ' + regEx.source);
 		return regEx;
 	}
 
@@ -221,11 +223,11 @@ export class MatchSet {
 	private createOptionGroup(parts: string[], anySelect: boolean = true): string {
 		let clonedParts: string[] = Uti.clone(parts);
 		clonedParts = clonedParts.map((part: string) => {
-			//console.log('Mapping ' + part);
+			//Slog.log('TokenSet', 'Mapping ' + part);
 			let chars: string[] = part.split('');
-			//console.log('Mapping ' + String(chars));
+			//Slog.log('TokenSet','Mapping ' + String(chars));
 			chars = chars.map((char: string) => this.escapeChar(char));
-			//console.log('Mapping ' + String(chars));
+			//Slog.log('TokenSet','Mapping ' + String(chars));
 			return chars.join('');
 		});
 

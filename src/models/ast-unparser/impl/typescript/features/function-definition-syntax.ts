@@ -11,7 +11,7 @@ export class FunctionDefinitionSyntax extends BaseFeatureSyntax {
 
 		let code: string = '';
 		code += 'function ';
-		code += node.label;
+		code += node.id.label;
 		code += '(';
 		const unparsedParam: string | null = astUnparser.unParseAstNode(node.parameters);
 		if (unparsedParam) {

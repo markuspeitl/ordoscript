@@ -1,3 +1,4 @@
+import { VariableDeclarationNode } from './../../../../ast-node/variable-declaration-node';
 import { Enclosing } from './../../../common/models/enclosing';
 import { CompositionNode } from './../../../../ast-node/composition-node';
 import { ForNode } from './../../../../ast-node/for-node';
@@ -27,10 +28,10 @@ export class ForSyntax extends BaseBodiedSyntax {
 		}
 
 		const node: ForNode = new ForNode();
-		//node.initializer = this.getNodeNullable <VariableDeclarationNode>(forParamsParts[0].trim(), VariableDeclarationNode.name);
-		node.initializer = this.getNode<CompositionNode>(forParamStatements[0].trim(), CompositionNode.name, 'initializer');
+		node.initializer = this.getNode<VariableDeclarationNode>(forParamStatements[0].trim(), VariableDeclarationNode.name, 'initializer');
 		node.endCondition = this.getNode<CompositionNode>(forParamStatements[1].trim(), CompositionNode.name, 'endCondition');
-		node.incrementor = this.getNode<CompositionNode>(forParamStatements[2].trim(), CompositionNode.name, 'incrementor');
+		//Can be unary or a composition
+		node.incrementor = this.getNodeDetect(forParamStatements[2].trim(), 'incrementor');
 
 		const afterParams: string = SyntaxTool.afterEnclosing(code, forParamsEnclosing);
 		node.body = this.parseBody(afterParams, this.tokenSet.blockScopeTokenPair);

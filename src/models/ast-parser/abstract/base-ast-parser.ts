@@ -1,3 +1,4 @@
+import { Slog } from '../common/util/slog';
 import { Uti, Tuple } from './../common/util/util';
 import { TokenSet, MatchSet } from './../impl/ordo/features/token-set';
 import { ISyntaxFeature } from '../interfaces/i-syntax-feature';
@@ -20,14 +21,14 @@ export abstract class BaseAstParser implements IAstParser {
 	protected addFeature(
 		AstNodeConstructor: new () => BaseAstNode,
 		FeatureConstructor: new (astParser: IAstParser, codeCurator?: ISyntaxCurator) => BaseSyntaxFeature,
-		codeCurator: ISyntaxCurator,
+		codeCurator: ISyntaxCurator
 	): void {
 		const astNode: BaseAstNode = new AstNodeConstructor();
 		const feature: BaseSyntaxFeature = new FeatureConstructor(this, codeCurator);
 		this.featureSetDict[astNode.constructor.name] = feature;
 		this.featuresArray.push(feature);
-		console.log('Adding feature for ast: ' + astNode.constructor.name);
-		console.log('is of type: ' + feature.constructor.name);
+		Slog.log('BaseAstParser', 'Adding feature for ast: ' + astNode.constructor.name);
+		Slog.log('BaseAstParser', 'is of type: ' + feature.constructor.name);
 		this.sortFeaturesByPriority();
 	}
 
@@ -58,10 +59,10 @@ export abstract class BaseAstParser implements IAstParser {
 		const matches: Tuple<string>[] = Uti.matchModuleTypes(syntaxModule, nodeModule, this.moduleTypesMatch);
 
 		for (const match of matches) {
-			console.log('\nLinking: ' + match.b + ' -> ' + match.a);
+			Slog.log('BaseAstParser', '\nLinking: ' + match.b + ' -> ' + match.a);
 			this.addFeature(nodeModule[match.b], syntaxModule[match.a], syntaxCurator);
 		}
-		//console.log(this.featuresArray);
+		//Slog.log('BaseAstParser', this.featuresArray);
 	}
 
 	protected getFeature(astNodeName: string): ISyntaxFeature {
@@ -70,7 +71,7 @@ export abstract class BaseAstParser implements IAstParser {
 
 	public printParserMapping(): void {
 		for (const key of Object.keys(this.featureSetDict)) {
-			console.log('Node: ' + key + ' -> ' + this.featureSetDict[key].constructor.name);
+			Slog.log('BaseAstParser', 'Node: ' + key + ' -> ' + this.featureSetDict[key].constructor.name);
 		}
 	}
 
@@ -91,7 +92,7 @@ export abstract class BaseAstParser implements IAstParser {
 		}
 	}
 	public parseFileContent(code: string): BlockContent | null {
-		ConsoleUtil.printNamedBody('Parse file content:', code);
+		ConsoleUtil.printNamedBody('BaseAstParser', 'Parse file content:', code);
 		return this.parseAstNode<BlockContent>(code, BlockContent.name);
 	}
 
@@ -100,11 +101,11 @@ export abstract class BaseAstParser implements IAstParser {
 			return null;
 		}
 
-		console.log('Starting to parse code: ' + String(code));
+		Slog.log('BaseAstParser', 'Starting to parse code: ' + String(code));
 		for (const syntaxFeature of this.featuresArray) {
 			const parsedNode: BaseAstNode | null = this.tryParseFeature(code, syntaxFeature);
 			if (parsedNode) {
-				console.log('Successfully parsed with: ' + String(syntaxFeature.constructor.name));
+				Slog.log('BaseAstParser', 'Successfully parsed with: ' + String(syntaxFeature.constructor.name));
 				return parsedNode;
 			}
 		}
@@ -114,7 +115,7 @@ export abstract class BaseAstParser implements IAstParser {
 	private tryParseFeature(code: string, feature: BaseSyntaxFeature): BaseAstNode | null {
 		const selectedFeature: ISyntaxFeature = feature;
 		if (selectedFeature instanceof BaseSyntaxFeature) {
-			//console.log('Try parsing with: ' + selectedFeature.constructor.name + ' : ' + code);
+			//Slog.log('BaseAstParser', 'Try parsing with: ' + selectedFeature.constructor.name + ' : ' + code);
 			const parsedNode: BaseAstNode | null = selectedFeature.tryParseFeature(code);
 			return parsedNode;
 		}
@@ -125,12 +126,12 @@ export abstract class BaseAstParser implements IAstParser {
 		if (!code) {
 			return null;
 		}
-		console.log('Before Parse: ' + astNodeType);
-		console.log(code);
+		Slog.log('BaseAstParser', 'Before Parse: ' + astNodeType);
+		Slog.log('BaseAstParser', code);
 		const selectedFeature: ISyntaxFeature = this.getFeature(astNodeType);
 
-		console.log('Selected parser: ');
-		console.log(selectedFeature.constructor.name);
+		Slog.log('BaseAstParser', 'Selected parser: ');
+		Slog.log('BaseAstParser', selectedFeature.constructor.name);
 		if (!selectedFeature) {
 			throw new Error('Can not parse code for which no Syntax Parser was found: ' + astNodeType);
 		}

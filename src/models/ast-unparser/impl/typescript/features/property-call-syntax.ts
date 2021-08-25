@@ -10,7 +10,7 @@ export class PropertyCallSyntax extends BaseFeatureSyntax {
 		}
 
 		let code: string = '';
-		code += node.id.label;
+		code += node.subject.label;
 		code += '.';
 		const unparsed: string | null = astUnparser.unParseAstNode(node.method);
 		if (unparsed) {

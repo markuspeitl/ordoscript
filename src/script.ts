@@ -5,8 +5,9 @@ import { BaseAstNode } from './models/ast-node/abstract/base-ast-node';
 import { BaseAstUnparser } from './models/ast-unparser/abstract/base-ast-unparser';
 import { TypeScriptAstUnparser } from './models/ast-unparser/impl/typescript/typescript-ast-unparser';
 import { Uti } from './models/ast-parser/common/util/util';
+import { Slog } from './models/ast-parser/common/util/slog';
 
-console.log('Script executed');
+Slog.log('Script', 'Script executed');
 
 const parser = new ArgumentParser({
 	description: 'A sample console application template'
@@ -23,7 +24,7 @@ const unparse: boolean = true;
 
 if (documentContents) {
 	const ordoAstParser: BaseAstParser = new OrdoAstParser();
-	//console.log('Parsing: ' + String(documentContents));
+	//Slog.log('Parsing: ' + String(documentContents));
 	const astNode: BaseAstNode | null = ordoAstParser.parseFileContent(String(documentContents));
 	if (astNode) {
 		Uti.writeDocument(JSON.stringify(astNode, null, 2), String(args.target) + '-tree.json');
@@ -37,4 +38,4 @@ if (documentContents) {
 	}
 }
 
-console.log('Script finished -> exiting');
+Slog.log('Script', 'Script finished -> exiting');

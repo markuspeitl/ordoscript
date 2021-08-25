@@ -1,6 +1,7 @@
 import { BaseAstNode } from '../../ast-node/abstract/base-ast-node';
 import { BlockContent } from '../../ast-node/block-content';
 import { ConsoleUtil } from '../../ast-parser/common/util/console-util';
+import { Slog } from '../../ast-parser/common/util/slog';
 import { Tuple, Uti } from '../../ast-parser/common/util/util';
 import { BaseFeatureSyntax } from './base-feature-syntax';
 export abstract class BaseAstUnparser {
@@ -29,7 +30,7 @@ export abstract class BaseAstUnparser {
 	//public abstract unParseAstNode(node: BaseAstNode | null): string | null;
 
 	public unParseFullAst(node: BlockContent): string | null {
-		ConsoleUtil.printNamedBody('Parse node content:', JSON.stringify(node, null, 2));
+		ConsoleUtil.printNamedBody('BaseAstUnparser', 'Parse node content:', JSON.stringify(node, null, 2));
 		return this.unParseAstNode(node);
 	}
 
@@ -38,8 +39,8 @@ export abstract class BaseAstUnparser {
 			return '';
 		}
 
-		//console.log('Unparse AST Node');
-		//console.log(astNode);
+		//Slog.log('BaseAstUnparser', 'Unparse AST Node');
+		//Slog.log('BaseAstUnparser', astNode);
 
 		const feature: BaseFeatureSyntax = this.getFeatureFor(astNode);
 
@@ -59,7 +60,7 @@ export abstract class BaseAstUnparser {
 		const matches: Tuple<string>[] = Uti.matchModuleTypes(syntaxModule, nodeModule, this.moduleTypesMatch);
 
 		for (const match of matches) {
-			console.log('\nLinking: ' + match.b + ' -> ' + match.a);
+			Slog.log('BaseAstUnparser', '\nLinking: ' + match.b + ' -> ' + match.a);
 			this.addFeature(nodeModule[match.b], syntaxModule[match.a]);
 		}
 	}

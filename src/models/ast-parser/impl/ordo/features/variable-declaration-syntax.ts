@@ -22,7 +22,7 @@ export class VariableDeclarationSyntax extends BaseSyntaxFeature {
 		}
 
 		const declaration: string = variableAndType[0].trim();
-		const declarationParts: string[] = declaration.split(' ');
+		const declarationParts: string[] = declaration.split(this.tokenSet.declarationSeperatorToken);
 
 		if (declarationParts.length < 2) {
 			throw new Error('Variable declaration must have both const|var|let and identifier!');

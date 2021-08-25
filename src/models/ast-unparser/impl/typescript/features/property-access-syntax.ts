@@ -11,7 +11,7 @@ export class PropertyAccessSyntax extends BaseFeatureSyntax {
 		}
 
 		let code: string = '';
-		code = UnparseTool.tryUnparse(code, node.id, astUnparser);
+		code = UnparseTool.tryUnparse(code, node.subject, astUnparser);
 		code += '.';
 		code += node.property;
 		code += '\n';

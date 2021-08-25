@@ -1,3 +1,4 @@
+import { Slog } from './slog';
 import fs from 'fs';
 
 export class Uti {
@@ -6,16 +7,16 @@ export class Uti {
 	}
 
 	public static readDocument(targetFilePath: string): string | null {
-		console.log('Reading document from: ' + targetFilePath);
+		Slog.log('Uti', 'Reading document from: ' + targetFilePath);
 		if (!fs.existsSync(targetFilePath)) {
-			console.log('File does not exist');
+			Slog.log('Uti', 'File does not exist');
 			return null;
 		}
 
 		return fs.readFileSync(targetFilePath) as unknown as string;
 	}
 	public static writeDocument(contents: string, targetFilePath: string): void {
-		//console.log('Writing: \n' + contents + '\nto: ' + targetFilePath + '\n');
+		Slog.log('Uti', 'Writing: \n' + contents + '\nto: ' + targetFilePath + '\n');
 		fs.writeFileSync(targetFilePath, contents);
 	}
 
@@ -35,7 +36,7 @@ export class Uti {
 			if (foundPoolType) {
 				matches.push({ a: key, b: foundPoolType });
 			} else {
-				console.log('No node type found for: ' + String(key));
+				Slog.log('Uti', 'No node type found for: ' + String(key));
 			}
 		}
 		return matches;

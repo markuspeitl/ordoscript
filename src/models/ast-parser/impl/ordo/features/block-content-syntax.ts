@@ -32,7 +32,7 @@ export class BlockContentSyntax extends BaseSyntaxFeature {
 			return node;
 		}
 
-		ConsoleUtil.printNamedBody('BLOCKCURATEDLINES', JSON.stringify(curatedLines, null, 2));
+		ConsoleUtil.printNamedBody('BlockContentSyntax', 'BLOCKCURATEDLINES', JSON.stringify(curatedLines, null, 2));
 
 		const statements: string[] = [];
 
@@ -61,7 +61,7 @@ export class BlockContentSyntax extends BaseSyntaxFeature {
 			}
 		}
 
-		ConsoleUtil.printNamedBody('BLOCKSTATEMENTS', JSON.stringify(statements, null, 2));
+		ConsoleUtil.printNamedBody('BlockContentSyntax', 'BLOCKSTATEMENTS', JSON.stringify(statements, null, 2));
 
 		if (statements.length > 0) {
 			node.children = [];

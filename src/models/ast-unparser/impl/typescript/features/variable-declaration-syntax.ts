@@ -10,10 +10,10 @@ export class VariableDeclarationSyntax extends BaseFeatureSyntax {
 		}
 
 		let code: string = '';
-		code += node.declaretype + ' ';
-		code += node.label;
-		if (node.valuetype) {
-			code += ':' + node.valuetype;
+		code += node.modifier.label + ' ';
+		code += node.id.label;
+		if (node.valuetype && node.valuetype.label) {
+			code += ':' + node.valuetype.label;
 		}
 
 		return code;

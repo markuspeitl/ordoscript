@@ -22,7 +22,7 @@ export class PropertyCallSyntax extends BaseSyntaxFeature {
 			throw Error('Invalid amount of participants for property method call: ' + String(parts.length));
 		}
 		node.subject = this.getNodeDetect(parts[0], 'id');
-		node.method = this.getNode<FunctionCall>(code.trim(), FunctionCall.name, 'method');
+		node.method = this.getNode<FunctionCall>(parts[1].trim(), FunctionCall.name, 'method');
 
 		return node;
 	}
