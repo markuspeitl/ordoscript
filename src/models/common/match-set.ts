@@ -1,61 +1,7 @@
-import { Slog } from '../../../common/util/slog';
-import { Uti } from './../../../common/util/util';
-export class TokenSet {
-	public delimiterTokens: string[] = [';', '\n'];
-	public typeDefinitionStartToken: string = ':';
-	public blockScopeTokenPair: TokenPair = new TokenPair('{', '}');
-	public foreignScopeTokenPair: TokenPair = new TokenPair('{', '}');
-	public functionParamTokenPair: TokenPair = new TokenPair('(', ')');
-	public functionCallParamTokenPair: TokenPair = new TokenPair('(', ')');
-	public groupingTokenPair: TokenPair = new TokenPair('(', ')');
-	public arrayLiteralTokenPair: TokenPair = new TokenPair('[', ']');
-	public functionKeywordToken: string = 'function';
-	public ifKeywordToken: string = 'if';
-	public ifParamTokenPair: TokenPair = new TokenPair('(', ')');
-	public elseKeywordToken: string = 'else';
-	public forKeywordToken: string = 'for';
-	public forParamTokenPair: TokenPair = new TokenPair('(', ')');
-	public constructorKeywordToken: string = 'constructor';
-	public declareTypeTokens: string[] = ['const', 'var', 'let'];
-	public stringEscapeTokens: TokenPair[] = [new TokenPair("'", "'"), new TokenPair('"', '"')];
-	public publicAccessToken: string = 'public';
-	public privateAccessToken: string = 'private';
-	public protectedAccessToken: string = 'protected';
-	public linkExtTokenKeyword: string = 'import';
-	public linkExtLocationToken: string = 'from';
-	public returnKeyword: string = 'return';
-	public assignMentToken: string = '=';
-	public propertyAccessToken: string = '.';
-	public listSeperator: string = ',';
-	public declarationSeperatorToken: string = ' ';
-	public binaryExpressionTokens: string[] = [
-		'+',
-		'-',
-		'+=',
-		'-=',
-		'*',
-		'/',
-		'^',
-		'&',
-		'|',
-		'&&',
-		'||',
-		'<',
-		'>',
-		'<<',
-		'>>',
-		'<=',
-		'>=',
-		'==',
-		'==='
-	];
-	public unaryExpressionTokens: string[] = ['++', '--'];
-
-	public loadFromFile(path: string): void {
-		const obj: Record<string, unknown> = Uti.readJSON(path);
-		Object.assign(this, obj);
-	}
-}
+import { Slog } from '../ast-parser/common/util/slog';
+import { Uti } from '../ast-parser/common/util/util';
+import { TokenPair } from './token-pair';
+import { TokenSet } from './token-set';
 
 export class MatchSet {
 	private validIdentifierLabel: string = '[a-zA-Z_]+[a-zA-Z0-9_]*';
@@ -216,6 +162,12 @@ export class MatchSet {
 		return regEx;
 	}
 
+	public static fromTokenSet(tokenSet: TokenSet): MatchSet {
+		const newMatchSet: MatchSet = new MatchSet();
+		newMatchSet.reconstructDetectors(tokenSet);
+		return newMatchSet;
+	}
+
 	private escapeChar(char: string): string {
 		return '\\' + char;
 	}
@@ -241,28 +193,3 @@ export class MatchSet {
 		return prefix + clonedParts.join('|') + postfix;
 	}
 }
-
-export class TokenPair {
-	public open: string;
-	public close: string;
-	public constructor(open: string, close: string) {
-		this.open = open;
-		this.close = close;
-	}
-}
-/*const tokenSet: TokenSet = new TokenSet();
-const matchSet: MatchSet = new MatchSet();
-matchSet.reconstructDetectors(tokenSet);
-
-function applyNewTokenSet(obj: Record<string, unknown>): void {
-	Object.apply(tokenSet, obj);
-}
-function applyNewMatchSet(obj: Record<string, string>): void {
-	for (const key of Object.keys(obj)) {
-		if (matchSet.hasOwnProperty(key)) {
-			(matchSet as any)[key] = new RegExp(obj[key]);
-		}
-	}
-}
-export { applyNewTokenSet, matchSet };
-*/

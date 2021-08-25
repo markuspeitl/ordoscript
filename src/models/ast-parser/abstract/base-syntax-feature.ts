@@ -1,10 +1,11 @@
-import { TokenSet, MatchSet } from './../impl/ordo/features/token-set';
+import { TokenSet } from '../../common/token-set';
 import { BaseAstNode } from '../../ast-node/abstract/base-ast-node';
 import { ISyntaxFeature } from '../interfaces/i-syntax-feature';
 import { ConsoleUtil } from '../common/util/console-util';
 import { ISyntaxCurator } from '../interfaces/i-syntax-curator';
 import { BaseAstParser } from './base-ast-parser';
 import { Slog } from '../common/util/slog';
+import { MatchSet } from '../../common/match-set';
 
 export abstract class BaseSyntaxFeature implements ISyntaxFeature {
 	protected syntaxCurator: ISyntaxCurator | null = null;

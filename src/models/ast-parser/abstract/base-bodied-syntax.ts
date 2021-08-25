@@ -1,7 +1,7 @@
 import { BlockScope } from '../../ast-node';
+import { TokenPair } from '../../common/token-pair';
 import { Enclosing } from '../common/models/enclosing';
 import { SyntaxTool } from '../common/util/syntax-tool';
-import { TokenPair } from '../impl/ordo/features';
 import { BaseSyntaxFeature } from './base-syntax-feature';
 
 export abstract class BaseBodiedSyntax extends BaseSyntaxFeature {

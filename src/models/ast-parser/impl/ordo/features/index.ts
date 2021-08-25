@@ -17,7 +17,6 @@ export * from './property-access-syntax';
 export * from './property-call-syntax';
 export * from './return-syntax';
 export * from './string-literal-syntax';
-export * from './token-set';
 export * from './unary-composition-syntax';
 export * from './value-listing-syntax';
 export * from './variable-declaration-syntax';

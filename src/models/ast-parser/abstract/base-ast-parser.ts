@@ -1,6 +1,6 @@
 import { Slog } from '../common/util/slog';
 import { Uti, Tuple } from './../common/util/util';
-import { TokenSet, MatchSet } from './../impl/ordo/features/token-set';
+import { TokenSet } from '../../common/token-set';
 import { ISyntaxFeature } from '../interfaces/i-syntax-feature';
 import { BaseAstNode } from '../../ast-node/abstract/base-ast-node';
 import { BlockContent } from '../../ast-node/block-content';
@@ -8,6 +8,7 @@ import { ConsoleUtil } from '../common/util/console-util';
 import { ISyntaxCurator } from '../interfaces/i-syntax-curator';
 import { BaseSyntaxFeature } from './base-syntax-feature';
 import { IAstParser } from '../interfaces/i-ast-parser';
+import { MatchSet } from '../../common/match-set';
 export abstract class BaseAstParser implements IAstParser {
 	private featureSetDict: Record<string, BaseSyntaxFeature> = {};
 	protected featuresArray: BaseSyntaxFeature[] = [];

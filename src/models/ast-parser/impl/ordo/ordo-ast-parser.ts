@@ -1,11 +1,15 @@
-import { TokenSet, MatchSet } from './features/token-set';
+import { Slog } from './../../common/util/slog';
+import { TokenSet } from '../../../common/token-set';
 import * as syntax from './features';
 import * as nodes from '../../../ast-node/index';
-import { OrdoSyntaxCurator } from './features/util/ordo-syntax-curator';
+import { OrdoSyntaxCurator } from './util/ordo-syntax-curator';
 import { BaseAstParser } from '../../abstract/base-ast-parser';
 import { ISyntaxCurator } from '../../interfaces/i-syntax-curator';
 import { LinkNode } from '../../../ast-node/index';
 import { ImportSyntax } from './features';
+import { MatchSet } from '../../../common/match-set';
+import path from 'path';
+import { exit } from 'process';
 
 export class OrdoAstParser extends BaseAstParser {
 	public initializeFeatureSet(): void {
@@ -40,10 +44,12 @@ export class OrdoAstParser extends BaseAstParser {
 		this.addFeature(ArrayLiteral, ArrayLiteralSyntax, syntaxCurator);
 		this.addFeature(Identifier, IdentifierSyntax, syntaxCurator);*/
 
-		const tokenSet: TokenSet = new TokenSet();
+		const tokenPath: string = path.join(__dirname, 'tokenSet/ordo-token-set.json');
+		const tokenSet: TokenSet = TokenSet.loadFromFile(tokenPath);
+		Slog.jlog('TokenSet', tokenSet);
+		//const tokenSet: TokenSet = new TokenSet();
 		this.loadTokenSet(tokenSet);
-		const matchSet: MatchSet = new MatchSet();
-		matchSet.reconstructDetectors(tokenSet);
+		const matchSet: MatchSet = MatchSet.fromTokenSet(tokenSet);
 		this.loadMatchSet(matchSet);
 
 		this.printParserMapping();

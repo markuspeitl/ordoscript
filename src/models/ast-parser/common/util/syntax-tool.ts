@@ -1,6 +1,4 @@
-import { BaseAstNode, BlockScope } from '../../../ast-node';
-import { BaseAstParser } from '../../abstract/base-ast-parser';
-import { TokenPair } from './../../impl/ordo/features/token-set';
+import { TokenPair } from '../../../common/token-pair';
 import { Enclosing } from './../models/enclosing';
 export class SyntaxTool {
 	public static getEnclosing(code: string, openToken: string, closeToken: string): Enclosing | null {
@@ -41,26 +39,4 @@ export class SyntaxTool {
 	public static beforeOpening(code: string, enclosing: Enclosing): string {
 		return code.substring(0, enclosing.open);
 	}
-
-	/*public static parseDetectArrayNullable(codes: string[], astParser: BaseAstParser, errorLabel: string): Array<BaseAstNode | null> {
-		const children: Array<BaseAstNode | null> = new Array<BaseAstNode | null>();
-		for (const code of codes) {
-			const child: BaseAstNode | null = astParser.parseAstNodeDetect(code);
-			children.push(child);
-		}
-		return children;
-	}
-
-	public static parseDetectArray(codes: string[], astParser: BaseAstParser, errorLabel: string): Array<BaseAstNode> {
-		const children: Array<BaseAstNode> = new Array<BaseAstNode>();
-
-		for (const code of codes) {
-			const child: BaseAstNode | null = astParser.parseAstNodeDetect(code);
-			if (!child) {
-				throw Error(errorLabel + ': ast node with code: "' + code + '" can not be parsed to null -> error');
-			}
-			children.push(child);
-		}
-		return children;
-	}*/
 }

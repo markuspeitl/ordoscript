@@ -4,7 +4,9 @@ export class Slog {
 		BaseFeatureSyntax: true,
 		BaseAstParser: true,
 		BaseAstUnparser: true,
-		default: true
+		default: true,
+		TokenSet: true,
+		TokenSetDetail: true
 	};
 
 	private static lastLogger: string = '';
@@ -23,6 +25,6 @@ export class Slog {
 	}
 
 	public static jlog(label: string, json: any): void {
-		Slog.log(label, JSON.stringify(json));
+		Slog.log(label, JSON.stringify(json, null, 2));
 	}
 }
