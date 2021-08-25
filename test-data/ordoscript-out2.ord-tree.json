@@ -19,41 +19,53 @@
     },
     {
       "left": {
-        "declaretype": "const",
-        "label": "test",
+        "modifier": {
+          "label": "const",
+          "type": "Identifier",
+          "original": "const"
+        },
+        "id": {
+          "label": "test",
+          "type": "Identifier",
+          "original": "test"
+        },
         "type": "VariableDeclarationNode",
-        "original": "const test "
+        "original": "const test"
       },
       "right": {
         "compositorToken": "+",
         "left": {
           "value": 1,
-          "type": "NumberLiteral",
-          "original": "1 "
+          "type": "NumericLiteral",
+          "original": "1"
         },
         "right": {
           "compositorToken": "*",
           "left": {
             "value": 4,
-            "type": "NumberLiteral",
-            "original": "4 "
+            "type": "NumericLiteral",
+            "original": "4"
           },
           "right": {
             "value": 3,
-            "type": "NumberLiteral",
-            "original": " 3"
+            "type": "NumericLiteral",
+            "original": "3"
           },
           "type": "CompositionNode",
-          "original": " 4 * 3"
+          "original": "4 * 3"
         },
         "type": "CompositionNode",
-        "original": " 1 + 4 * 3"
+        "original": "1 + 4 * 3"
       },
       "type": "AssignmentNode",
       "original": "const test = 1 + 4 * 3"
     },
     {
-      "label": "print_hello",
+      "id": {
+        "label": "print_hello",
+        "type": "Identifier",
+        "original": "print_hello"
+      },
       "parameters": {
         "values": [{
           "label": "hello_text",
@@ -63,20 +75,19 @@
         "type": "ValueListingNode",
         "original": "hello_text"
       },
-      "returnType": {
-        "label": "TestClass",
-        "type": "Identifier",
-        "original": "TestClass"
-      },
       "body": {
         "content": {
           "children": [{
-              "id": {
-                "label": "console"
+              "subject": {
+                "label": "console",
+                "type": "Identifier",
+                "original": "console"
               },
               "method": {
                 "identifier": {
-                  "label": "log"
+                  "label": "log",
+                  "type": "Identifier",
+                  "original": "log"
                 },
                 "parameters": {
                   "values": [{
@@ -114,7 +125,9 @@
     },
     {
       "identifier": {
-        "label": "print_hello"
+        "label": "print_hello",
+        "type": "Identifier",
+        "original": "print_hello"
       },
       "parameters": {
         "values": [{
@@ -130,38 +143,62 @@
     },
     {
       "left": {
-        "declaretype": "const",
-        "valuetype": "any",
-        "label": "newall",
+        "valuetype": {
+          "label": "any",
+          "type": "Identifier",
+          "original": "any"
+        },
+        "modifier": {
+          "label": "const",
+          "type": "Identifier",
+          "original": "const"
+        },
+        "id": {
+          "label": "newall",
+          "type": "Identifier",
+          "original": "newall"
+        },
         "type": "VariableDeclarationNode",
-        "original": "const newall: any "
+        "original": "const newall: any"
       },
       "right": {
         "content": null,
         "type": "BlockScope",
-        "original": " {}"
+        "original": "{}"
       },
       "type": "AssignmentNode",
       "original": "\nconst newall: any = {}"
     },
     {
       "left": {
-        "declaretype": "const",
-        "valuetype": "any",
-        "label": "newallss",
+        "valuetype": {
+          "label": "any",
+          "type": "Identifier",
+          "original": "any"
+        },
+        "modifier": {
+          "label": "const",
+          "type": "Identifier",
+          "original": "const"
+        },
+        "id": {
+          "label": "newallss",
+          "type": "Identifier",
+          "original": "newallss"
+        },
         "type": "VariableDeclarationNode",
-        "original": "const newallss: any "
+        "original": "const newallss: any"
       },
       "right": {
         "value": {
           "values": [{
               "value": 1,
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "original": "1"
             },
             {
               "value": 2,
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "original": "2"
             },
             {
@@ -174,7 +211,7 @@
           "original": "1, 2, newall"
         },
         "type": "ArrayLiteral",
-        "original": " [1, 2, newall]"
+        "original": "[1, 2, newall]"
       },
       "type": "AssignmentNode",
       "original": "const newallss: any = [1, 2, newall]"
@@ -185,12 +222,12 @@
         "left": {
           "label": "newall",
           "type": "Identifier",
-          "original": "newall "
+          "original": "newall"
         },
         "right": {
           "value": 40,
-          "type": "NumberLiteral",
-          "original": " 40"
+          "type": "NumericLiteral",
+          "original": "40"
         },
         "type": "CompositionNode",
         "original": "newall < 40"
@@ -199,7 +236,9 @@
         "content": {
           "children": [{
             "identifier": {
-              "label": "print_hello"
+              "label": "print_hello",
+              "type": "Identifier",
+              "original": "print_hello"
             },
             "parameters": {
               "values": [{
@@ -227,7 +266,9 @@
         "content": {
           "children": [{
             "identifier": {
-              "label": "print_hello"
+              "label": "print_hello",
+              "type": "Identifier",
+              "original": "print_hello"
             },
             "parameters": {
               "values": [{
@@ -252,60 +293,74 @@
     },
     {
       "left": {
-        "declaretype": "const",
-        "label": "test",
+        "modifier": {
+          "label": "const",
+          "type": "Identifier",
+          "original": "const"
+        },
+        "id": {
+          "label": "test",
+          "type": "Identifier",
+          "original": "test"
+        },
         "type": "VariableDeclarationNode",
-        "original": "const test "
+        "original": "const test"
       },
       "right": {
-        "id": {
-          "label": "newall"
+        "subject": {
+          "label": "newall",
+          "type": "Identifier",
+          "original": "newall"
         },
         "method": {
           "identifier": {
-            "label": "prop"
+            "label": "prop",
+            "type": "Identifier",
+            "original": "prop"
           },
-          "parameters": null,
           "type": "FunctionCall",
           "original": "prop();"
         },
         "type": "PropertyCallNode",
-        "original": " newall.prop();"
+        "original": "newall.prop();"
       },
       "type": "AssignmentNode",
       "original": "const test = newall.prop();"
     },
     {
+      "initializer": {
+        "valuetype": {
+          "label": "number = 0",
+          "type": "Identifier",
+          "original": "number = 0"
+        },
+        "modifier": {
+          "label": "var",
+          "type": "Identifier",
+          "original": "var"
+        },
+        "id": {
+          "label": "i",
+          "type": "Identifier",
+          "original": "i"
+        },
+        "type": "VariableDeclarationNode",
+        "original": "var i: number = 0"
+      },
       "endCondition": {
         "compositorToken": "<",
         "left": {
           "label": "i",
           "type": "Identifier",
-          "original": "i "
+          "original": "i"
         },
         "right": {
           "value": 10,
-          "type": "NumberLiteral",
-          "original": " 10"
+          "type": "NumericLiteral",
+          "original": "10"
         },
         "type": "CompositionNode",
         "original": "i < 10"
-      },
-      "initializer": {
-        "left": {
-          "declaretype": "var",
-          "valuetype": "number",
-          "label": "i",
-          "type": "VariableDeclarationNode",
-          "original": "var i: number "
-        },
-        "right": {
-          "value": 0,
-          "type": "NumberLiteral",
-          "original": " 0"
-        },
-        "type": "AssignmentNode",
-        "original": "var i: number = 0"
       },
       "incrementor": {
         "operationToken": "++",
@@ -320,12 +375,16 @@
       "body": {
         "content": {
           "children": [{
-            "id": {
-              "label": "console"
+            "subject": {
+              "label": "console",
+              "type": "Identifier",
+              "original": "console"
             },
             "method": {
               "identifier": {
-                "label": "log"
+                "label": "log",
+                "type": "Identifier",
+                "original": "log"
               },
               "parameters": {
                 "values": [{
