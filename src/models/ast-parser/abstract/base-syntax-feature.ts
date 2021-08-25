@@ -1,4 +1,3 @@
-import { TokenSet } from '../../common/token-set';
 import { BaseAstNode } from '../../ast-node/abstract/base-ast-node';
 import { ISyntaxFeature } from '../interfaces/i-syntax-feature';
 import { ConsoleUtil } from '../common/util/console-util';
@@ -6,12 +5,14 @@ import { ISyntaxCurator } from '../interfaces/i-syntax-curator';
 import { BaseAstParser } from './base-ast-parser';
 import { Slog } from '../common/util/slog';
 import { MatchSet } from '../../common/match-set';
+import { BaseSyntaxParser } from '../../abstract/base-syntax-parser';
 
-export abstract class BaseSyntaxFeature implements ISyntaxFeature {
+export abstract class BaseSyntaxFeature extends BaseSyntaxParser implements ISyntaxFeature {
 	protected syntaxCurator: ISyntaxCurator | null = null;
 	public abstract priority: number = 10;
 	private astParser: BaseAstParser;
 	public constructor(astParser: BaseAstParser, syntaxCurator?: ISyntaxCurator) {
+		super();
 		this.astParser = astParser;
 		if (syntaxCurator) {
 			this.syntaxCurator = syntaxCurator;
@@ -53,20 +54,9 @@ export abstract class BaseSyntaxFeature implements ISyntaxFeature {
 		return this.parseFeature(code);
 	}
 
-	protected tokenSet: TokenSet;
-	public loadTokenSet(tokenSet: TokenSet): void {
-		this.tokenSet = tokenSet;
-	}
 	protected matchSet: MatchSet;
 	public loadMatchSet(matchSet: MatchSet): void {
 		this.matchSet = matchSet;
-	}
-
-	public getNodeName(): string {
-		return String(this.constructor.name);
-	}
-	public prependNodeName(childName: string): string {
-		return '"' + this.getNodeName() + '.' + childName + '" ';
 	}
 
 	public getNodeDetect<BaseAstNode>(code: string, errorLabel: string): BaseAstNode {

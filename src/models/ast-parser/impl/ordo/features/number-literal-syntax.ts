@@ -1,8 +1,8 @@
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { BaseSyntaxFeature } from '../../../abstract/base-syntax-feature';
-import { NumberLiteral } from '../../../../ast-node/number-literal';
+import { NumericLiteral } from '../../../../ast-node/numeric-literal';
 
-export class NumberLiteralSyntax extends BaseSyntaxFeature {
+export class NumericLiteralSyntax extends BaseSyntaxFeature {
 	public priority: number = 100;
 	//private regExp: RegExp = new RegExp(/^[0-9]+/);
 	public isFeatureDetected(code: string): boolean {
@@ -15,7 +15,7 @@ export class NumberLiteralSyntax extends BaseSyntaxFeature {
 		if (!code) {
 			return null;
 		}
-		const node: NumberLiteral = new NumberLiteral();
+		const node: NumericLiteral = new NumericLiteral();
 		node.value = Number(code);
 		return node;
 	}

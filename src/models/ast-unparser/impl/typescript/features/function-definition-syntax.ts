@@ -1,30 +1,29 @@
-import { BaseAstUnparser } from '../../../abstract/base-ast-unparser';
 import { BaseFeatureSyntax } from '../../../abstract/base-feature-syntax';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
 import { FunctionDefinition } from '../../../../ast-node';
 
 export class FunctionDefinitionSyntax extends BaseFeatureSyntax {
-	protected unParseFeatureInternal(node: BaseAstNode, astUnparser: BaseAstUnparser): string | null {
+	protected unParseFeatureInternal(node: BaseAstNode): string | null {
 		if (!(node instanceof FunctionDefinition)) {
 			return null;
 		}
 
 		let code: string = '';
-		code += 'function ';
+		code += this.tokenSet.functionKeywordToken + ' ';
 		code += node.id.label;
-		code += '(';
-		const unparsedParam: string | null = astUnparser.unParseAstNode(node.parameters);
+		code += this.tokenSet.functionParamTokenPair.open;
+		const unparsedParam: string | null = this.astUnparser.unParseAstNode(node.parameters);
 		if (unparsedParam) {
 			code += unparsedParam;
 		}
-		code += ')';
+		code += this.tokenSet.functionParamTokenPair.close;
 		if (node.returnType) {
-			code += ':' + node.returnType.label;
+			code += this.tokenSet.typeDefinitionStartToken + node.returnType.label;
 		}
 
-		const unparsedBody: string | null = astUnparser.unParseAstNode(node.body);
+		const unparsedBody: string | null = this.astUnparser.unParseAstNode(node.body);
 		if (unparsedBody) {
-			code += unparsedBody + '\n';
+			code += unparsedBody; //+ '\n';
 		}
 
 		return code;

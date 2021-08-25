@@ -1,5 +1,5 @@
 import { BaseAstNode } from './abstract/base-ast-node';
 
-export class NumberLiteral extends BaseAstNode {
+export class NumericLiteral extends BaseAstNode {
 	public value: number;
 }

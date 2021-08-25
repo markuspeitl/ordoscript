@@ -1,12 +1,14 @@
 export class Slog {
 	private static loggerLabels: Record<string, boolean> = {
-		BaseSyntaxFeature: true,
-		BaseFeatureSyntax: true,
-		BaseAstParser: true,
-		BaseAstUnparser: true,
-		default: true,
-		TokenSet: true,
-		TokenSetDetail: true
+		BaseSyntaxFeature: false,
+		BaseFeatureSyntax: false,
+		BaseAstParser: false,
+		BaseAstUnparser: false,
+		default: false,
+		TokenSet: false,
+		TokenSetDetail: false,
+		Uti: false,
+		MatchType: true
 	};
 
 	private static lastLogger: string = '';

@@ -9,17 +9,16 @@ import { LinkNode } from '../../../ast-node/index';
 import { ImportSyntax } from './features';
 import { MatchSet } from '../../../common/match-set';
 import path from 'path';
-import { exit } from 'process';
 
 export class OrdoAstParser extends BaseAstParser {
-	public initializeFeatureSet(): void {
+	public initializeSubParsers(): void {
 		//Optimization todo -> order by usage probability
 		const syntaxCurator: ISyntaxCurator = new OrdoSyntaxCurator();
 
 		this.loadSyntaxFeaturesDynamic(nodes, syntax, syntaxCurator);
 
 		//Add features that can not be dynamically linked
-		this.addFeature(LinkNode, ImportSyntax, syntaxCurator);
+		this.addFeatureFromTypes(LinkNode, ImportSyntax, syntaxCurator);
 
 		/*this.addFeature(ForNode, ForSyntax, syntaxCurator);
 		this.addFeature(ReturnNode, ReturnSyntax, syntaxCurator);
@@ -37,7 +36,7 @@ export class OrdoAstParser extends BaseAstParser {
 		this.addFeature(FunctionCall, FunctionCallSyntax, syntaxCurator);
 		this.addFeature(UnaryCompositionNode, UnaryCompositionSyntax, syntaxCurator);
 		this.addFeature(CompositionNode, CompositionSyntax, syntaxCurator);
-		this.addFeature(NumberLiteral, NumberLiteralSyntax, syntaxCurator);
+		this.addFeature(NumericLiteral, NumericLiteralSyntax, syntaxCurator);
 		this.addFeature(StringLiteral, StringLiteralSyntax, syntaxCurator);
 		this.addFeature(DictLiteral, DictLiteralSyntax, syntaxCurator);
 		this.addFeature(ParameterDeclaration, ParameterDeclarationSyntax, syntaxCurator);

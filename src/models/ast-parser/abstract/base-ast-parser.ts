@@ -1,6 +1,5 @@
 import { Slog } from '../common/util/slog';
 import { Uti, Tuple } from './../common/util/util';
-import { TokenSet } from '../../common/token-set';
 import { ISyntaxFeature } from '../interfaces/i-syntax-feature';
 import { BaseAstNode } from '../../ast-node/abstract/base-ast-node';
 import { BlockContent } from '../../ast-node/block-content';
@@ -9,46 +8,21 @@ import { ISyntaxCurator } from '../interfaces/i-syntax-curator';
 import { BaseSyntaxFeature } from './base-syntax-feature';
 import { IAstParser } from '../interfaces/i-ast-parser';
 import { MatchSet } from '../../common/match-set';
-export abstract class BaseAstParser implements IAstParser {
-	private featureSetDict: Record<string, BaseSyntaxFeature> = {};
-	protected featuresArray: BaseSyntaxFeature[] = [];
+import { BaseParser } from '../../abstract/base-parser';
 
-	public constructor() {
-		this.initializeFeatureSet();
-	}
-
-	public abstract initializeFeatureSet(): void;
-
-	protected addFeature(
+export abstract class BaseAstParser extends BaseParser<BaseSyntaxFeature> implements IAstParser {
+	protected addFeatureFromTypes(
 		AstNodeConstructor: new () => BaseAstNode,
 		FeatureConstructor: new (astParser: IAstParser, codeCurator?: ISyntaxCurator) => BaseSyntaxFeature,
 		codeCurator: ISyntaxCurator
 	): void {
-		const astNode: BaseAstNode = new AstNodeConstructor();
 		const feature: BaseSyntaxFeature = new FeatureConstructor(this, codeCurator);
-		this.featureSetDict[astNode.constructor.name] = feature;
-		this.featuresArray.push(feature);
-		Slog.log('BaseAstParser', 'Adding feature for ast: ' + astNode.constructor.name);
-		Slog.log('BaseAstParser', 'is of type: ' + feature.constructor.name);
+		this.addSubParser(AstNodeConstructor, feature);
 		this.sortFeaturesByPriority();
 	}
 
 	protected sortFeaturesByPriority(): void {
-		this.featuresArray = this.featuresArray.sort((a: BaseSyntaxFeature, b: BaseSyntaxFeature) => a.priority - b.priority);
-		/*const dictKeys: string[] = Object.keys(this.featureSetDict);
-		const features: BaseSyntaxFeature[] = dictKeys.map((key: string) => this.featureSetDict[key]);
-		let nodeSytaxes: INodeSyntax[] = [];
-		for (let i = 0; i < features.length; i++) {
-			nodeSytaxes.push({
-				nodeName: dictKeys[i],
-				syntaxFeature: features[i]
-			});
-		}
-
-		nodeSytaxes = nodeSytaxes.sort((a: INodeSyntax, b: INodeSyntax) => a.syntaxFeature.priority - b.syntaxFeature.priority);
-		nodeSytaxes.forEach((nodeSytax: INodeSyntax) => {
-			this.featureSetDict[nodeSytax.nodeName] = nodeSytax.syntaxFeature;
-		});*/
+		this.subParserArray = this.subParserArray.sort((a: BaseSyntaxFeature, b: BaseSyntaxFeature) => a.priority - b.priority);
 	}
 
 	private moduleTypesMatch(syntaxTypeName: string, nodeTypeName: string): boolean {
@@ -57,39 +31,24 @@ export abstract class BaseAstParser implements IAstParser {
 	}
 
 	protected loadSyntaxFeaturesDynamic(nodeModule: any, syntaxModule: any, syntaxCurator: ISyntaxCurator): void {
+		Slog.log('MatchType', '\n-----------BaseAstParser: Load dynamic syntax features.');
+
 		const matches: Tuple<string>[] = Uti.matchModuleTypes(syntaxModule, nodeModule, this.moduleTypesMatch);
 
 		for (const match of matches) {
 			Slog.log('BaseAstParser', '\nLinking: ' + match.b + ' -> ' + match.a);
-			this.addFeature(nodeModule[match.b], syntaxModule[match.a], syntaxCurator);
+			this.addFeatureFromTypes(nodeModule[match.b], syntaxModule[match.a], syntaxCurator);
 		}
 		//Slog.log('BaseAstParser', this.featuresArray);
+		Uti.printUnmatchedPoolTypes(syntaxModule, nodeModule, this.moduleTypesMatch);
 	}
 
-	protected getFeature(astNodeName: string): ISyntaxFeature {
-		return this.featureSetDict[astNodeName];
-	}
-
-	public printParserMapping(): void {
-		for (const key of Object.keys(this.featureSetDict)) {
-			Slog.log('BaseAstParser', 'Node: ' + key + ' -> ' + this.featureSetDict[key].constructor.name);
-		}
-	}
-
-	public loadTokenSet(tokenSet: TokenSet): void {
-		for (const key of Object.keys(this.featureSetDict)) {
-			this.featureSetDict[key].loadTokenSet(tokenSet);
-		}
-		for (const feature of this.featuresArray) {
-			feature.loadTokenSet(tokenSet);
-		}
-	}
 	public loadMatchSet(matchSet: MatchSet): void {
-		for (const key of Object.keys(this.featureSetDict)) {
-			this.featureSetDict[key].loadMatchSet(matchSet);
+		for (const key of Object.keys(this.subParserDict)) {
+			this.subParserDict[key].loadMatchSet(matchSet);
 		}
-		for (const feature of this.featuresArray) {
-			feature.loadMatchSet(matchSet);
+		for (const subParser of this.subParserArray) {
+			subParser.loadMatchSet(matchSet);
 		}
 	}
 	public parseFileContent(code: string): BlockContent | null {
@@ -103,7 +62,7 @@ export abstract class BaseAstParser implements IAstParser {
 		}
 
 		Slog.log('BaseAstParser', 'Starting to parse code: ' + String(code));
-		for (const syntaxFeature of this.featuresArray) {
+		for (const syntaxFeature of this.subParserArray) {
 			const parsedNode: BaseAstNode | null = this.tryParseFeature(code, syntaxFeature);
 			if (parsedNode) {
 				Slog.log('BaseAstParser', 'Successfully parsed with: ' + String(syntaxFeature.constructor.name));
@@ -129,7 +88,7 @@ export abstract class BaseAstParser implements IAstParser {
 		}
 		Slog.log('BaseAstParser', 'Before Parse: ' + astNodeType);
 		Slog.log('BaseAstParser', code);
-		const selectedFeature: ISyntaxFeature = this.getFeature(astNodeType);
+		const selectedFeature: ISyntaxFeature = this.getSubParser(astNodeType);
 
 		Slog.log('BaseAstParser', 'Selected parser: ');
 		Slog.log('BaseAstParser', selectedFeature.constructor.name);

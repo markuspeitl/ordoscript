@@ -1,15 +1,23 @@
+import { BaseSyntaxParser } from '../../abstract/base-syntax-parser';
 import { BaseAstNode } from '../../ast-node/abstract/base-ast-node';
 import { ConsoleUtil } from '../../ast-parser/common/util/console-util';
+import { IFeatureSyntax } from '../interfaces/i-feature-syntax';
 import { BaseAstUnparser } from './base-ast-unparser';
 
-export abstract class BaseFeatureSyntax {
-	public unParseFeature(node: BaseAstNode | null, astUnparser: BaseAstUnparser): string | null {
+export abstract class BaseFeatureSyntax extends BaseSyntaxParser implements IFeatureSyntax {
+	protected astUnparser: BaseAstUnparser;
+	public constructor(astUnparser: BaseAstUnparser) {
+		super();
+		this.astUnparser = astUnparser;
+	}
+
+	public unParseFeature(node: BaseAstNode | null): string | null {
 		if (!node) {
 			return null;
 		}
 
 		ConsoleUtil.printNamedBody('BaseFeatureSyntax', 'UnParsing feature to syntax' + String(this.constructor.name), JSON.stringify(node, null, 2));
-		const code: string | null = this.unParseFeatureInternal(node, astUnparser);
+		const code: string | null = this.unParseFeatureInternal(node);
 		if (!code) {
 			return '';
 		}
@@ -19,14 +27,17 @@ export abstract class BaseFeatureSyntax {
 
 		return code;
 	}
-	protected abstract unParseFeatureInternal(node: BaseAstNode, astParser: BaseAstUnparser): string | null;
-	/*public tryUnParseFeature(node: BaseAstNode, astUnParser: BaseAstUnparser): string | null {
+	protected abstract unParseFeatureInternal(node: BaseAstNode): string | null;
+
+	protected tryUnparse(code: string, node: BaseAstNode | null): string {
 		if (!node) {
-			return null;
+			return '';
 		}
-		if (!this.isOfFeatureType(node)) {
-			return null;
+
+		const unparsedBody: string | null = this.astUnparser.unParseAstNode(node);
+		if (unparsedBody) {
+			code += unparsedBody;
 		}
-		return this.unParseFeature(node, astUnParser);
-	}*/
+		return code;
+	}
 }

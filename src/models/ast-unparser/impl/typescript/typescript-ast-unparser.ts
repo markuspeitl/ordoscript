@@ -1,9 +1,12 @@
 import { BaseAstUnparser } from '../../abstract/base-ast-unparser';
 import * as nodeModule from '../../../ast-node';
 import * as syntaxModule from './features';
+import path from 'path';
+import { TokenSet } from '../../../common/token-set';
+import { Slog } from '../../../ast-parser/common/util/slog';
 
 export class TypeScriptAstUnparser extends BaseAstUnparser {
-	public initializeFeatureSet(): void {
+	public initializeSubParsers(): void {
 		this.loadSyntaxFeaturesDynamic(nodeModule, syntaxModule);
 
 		/*this.addFeature(BlockScope, BlockScopeSyntax);
@@ -21,10 +24,15 @@ export class TypeScriptAstUnparser extends BaseAstUnparser {
 		//this.addFeature(PropertyAccessNode, PropertyAccessSyntax);
 		this.addFeature(FunctionCall, FunctionCallSyntax);
 		this.addFeature(CompositionNode, CompositionSyntax);
-		this.addFeature(NumberLiteral, NumberLiteralSyntax);
+		this.addFeature(NumericLiteral, NumericLiteralSyntax);
 		this.addFeature(StringLiteral, StringLiteralSyntax);
 		//this.addFeature(DictLiteral, DictLiteralSyntax);
 		//this.addFeature(ParameterDeclaration, ParameterDeclarationSyntax);
 		this.addFeature(Identifier, IdentifierSyntax);*/
+
+		const tokenPath: string = path.join(__dirname, 'tokenSet/typescript-token-set.json');
+		const tokenSet: TokenSet = TokenSet.loadFromFile(tokenPath);
+		Slog.jlog('TokenSet', tokenSet);
+		this.loadTokenSet(tokenSet);
 	}
 }

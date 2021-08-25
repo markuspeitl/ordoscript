@@ -17,6 +17,7 @@ export class TokenSet {
 	public elseKeywordToken: string = 'else';
 	public forKeywordToken: string = 'for';
 	public forParamTokenPair: TokenPair = new TokenPair('(', ')');
+	public forParamStatementSeperator: string = ';';
 	public constructorKeywordToken: string = 'constructor';
 	public declareTypeTokens: string[] = ['const', 'var', 'let'];
 	public stringEscapeTokens: TokenPair[] = [new TokenPair("'", "'"), new TokenPair('"', '"')];

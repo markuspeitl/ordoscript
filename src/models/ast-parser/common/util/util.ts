@@ -35,11 +35,22 @@ export class Uti {
 
 			if (foundPoolType) {
 				matches.push({ a: key, b: foundPoolType });
+				Slog.log('MatchType', 'Found match: ' + String(key) + ' -> ' + String(foundPoolType));
 			} else {
-				Slog.log('Uti', 'No node type found for: ' + String(key));
+				Slog.log('MatchType', 'No match found for: ' + String(key));
 			}
 		}
 		return matches;
+	}
+
+	public static printUnmatchedPoolTypes(matchMaster: any, matchPool: any, matcherFn: (a: string, b: string) => boolean): void {
+		const masterKeys: string[] = Object.keys(matchMaster);
+		const poolKeys: string[] = Object.keys(matchPool);
+		for (const key of poolKeys) {
+			if (!masterKeys.find((masterType: string) => matcherFn(masterType, key))) {
+				Slog.log('MatchType', 'No match found for pooltype: ' + String(key));
+			}
+		}
 	}
 }
 
