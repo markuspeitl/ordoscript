@@ -27,6 +27,7 @@ export class TokenSet {
 	public linkExtTokenKeyword: string = 'import';
 	public linkExtLocationToken: string = 'from';
 	public returnKeyword: string = 'return';
+	public identationToken: string = '\t';
 	public assignMentToken: string = '=';
 	public propertyAccessToken: string = '.';
 	public listSeperator: string = ',';

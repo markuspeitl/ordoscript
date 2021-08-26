@@ -1,0 +1,83 @@
+{
+    "blockScopeTokenPair": {
+        "open": ":",
+        "close": ""
+    },
+    "foreignScopeTokenPair": {
+        "open": "",
+        "close": ""
+    },
+    "functionParamTokenPair": {
+        "open": "(",
+        "close": ")"
+    },
+    "functionCallParamTokenPair": {
+        "open": "(",
+        "close": ")"
+    },
+    "groupingTokenPair": {
+        "open": "(",
+        "close": ")"
+    },
+    "arrayLiteralTokenPair": {
+        "open": "[",
+        "close": "]"
+    },
+    "ifParamTokenPair": {
+        "open": " ",
+        "close": ""
+    },
+    "forParamTokenPair": {
+        "open": " ",
+        "close": ""
+    },
+    "delimiterTokens": ["\n"],
+    "typeDefinitionStartToken": "",
+    "functionKeywordToken": "def",
+    "ifKeywordToken": "if",
+    "elseKeywordToken": "else",
+    "forKeywordToken": "for",
+    "constructorKeywordToken": "__init__",
+    "declareTypeTokens": [],
+    "stringEscapeTokens": [{
+            "open": "'",
+            "close": "'"
+        },
+        {
+            "open": "\"",
+            "close": "\""
+        }
+    ],
+    "publicAccessToken": "",
+    "privateAccessToken": "",
+    "protectedAccessToken": "",
+    "linkExtTokenKeyword": "import",
+    "linkExtLocationToken": "from",
+    "returnKeyword": "return",
+    "assignMentToken": "=",
+    "propertyAccessToken": ".",
+    "listSeperator": ",",
+    "declarationSeperatorToken": "",
+    "binaryExpressionTokens": [
+        "+",
+        "-",
+        "+=",
+        "-=",
+        "*",
+        "/",
+        "^",
+        "&",
+        "|",
+        "&&",
+        "||",
+        "<",
+        ">",
+        "<<",
+        ">>",
+        "<=",
+        ">=",
+        "==",
+        "==="
+    ],
+    "unaryExpressionTokens": []
+}

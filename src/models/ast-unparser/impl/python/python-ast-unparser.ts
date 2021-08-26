@@ -6,7 +6,7 @@ import path from 'path';
 import { TokenSet } from '../../../common/token-set';
 import { Slog } from '../../../ast-parser/common/util/slog';
 
-export class TypeScriptAstUnparser extends BaseAstUnparser {
+export class PythonAstUnparser extends BaseAstUnparser {
 	public initializeSubParsers(): void {
 		//Load all default parsers
 		this.loadSyntaxFeaturesDynamic(nodeModule, defaultSyntaxModule);
@@ -34,7 +34,7 @@ export class TypeScriptAstUnparser extends BaseAstUnparser {
 		//this.addFeature(ParameterDeclaration, ParameterDeclarationSyntax);
 		this.addFeature(Identifier, IdentifierSyntax);*/
 
-		const tokenPath: string = path.join(__dirname, 'tokenSet/typescript-token-set.json');
+		const tokenPath: string = path.join(__dirname, 'tokenSet/python-token-set.json');
 		const tokenSet: TokenSet = TokenSet.loadFromFile(tokenPath);
 		Slog.jlog('TokenSet', tokenSet);
 		this.loadTokenSet(tokenSet);
