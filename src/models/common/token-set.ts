@@ -1,4 +1,3 @@
-import { FunctionalTool } from 'functional-lib';
 import { Slog } from '../ast-parser/common/util/slog';
 import { Uti } from '../ast-parser/common/util/util';
 import { TokenPair } from './token-pair';
@@ -7,6 +6,7 @@ export class TokenSet {
 	public typeDefinitionStartToken: string = ':';
 	public blockScopeTokenPair: TokenPair = new TokenPair('{', '}');
 	public foreignScopeTokenPair: TokenPair = new TokenPair('{', '}');
+	public objectLiteralTokenPair: TokenPair = new TokenPair('{', '}');
 	public functionParamTokenPair: TokenPair = new TokenPair('(', ')');
 	public functionCallParamTokenPair: TokenPair = new TokenPair('(', ')');
 	public groupingTokenPair: TokenPair = new TokenPair('(', ')');

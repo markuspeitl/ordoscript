@@ -21,6 +21,7 @@ export class MatchSet {
 	public arrayLiteralDetector: RegExp;
 	public assignmentDetector: RegExp;
 	public blockScopeDetector: RegExp;
+	public objectLiteralDetector: RegExp;
 	public compositionDetector: RegExp;
 	public unaryCompositionDetector: RegExp;
 	public ifDetector: RegExp;
@@ -36,7 +37,7 @@ export class MatchSet {
 	public returnDetector: RegExp;
 	public importDetector: RegExp;
 
-	private loadedTokenSet: TokenSet;
+	public loadedTokenSet: TokenSet;
 
 	public reconstructDetectors(tokens: TokenSet): void {
 		const functionParts: string[] = [
@@ -69,6 +70,14 @@ export class MatchSet {
 			this.escapeChar(tokens.blockScopeTokenPair.close)
 		];
 		this.blockScopeDetector = this.applyPartsToRegex(blockScopeParts, 'blockScopeDetector');
+
+		const objectLiteralParts: string[] = [
+			'^',
+			this.escapeChar(tokens.objectLiteralTokenPair.open),
+			this.anyThingAll,
+			this.escapeChar(tokens.objectLiteralTokenPair.close)
+		];
+		this.objectLiteralDetector = this.applyPartsToRegex(objectLiteralParts, 'objectLiteralDetector');
 
 		const compositionParts: string[] = [
 			this.anyThing,

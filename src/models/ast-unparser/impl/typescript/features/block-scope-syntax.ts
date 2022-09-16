@@ -16,7 +16,7 @@ export class BlockScopeSyntax extends BaseFeatureSyntax {
 				const lines: string[] = unParsedBlock.split('\n');
 				for (const line of lines) {
 					if (line && line.length > 0) {
-						code += '\t' + line.trim() + '\n';
+						code += this.tokenSet.identationToken + line.trim() + '\n';
 					}
 				}
 			}

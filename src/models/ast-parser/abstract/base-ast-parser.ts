@@ -69,7 +69,7 @@ export abstract class BaseAstParser extends BaseParser<BaseSyntaxFeature> implem
 				return parsedNode;
 			}
 		}
-		throw new Error('Failed to parse AST node, syntax feature not detected: ' + String(code));
+		throw new Error(this.constructor.name + ': Failed to parse AST node, syntax feature not detected: ' + String(code));
 	}
 
 	private tryParseFeature(code: string, feature: BaseSyntaxFeature): BaseAstNode | null {

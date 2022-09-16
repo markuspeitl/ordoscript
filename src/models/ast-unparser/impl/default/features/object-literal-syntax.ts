@@ -1,19 +1,19 @@
-import { ArrayLiteral } from './../../../../ast-node/array-literal';
 import { BaseFeatureSyntax } from '../../../abstract/base-feature-syntax';
 import { BaseAstNode } from '../../../../ast-node/abstract/base-ast-node';
+import { ObjectLiteral } from '../../../../ast-node';
 
-export class ArrayLiteralSyntax extends BaseFeatureSyntax {
+export class ObjectLiteralSyntax extends BaseFeatureSyntax {
 	protected unParseFeatureInternal(node: BaseAstNode): string | null {
-		if (!(node instanceof ArrayLiteral)) {
+		if (!(node instanceof ObjectLiteral)) {
 			return null;
 		}
 
 		let code: string = '';
-		code += this.tokenSet.arrayLiteralTokenPair.open;
+		code += this.tokenSet.objectLiteralTokenPair.open;
 		if (node.value) {
 			code = this.tryUnparse(code, node.value);
 		}
-		code += this.tokenSet.arrayLiteralTokenPair.close;
+		code += this.tokenSet.objectLiteralTokenPair.close;
 		return code;
 	}
 }

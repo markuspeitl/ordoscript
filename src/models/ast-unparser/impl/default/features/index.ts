@@ -18,3 +18,4 @@ export * from './value-listing-syntax';
 export * from './variable-declaration-syntax';
 export * from './array-literal-syntax';
 export * from './link-syntax';
+export * from './object-literal-syntax';

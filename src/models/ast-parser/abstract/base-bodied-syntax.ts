@@ -6,7 +6,7 @@ import { BaseSyntaxFeature } from './base-syntax-feature';
 
 export abstract class BaseBodiedSyntax extends BaseSyntaxFeature {
 	public parseBody(code: string, tokenPair: TokenPair): BlockScope {
-		const blockEnclosing: Enclosing | null = SyntaxTool.getEnclosingOfTokens(code, tokenPair);
+		const blockEnclosing: Enclosing | null = SyntaxTool.getMaxEnclosingOfTokens(code, tokenPair);
 		SyntaxTool.widenEnclosing(blockEnclosing, 1);
 		const enclosedBlock: string | null = SyntaxTool.getEnclosedContents(code, blockEnclosing);
 		if (!blockEnclosing || !enclosedBlock) {

@@ -1,6 +1,5 @@
 {
-  "children": [
-    {
+  "children": [{
       "left": {
         "declaretype": "const",
         "label": "test",
@@ -10,11 +9,11 @@
         "compositorToken": "+",
         "left": {
           "value": 1,
-          "type": "NumberLiteral"
+          "type": "NumericLiteral"
         },
         "right": {
           "value": 4,
-          "type": "NumberLiteral"
+          "type": "NumericLiteral"
         },
         "type": "CompositionNode"
       },
@@ -23,39 +22,33 @@
     {
       "label": "print_hello",
       "parameters": {
-        "values": [
-          {
-            "label": "hello_text: string",
-            "type": "Identifier"
-          }
-        ],
+        "values": [{
+          "label": "hello_text: string",
+          "type": "Identifier"
+        }],
         "type": "ValueListingNode"
       },
       "body": {
         "content": {
-          "children": [
-            {
-              "id": {
-                "label": "console"
+          "children": [{
+            "id": {
+              "label": "console"
+            },
+            "method": {
+              "identifier": {
+                "label": "log"
               },
-              "method": {
-                "identifier": {
-                  "label": "log"
-                },
-                "parameters": {
-                  "values": [
-                    {
-                      "label": "hello_text",
-                      "type": "Identifier"
-                    }
-                  ],
-                  "type": "ValueListingNode"
-                },
-                "type": "FunctionCall"
+              "parameters": {
+                "values": [{
+                  "label": "hello_text",
+                  "type": "Identifier"
+                }],
+                "type": "ValueListingNode"
               },
-              "type": "PropertyCallNode"
-            }
-          ],
+              "type": "FunctionCall"
+            },
+            "type": "PropertyCallNode"
+          }],
           "type": "BlockContent"
         },
         "type": "BlockScope"
@@ -67,12 +60,10 @@
         "label": "print_hello"
       },
       "parameters": {
-        "values": [
-          {
-            "text": "hello world from ordo",
-            "type": "StringLiteral"
-          }
-        ],
+        "values": [{
+          "text": "hello world from ordo",
+          "type": "StringLiteral"
+        }],
         "type": "ValueListingNode"
       },
       "type": "FunctionCall"

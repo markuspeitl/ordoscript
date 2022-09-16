@@ -8,7 +8,8 @@ export class BlockScopeSyntax extends BaseSyntaxFeature {
 
 	public isFeatureDetected(code: string): boolean {
 		const trimmed: string = code.trim();
-		return this.matchSet.blockScopeDetector.test(trimmed);
+		return false;
+		//return this.matchSet.blockScopeDetector.test(trimmed);
 	}
 
 	public parseFeatureInternal(code: string): BaseAstNode | null {

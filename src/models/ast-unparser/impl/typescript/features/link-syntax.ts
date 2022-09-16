@@ -11,9 +11,9 @@ export class LinkSyntax extends BaseFeatureSyntax {
 		}
 		let code: string = '';
 		code += this.tokenSet.linkExtTokenKeyword + ' ';
-		code += this.tokenSet.blockScopeTokenPair.open;
+		code += this.tokenSet.foreignScopeTokenPair.open;
 		code = this.tryUnparse(code, node.selectedResources);
-		code += this.tokenSet.blockScopeTokenPair.close + ' ';
+		code += this.tokenSet.foreignScopeTokenPair.close + ' ';
 		code += this.tokenSet.linkExtLocationToken + ' ';
 		code = this.tryUnparse(code, node.locationSpecification);
 		//code += this.tokenSet.delimiterTokens.join('');

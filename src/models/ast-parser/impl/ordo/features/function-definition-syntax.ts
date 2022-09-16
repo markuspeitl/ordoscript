@@ -30,6 +30,8 @@ export class FunctionDefinitionSyntax extends BaseBodiedSyntax {
 		node.id = this.getNode<Identifier>(name, Identifier.name, 'id');
 
 		const enclosedParams: string | null = SyntaxTool.getEnclosedContents(code, functionParamsEnclosing);
+		console.log(code);
+		console.log(enclosedParams);
 		if (enclosedParams) {
 			node.parameters = this.getNodeNullable<ValueListingNode>(enclosedParams, ValueListingNode.name);
 		}

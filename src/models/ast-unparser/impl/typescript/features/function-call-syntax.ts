@@ -11,12 +11,12 @@ export class FunctionCallSyntax extends BaseFeatureSyntax {
 
 		let code: string = '';
 		code += node.identifier.label;
-		code += this.tokenSet.functionParamTokenPair.open;
+		code += this.tokenSet.functionCallParamTokenPair.open;
 		const unparsedParam: string | null = this.astUnparser.unParseAstNode(node.parameters);
 		if (unparsedParam) {
 			code += unparsedParam;
 		}
-		code += this.tokenSet.functionParamTokenPair.close;
+		code += this.tokenSet.functionCallParamTokenPair.close;
 		return code;
 	}
 }

@@ -37,19 +37,31 @@ export class BlockContentSyntax extends BaseSyntaxFeature {
 		const statements: string[] = [];
 
 		let blockCode: string | null = null;
+
+		let innerBlocksOpened: number = 0;
+
 		for (let i: number = 0; i < curatedLines.length; i++) {
 			const line: string = curatedLines[i];
 
 			const openBlockIndex: number = line.indexOf(this.tokenSet.blockScopeTokenPair.open);
 			if (openBlockIndex > -1) {
-				const previousCode: string = line.substring(0, openBlockIndex);
-				const previousLineIndex: number = i - 1;
-				if (previousCode.trim().length > 0) {
-					blockCode = '';
-				} else if (curatedLines.length > previousLineIndex && curatedLines[previousLineIndex].trim().length > 0) {
-					blockCode = curatedLines[previousLineIndex];
+				if (blockCode !== null) {
+					innerBlocksOpened++;
+				} else {
+					const previousCode: string = line.substring(0, openBlockIndex);
+					const previousLineIndex: number = i - 1;
+					if (previousCode.trim().length > 0) {
+						blockCode = '';
+					} else if (curatedLines.length > previousLineIndex && curatedLines[previousLineIndex].trim().length > 0) {
+						blockCode = curatedLines[previousLineIndex];
+					}
 				}
 			}
+			const closeBlockIndex: number = line.indexOf(this.tokenSet.blockScopeTokenPair.open);
+			if (closeBlockIndex > -1) {
+				innerBlocksOpened--;
+			}
+
 			if (blockCode !== null) {
 				blockCode = blockCode + '\n' + line;
 				if (line.includes(this.tokenSet.blockScopeTokenPair.close)) {

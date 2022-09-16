@@ -3,7 +3,7 @@ export * from './assignment-syntax';
 export * from './block-content-syntax';
 export * from './block-scope-syntax';
 export * from './composition-syntax';
-export * from './dict-literal-syntax';
+export * from './object-literal-syntax';
 export * from './else-syntax';
 export * from './for-syntax';
 export * from './function-call-syntax';

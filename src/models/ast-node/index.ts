@@ -6,7 +6,7 @@ export * from './block-scope';
 export * from './branch-node';
 export * from './composition-node';
 export * from './condition-node';
-export * from './dict-literal';
+export * from './object-literal';
 export * from './else-node';
 export * from './for-node';
 export * from './function-call';

@@ -1,3 +1,4 @@
+import { PythonAstUnparser } from './models/ast-unparser/impl/python/python-ast-unparser';
 import { OrdoAstParser } from './models/ast-parser/impl/ordo/ordo-ast-parser';
 import { ArgumentParser } from 'argparse';
 import { BaseAstParser } from './models/ast-parser/abstract/base-ast-parser';
@@ -31,6 +32,7 @@ if (documentContents) {
 	}
 	if (astNode && unparse) {
 		const astUnparser: BaseAstUnparser = new TypeScriptAstUnparser();
+		//const astUnparser: BaseAstUnparser = new PythonAstUnparser();
 		const code: string | null = astUnparser.unParseAstNode(astNode);
 		if (code) {
 			Uti.writeDocument(code, String(args.target) + '.ts');
